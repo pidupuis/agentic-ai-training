@@ -1,0 +1,22 @@
+{
+  "name": "agentic-ai-training",
+  "build": { "dockerfile": "Dockerfile" },
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1": {}
+  },
+  "postCreateCommand": "npm config set prefix /home/node/.local && npm install -g corepack && corepack enable --install-directory /home/node/.local/bin",
+  "remoteEnv": {
+    "PATH": "/home/node/.local/bin:${containerEnv:PATH}"
+  },
+  "remoteUser": "node",
+  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "mounts": [
+    "source=claude-code-config-v2-${devcontainerId},target=/home/node/.claude,type=volume"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude"
+  },
+  "postStartCommand": "sudo /usr/local/bin/egress-firewall.sh",
+  "waitFor": "postStartCommand"
+}
