@@ -12,11 +12,15 @@
   "remoteUser": "node",
   "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
   "mounts": [
-    "source=claude-code-config-v2-${devcontainerId},target=/home/node/.claude,type=volume"
+    "source=claude-code-config-v2-${devcontainerId},target=/home/node/.claude,type=volume",
+    "source=shell-history-${devcontainerId},target=/commandhistory,type=volume"
   ],
   "containerEnv": {
-    "CLAUDE_CONFIG_DIR": "/home/node/.claude"
+    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "HISTFILE": "/commandhistory/.zsh_history"
   },
   "postStartCommand": "sudo /usr/local/bin/egress-firewall.sh",
-  "waitFor": "postStartCommand"
+  "waitFor": "postStartCommand",
+  "forwardPorts": [5173]
 }

@@ -16,4 +16,12 @@ RUN chmod 0755 /usr/local/bin/egress-firewall.sh \
     && chmod 0440 /etc/sudoers.d/node-firewall
 
 RUN mkdir -p /home/node/.claude && chown node:node /home/node/.claude
+
+COPY --from=ghcr.io/astral-sh/uv:0.13.9 /uv /uvx /bin/
+ENV UV_LINK_MODE=copy
+
+RUN mkdir -p /commandhistory \
+    && touch /commandhistory/.zsh_history \
+    && chown -R node:node /commandhistory
+
 USER node

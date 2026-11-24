@@ -61,7 +61,13 @@ for domain in \
     "claude.ai" \
     "platform.claude.com" \
     "sentry.io" \
-    "statsig.com"; do
+    "statsig.com" \
+    "api.openai.com" \
+    "rest.ensembl.org" \
+    "eutils.ncbi.nlm.nih.gov" \
+    "ui.shadcn.com" \
+    "objects.githubusercontent.com" \
+    "release-assets.githubusercontent.com"; do
     echo "Resolving $domain..."
     ips=$(dig +short A "$domain" | grep -E '^[0-9]+(\.[0-9]+){3}$' || true)
     if [ -z "$ips" ]; then
