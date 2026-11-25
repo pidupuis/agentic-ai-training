@@ -1,12 +1,29 @@
-"""The agent: tool schemas, system prompt and the hand-written loop."""
+"""The agent: tool schemas, system prompt and the hand-written tool-calling loop.
 
-import json, time
-from pydantic import ValidationError
+How a run works:
+    1. We send the conversation (system prompt + variant description) and the TOOLS schemas.
+    2. The model answers with one or more tool calls: which function, with which JSON arguments.
+    3. We execute them in Python and append each result to the conversation.
+    4. Repeat until the model calls submit_annotation with a valid annotation.
+
+The LLM never runs code or reaches the network itself: it only *asks* for tool calls,
+and this module decides what actually runs. See docs/agent-vs-code.md for which parts
+are left to the model and which are deterministic code.
+"""
+
+import json
+import time
+from collections.abc import Callable
+
+from app.llm import get_client, get_model
 from app.models import Annotation
 from app.tools.ensembl import get_vep_annotation
 from app.tools.pubmed import search_pubmed
-from app.llm import get_client, get_model
+from app.variants import Variant
 
+# Tool schemas in the OpenAI "function calling" format. The model sees only these
+# names, descriptions and JSON Schemas, never the Python code: the descriptions are
+# effectively part of the prompt, read at the moment the model writes the arguments.
 TOOLS = [
     {
         "type": "function",
@@ -54,6 +71,8 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "submit_annotation",
+            # This "tool" executes nothing. Making the model *call a function* to give its
+            # answer forces the answer into JSON matching the schema, instead of free text.
             "description": "Submit your final annotation. Always finish by calling this tool.",
             # Generated from the Pydantic model: one source of truth for the output format.
             "parameters": Annotation.model_json_schema(),
@@ -61,13 +80,15 @@ TOOLS = [
     },
 ]
 
-# Name -> Python function, used by the loop to execute the model's tool calls.
-# submit_annotation is absent on purpose: the loop handles it itself.
-TOOL_FUNCTIONS = {
+# Tool name -> Python function, used by the loop to execute the model's tool calls.
+# submit_annotation is absent on purpose: the loop validates it instead of running it.
+TOOL_FUNCTIONS: dict[str, Callable[..., dict]] = {
     "get_vep_annotation": get_vep_annotation,
     "search_pubmed": search_pubmed,
 }
 
+# The "\" at the end of a line joins it with the next one (no newline in the string):
+# sentences stay on one line for the model while the source stays readable.
 SYSTEM_PROMPT = """\
 You are a variant interpretation assistant for an oncology lab. You propose an \
 oncogenicity classification for one somatic variant; a human expert always reviews \
@@ -87,6 +108,8 @@ an article url (https://pubmed.ncbi.nlm.nih.gov/<pmid>/) for a paper, the Ensemb
 for VEP data. Never build or guess a url.
 - SIFT/PolyPhen predictions, rarity in gnomAD and a COSMIC id are weak hints. \
 On their own they never justify oncogenic or likely_oncogenic.
+- VEP facts (consequence type, database ids, predictions, rarity) are context: mark them \
+neutral. Only a frequent gnomAD allele (above 1%) counts as supports_benign.
 - Zero relevant articles is a valid result: answer vus or insufficient_evidence.
 - If sources disagree, list each disagreement in conflicts.
 - Never guess. When unsure, choose the more cautious class and set needs_expert_review \
@@ -96,14 +119,123 @@ needs_expert_review must be true if the classification is vus or insufficient_ev
 if conflicts is not empty, or if confidence is low.
 """
 
+# Safety net against endless loops (and bills). A normal run takes 3 to 5 turns.
 MAX_TURNS = 8
+
+EventHandler = Callable[[dict], None]
 
 
 class AgentError(Exception):
-    """The agent could not produce a valid annotation."""
+    """The agent could not produce a valid annotation within MAX_TURNS."""
 
 
-def _user_message(variant) -> str:
+def run_agent(variant: Variant, on_event: EventHandler) -> Annotation:
+    """Run the tool-calling loop until the model submits a valid annotation.
+
+    Args:
+        variant: one of app.variants.VARIANTS.
+        on_event: called once per step with an event dict. The CLI prints events,
+            the API (step 3) streams them to the browser; the loop does not care which.
+            Every event carries "type" and "ts" (Unix timestamp, for durations in the UI):
+              {"type": "tool_call",   "tool": "search_pubmed", "args": {"query": "..."}, "ts": ...}
+              {"type": "tool_result", "tool": "search_pubmed", "result": {<tool contract>}, "ts": ...}
+              {"type": "annotation",  "annotation": {<Annotation as dict>}, "ts": ...}
+            A tool_result always follows its tool_call, so the UI can pair them in order.
+
+    Returns:
+        The validated Annotation.
+
+    Raises:
+        AgentError: no valid annotation after MAX_TURNS model calls.
+    """
+    client, model = get_client(), get_model()
+
+    # The conversation history IS the agent's memory: the API is stateless, so every
+    # call resends everything (prompt, request, each tool call and each result).
+    messages: list[dict] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": _user_message(variant)},
+    ]
+    # Every url any tool returned so far: the only urls the annotation may cite.
+    seen_urls: set[str] = set()
+    pubmed_called = False
+
+    def emit(event: dict) -> None:
+        # {**event, "ts": ...} copies the dict and adds a key (JS: {...event, ts}).
+        on_event({**event, "ts": time.time()})
+
+    for _turn in range(MAX_TURNS):  # "_turn": the variable itself is unused
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            tools=TOOLS,
+            # The model must call a tool on every turn: no free-text answers.
+            tool_choice="required",
+        )
+        msg = response.choices[0].message
+        # Keep the assistant message, tool_calls included, as a plain dict:
+        # the API rejects a "tool" message whose tool_call_id is not in the history.
+        messages.append(msg.model_dump(exclude_none=True))
+
+        if not msg.tool_calls:  # should not happen with tool_choice="required"
+            messages.append(
+                {"role": "user", "content": "Call a tool. Finish with submit_annotation."}
+            )
+            continue
+
+        # The model may request several tools in one turn (e.g. two PubMed queries).
+        for call in msg.tool_calls:
+            name = call.function.name
+            # try/except/else: the else block runs only if no exception was raised.
+            try:
+                # Arguments arrive as a JSON *string* written by the model.
+                args = json.loads(call.function.arguments)
+            except json.JSONDecodeError as e:
+                emit({"type": "tool_call", "tool": name, "args": call.function.arguments})
+                result = {"error": f"Arguments are not valid JSON: {e}"}
+            else:
+                emit({"type": "tool_call", "tool": name, "args": args})
+                if name == "submit_annotation":
+                    try:
+                        annotation = _check_annotation(args, seen_urls, pubmed_called)
+                    except ValueError as e:  # pydantic's ValidationError is a ValueError
+                        # Self-correction: the rejection becomes the tool result,
+                        # the model reads it and fixes its answer on the next turn.
+                        result = {"error": f"Annotation rejected: {e}"}
+                    else:
+                        emit({"type": "annotation", "annotation": annotation.model_dump()})
+                        return annotation
+                elif name in TOOL_FUNCTIONS:
+                    try:
+                        # **args unpacks the dict into keyword arguments:
+                        # {"query": "x"} -> search_pubmed(query="x")
+                        result = TOOL_FUNCTIONS[name](**args)
+                    except TypeError as e:  # wrong or missing argument names
+                        result = {"error": f"Bad arguments for {name}: {e}"}
+                    pubmed_called = pubmed_called or name == "search_pubmed"
+                    _collect_urls(result, seen_urls)
+                else:
+                    result = {"error": f"Unknown tool: {name}"}
+
+            emit({"type": "tool_result", "tool": name, "result": result})
+            # Every tool_call needs a matching "tool" message, even a failed or rejected
+            # one; otherwise the next API call fails with a 400 error.
+            messages.append(
+                {"role": "tool", "tool_call_id": call.id, "content": json.dumps(result)}
+            )
+
+    raise AgentError(f"No valid annotation after {MAX_TURNS} turns")
+
+
+def _user_message(variant: Variant) -> str:
+    """The task given to the model.
+
+    Example output:
+        Annotate this somatic variant.
+        Gene: BRAF
+        Protein change: p.Val600Glu (V600E)
+        Genomic HGVS (GRCh38): 7:g.140753336A>T
+    """
     return (
         f"Annotate this somatic variant.\n"
         f"Gene: {variant.gene}\n"
@@ -112,8 +244,19 @@ def _user_message(variant) -> str:
     )
 
 
-def _collect_urls(obj, found: set[str]) -> set[str]:
-    """Every value of a "url" key, at any depth (VEP url, PubMed search and article urls)."""
+def _collect_urls(obj: object, found: set[str]) -> set[str]:
+    """Add every value of a "url" key, at any depth, to `found` (and return it).
+
+    Recursive, because PubMed nests the article urls, which are the most important
+    evidence, inside data.articles[]. Checking only result["url"] would reject them.
+
+    Example:
+        {"source": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term=...",
+         "data": {"articles": [{"pmid": "22281684",
+                                "url": "https://pubmed.ncbi.nlm.nih.gov/22281684/"}]}}
+        -> {"https://pubmed.ncbi.nlm.nih.gov/?term=...",
+            "https://pubmed.ncbi.nlm.nih.gov/22281684/"}
+    """
     if isinstance(obj, dict):
         for key, value in obj.items():
             if key == "url" and isinstance(value, str):
@@ -127,10 +270,25 @@ def _collect_urls(obj, found: set[str]) -> set[str]:
 
 
 def _check_annotation(args: dict, seen_urls: set[str], pubmed_called: bool) -> Annotation:
-    """Validate a submit_annotation call. Raises ValueError with a message for the model."""
+    """Validate a submit_annotation call: deterministic guardrails around the model.
+
+    Three checks, cheapest first:
+        1. PubMed was searched at least once (no conclusion from VEP alone).
+        2. The arguments match the Annotation schema (Pydantic), which also
+           enforces the needs_expert_review rule (see Annotation).
+        3. Anti-hallucination: every cited url was returned by a tool in this run.
+           A url no tool returned can only have been invented.
+
+    Returns:
+        The validated Annotation.
+
+    Raises:
+        ValueError (or pydantic.ValidationError, a subclass) with a message written
+        for the model: it is sent back as the tool result so the model can fix it.
+    """
     if not pubmed_called:
         raise ValueError("You must search PubMed at least once before submitting.")
-    annotation = Annotation.model_validate(args)  # raises ValidationError if malformed
+    annotation = Annotation.model_validate(args)
     invented = [e.url for e in annotation.evidence if e.url not in seen_urls]
     if invented:
         raise ValueError(
@@ -138,74 +296,3 @@ def _check_annotation(args: dict, seen_urls: set[str], pubmed_called: bool) -> A
             "Cite only urls that appear in tool results."
         )
     return annotation
-
-
-def run_agent(variant, on_event) -> Annotation:
-    """Run the tool-calling loop until the model submits a valid annotation.
-
-    Args:
-        variant: a Variant from app.variants.
-        on_event: called with each event dict (tool_call, tool_result, annotation).
-            The CLI prints them; the API will stream them to the browser.
-
-    Returns:
-        The validated Annotation. Raises AgentError after MAX_TURNS without one.
-    """
-    client, model = get_client(), get_model()
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": _user_message(variant)},
-    ]
-    seen_urls: set[str] = set()
-    pubmed_called = False
-
-    def emit(event: dict) -> None:
-        on_event({**event, "ts": time.time()})  # timestamp, for durations in the UI
-
-    for _turn in range(MAX_TURNS):
-        response = client.chat.completions.create(
-            model=model,
-            messages=messages,
-            tools=TOOLS,
-            tool_choice="required",  # the model must call a tool on every turn
-        )
-        msg = response.choices[0].message
-        # Keep the assistant message in the history, tool_calls included:
-        # the API rejects a "tool" message whose tool_call_id it cannot find.
-        messages.append(msg.model_dump(exclude_none=True))
-
-        if not msg.tool_calls:  # should not happen with tool_choice="required"
-            messages.append({"role": "user", "content": "Call a tool. Finish with submit_annotation."})
-            continue
-
-        for call in msg.tool_calls:  # the model may request several tools in one turn
-            name = call.function.name
-            try:
-                args = json.loads(call.function.arguments)
-            except json.JSONDecodeError as e:
-                args, result = {}, {"error": f"Arguments are not valid JSON: {e}"}
-            else:
-                emit({"type": "tool_call", "tool": name, "args": args})
-                if name == "submit_annotation":
-                    try:
-                        annotation = _check_annotation(args, seen_urls, pubmed_called)
-                    except (ValidationError, ValueError) as e:
-                        result = {"error": f"Annotation rejected: {e}"}  # self-correction
-                    else:
-                        emit({"type": "annotation", "annotation": annotation.model_dump()})
-                        return annotation
-                elif name in TOOL_FUNCTIONS:
-                    try:
-                        result = TOOL_FUNCTIONS[name](**args)
-                    except TypeError as e:  # wrong or missing argument names
-                        result = {"error": f"Bad arguments for {name}: {e}"}
-                    pubmed_called = pubmed_called or name == "search_pubmed"
-                    _collect_urls(result, seen_urls)
-                else:
-                    result = {"error": f"Unknown tool: {name}"}
-
-            emit({"type": "tool_result", "tool": name, "result": result})
-            # Every tool_call needs its answer, even a rejected one.
-            messages.append({"role": "tool", "tool_call_id": call.id, "content": json.dumps(result)})
-
-    raise AgentError(f"No valid annotation after {MAX_TURNS} turns")

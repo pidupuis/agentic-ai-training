@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 Classification = Literal[
     "oncogenic", "likely_oncogenic", "vus", "likely_benign", "benign", "insufficient_evidence"
@@ -28,3 +28,19 @@ class Annotation(BaseModel):
     evidence: list[Evidence] = Field(min_length=1)
     conflicts: list[str] = Field(description="Disagreements between sources; empty if none")
     needs_expert_review: bool = Field(description="True if VUS, conflict or low confidence")
+
+    @model_validator(mode="after")
+    def _enforce_review_rule(self) -> "Annotation":
+        """Force needs_expert_review when the rule applies, whatever the model said.
+
+        This is pure logic, so it is enforced in code rather than trusted to the LLM.
+        The model may still ask for a review in other cases (True stays True).
+        Runs after field validation, on every Annotation built anywhere (agent, API, tests).
+        """
+        if (
+            self.classification in ("vus", "insufficient_evidence")
+            or self.conflicts
+            or self.confidence == "low"
+        ):
+            self.needs_expert_review = True
+        return self
