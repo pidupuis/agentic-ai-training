@@ -2,7 +2,7 @@
 
 A Python agent that annotates a tumor variant from Ensembl and PubMed, and a React interface where an expert watches the agent work, then accepts, corrects or rejects its sourced conclusion.
 
-<!-- TODO: demo GIF or screenshot -->
+![Demo](docs/demo.gif)
 
 ## Why
 
