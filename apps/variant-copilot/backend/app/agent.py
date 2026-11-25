@@ -6,12 +6,17 @@ How a run works:
     3. We execute them in Python and append each result to the conversation.
     4. Repeat until the model calls submit_annotation with a valid annotation.
 
+Cost safety: a run makes at most MAX_TURNS LLM calls, and stops before the next one
+if the caller sets the optional `cancel` flag (used by the API on disconnect).
+
 The LLM never runs code or reaches the network itself: it only *asks* for tool calls,
 and this module decides what actually runs. See docs/agent-vs-code.md for which parts
 are left to the model and which are deterministic code.
 """
 
 import json
+import logging
+import threading
 import time
 from collections.abc import Callable
 
@@ -129,7 +134,24 @@ class AgentError(Exception):
     """The agent could not produce a valid annotation within MAX_TURNS."""
 
 
-def run_agent(variant: Variant, on_event: EventHandler) -> Annotation:
+class AgentCancelled(Exception):
+    """The run was stopped on purpose because the caller set the cancel flag.
+
+    Not an error: in the API it means the browser went away, so nobody is
+    waiting for the result and further LLM calls would be paid for nothing.
+    """
+
+
+# One logger per module, named "app.agent". INFO messages appear in the uvicorn
+# terminal (logging is configured in app/main.py); the CLI does not show them.
+log = logging.getLogger(__name__)
+
+
+def run_agent(
+    variant: Variant,
+    on_event: EventHandler,
+    cancel: threading.Event | None = None,
+) -> Annotation:
     """Run the tool-calling loop until the model submits a valid annotation.
 
     Args:
@@ -141,12 +163,18 @@ def run_agent(variant: Variant, on_event: EventHandler) -> Annotation:
               {"type": "tool_result", "tool": "search_pubmed", "result": {<tool contract>}, "ts": ...}
               {"type": "annotation",  "annotation": {<Annotation as dict>}, "ts": ...}
             A tool_result always follows its tool_call, so the UI can pair them in order.
+        cancel: optional stop flag, shared with another thread. threading.Event is a
+            thread-safe boolean: the API calls cancel.set() when the browser disconnects,
+            and the loop checks cancel.is_set() before every LLM call. The CLI passes
+            nothing (Ctrl+C already stops everything).
 
     Returns:
         The validated Annotation.
 
     Raises:
         AgentError: no valid annotation after MAX_TURNS model calls.
+        AgentCancelled: the cancel flag was set. An LLM call already in flight cannot
+            be interrupted, so at most one call is paid after the flag is set.
     """
     client, model = get_client(), get_model()
 
@@ -164,7 +192,12 @@ def run_agent(variant: Variant, on_event: EventHandler) -> Annotation:
         # {**event, "ts": ...} copies the dict and adds a key (JS: {...event, ts}).
         on_event({**event, "ts": time.time()})
 
-    for _turn in range(MAX_TURNS):  # "_turn": the variable itself is unused
+    for turn in range(1, MAX_TURNS + 1):  # 1, 2, ..., MAX_TURNS
+        # The only place where money is spent, so the only place we need to check.
+        if cancel is not None and cancel.is_set():
+            raise AgentCancelled(f"{variant.id}: cancelled before turn {turn}")
+        log.info("%s: turn %d/%d", variant.id, turn, MAX_TURNS)
+
         response = client.chat.completions.create(
             model=model,
             messages=messages,
