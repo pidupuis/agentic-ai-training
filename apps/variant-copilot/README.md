@@ -46,6 +46,7 @@ The browser only talks to the API (through the Vite proxy). Only the agent calls
 - **Structured output through a tool.** The agent must finish by calling `submit_annotation`, whose schema is generated from the Pydantic model. The answer is always valid JSON, and an invalid one is sent back to the model, which corrects itself.
 - **URL check against hallucinations.** A cited URL that no tool returned can only be invented: it is refused.
 - **Deterministic code wherever a rule exists.** The LLM only writes the searches, reads the abstracts and weighs the evidence. Everything else is plain code, including the rule that forces expert review for a VUS. See [docs/agent-vs-code.md](docs/agent-vs-code.md).
+- **Frontend state by kind.** Server data in TanStack Query, navigation in the URL (TanStack Router: `/variants/braf-v600e`, `/audit?variant=…`), and only local UI state in `useState`. Live agent streams sit above the router, so changing pages never cancels a run.
 - **Tagged PubMed queries.** Without `[tiab]` tags, PubMed silently drops unknown words: `HSP90AA1 D724N` returns 1,500 unrelated articles, the tagged query returns 0. The tool also returns PubMed's own translation of each query.
 - **Small, clean tool results.** Each tool returns ~10 fields with their source, never raw JSON: the model reasons better and costs less.
 - **An append-only audit trail.** `data/reviews.jsonl` has one line per decision. A correction is a new line, nothing is deleted, and the AI proposal is copied from the server, never sent by the browser.
