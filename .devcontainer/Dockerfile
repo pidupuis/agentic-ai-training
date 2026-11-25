@@ -2,13 +2,13 @@ FROM mcr.microsoft.com/devcontainers/typescript-node:26
 
 USER root
 
-# Outils dont le pare-feu a besoin (dnsmasq-base : résolveur DNS qui remplit l'ipset)
+# Tools the firewall needs (dnsmasq-base: the DNS resolver that fills the ipset)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        iptables ipset dnsutils dnsmasq-base aggregate jq curl sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# Le script de pare-feu, et sudo limité à ce seul script
+# The firewall script, and sudo restricted to that single script
 COPY egress-firewall.sh /usr/local/bin/egress-firewall.sh
 RUN chmod 0755 /usr/local/bin/egress-firewall.sh \
     && rm -f /etc/sudoers.d/node \
