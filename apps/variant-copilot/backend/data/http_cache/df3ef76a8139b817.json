@@ -1,0 +1,27 @@
+{
+ "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22HSP90AA1%22%5Btiab%5D+AND+%28cancer%5Btiab%5D+OR+carcinoma%5Btiab%5D+OR+tumor%5Btiab%5D%29+AND+%28%22D724N%22%5Btiab%5D+OR+%22Asp724Asn%22%5Btiab%5D%29&retmode=json&retmax=5&sort=relevance",
+ "body": {
+  "header": {
+   "type": "esearch",
+   "version": "0.3"
+  },
+  "esearchresult": {
+   "count": "0",
+   "retmax": "0",
+   "retstart": "0",
+   "idlist": [],
+   "translationset": [],
+   "querytranslation": "\"HSP90AA1\"[tiab] AND (cancer[tiab] OR carcinoma[tiab] OR tumor[tiab]) AND (\"D724N\"[tiab] OR \"Asp724Asn\"[tiab])",
+   "warninglist": {
+    "phrasesignored": [],
+    "quotedphrasesnotfound": [
+     "\"D724N\"[tiab]",
+     "\"Asp724Asn\"[tiab]"
+    ],
+    "outputmessages": [
+     "No items found."
+    ]
+   }
+  }
+ }
+}
