@@ -29,16 +29,22 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    env:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0" # download the pinned Yarn without asking
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 26 # same as the devcontainer image
-      # Node 25+ no longer ships Corepack (same as in the devcontainer): install it, then
-      # let it provide the Yarn version pinned in package.json. Its shims land in
-      # setup-node's bin dir, which comes before the runner's global Yarn 1 in PATH.
-      - run: npm install -g corepack && corepack enable
-      - run: yarn install --immutable
-      - run: yarn workspace frontend lint
-      - run: yarn workspace frontend format:check
-      - run: yarn workspace frontend typecheck
+          # setup-node v5 caches automatically from the packageManager field, which
+          # runs the runner's global Yarn 1 before Corepack exists: turn that off.
+          package-manager-cache: false
+      # Node 25+ no longer ships Corepack (same as in the devcontainer): install it.
+      - run: npm install -g corepack
+      # "corepack yarn" runs the Yarn pinned in package.json (4.18.1), whatever
+      # "yarn" means on the runner's PATH (a global Yarn 1).
+      - run: corepack yarn --version
+      - run: corepack yarn install --immutable
+      - run: corepack yarn workspace frontend lint
+      - run: corepack yarn workspace frontend format:check
+      - run: corepack yarn workspace frontend typecheck
