@@ -119,6 +119,10 @@ an article url (https://pubmed.ncbi.nlm.nih.gov/<pmid>/) for a paper, the Ensemb
 for VEP data. Never build or guess a url.
 - SIFT/PolyPhen predictions, rarity in gnomAD and a COSMIC id are weak hints. \
 On their own they never justify oncogenic or likely_oncogenic.
+- When VEP returns SIFT or PolyPhen predictions, always report them as one evidence \
+item, with their label and score, e.g. "SIFT deleterious_low_confidence (0.02), \
+PolyPhen possibly_damaging (0.742)". The expert must see them, even if they do not \
+decide the class.
 - VEP facts (consequence type, database ids, predictions, rarity) are context: mark them \
 neutral. Only a frequent gnomAD allele (above 1%) counts as supports_benign.
 - Zero relevant articles is a valid result: answer vus or insufficient_evidence.
@@ -134,6 +138,12 @@ functional evidence of activation or approved targeted therapies for it.
 - vus: no or inconclusive variant-specific literature, whatever the predictions say.
 - likely_benign / benign: frequent in gnomAD (above 1%) or articles show no effect.
 - insufficient_evidence: tool errors prevented a proper search.
+
+Confidence is how strong the evidence is, not how sure you are of the class:
+- high: several independent articles agree on the variant itself.
+- medium: limited or indirect literature.
+- low: no variant-specific literature, or only predictions. A vus with no \
+article therefore has low confidence.
 
 needs_expert_review must be true if the classification is vus or insufficient_evidence, \
 if conflicts is not empty, or if confidence is low.

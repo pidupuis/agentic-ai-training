@@ -96,8 +96,8 @@ def _parse_vep(body: list, alt: str) -> dict | None:
             {"gene_symbol": "HSP90AA1", "transcript_id": "ENST00000216281", "canonical": 1,
              "consequence_terms": ["missense_variant"],
              "hgvsp": "ENSP00000216281.8:p.Asp724Asn", "protein_start": 724,
-             "sift_prediction": "deleterious_low_confidence",
-             "polyphen_prediction": "possibly_damaging"},
+             "sift_prediction": "deleterious_low_confidence", "sift_score": 0.02,
+             "polyphen_prediction": "possibly_damaging", "polyphen_score": 0.742},
             {"gene_symbol": "HSP90AA1", "transcript_id": "ENST00000...", ...}  # non-canonical
           ],
           "colocated_variants": [
@@ -112,8 +112,8 @@ def _parse_vep(body: list, alt: str) -> dict | None:
          "gene_symbol": "HSP90AA1", "transcript_id": "ENST00000216281",
          "consequence_terms": ["missense_variant"], "hgvsp": "p.Asp724Asn",
          "protein_start": 724,
-         "sift_prediction": "deleterious_low_confidence",
-         "polyphen_prediction": "possibly_damaging",
+         "sift_prediction": "deleterious_low_confidence", "sift_score": 0.02,
+         "polyphen_prediction": "possibly_damaging", "polyphen_score": 0.742,
          "known_ids": ["COSV53488860", "rs563025620"],
          "gnomad_exomes_af": 2.243e-05}
     """
@@ -158,8 +158,12 @@ def _parse_vep(body: list, alt: str) -> dict | None:
         "hgvsp": tx["hgvsp"].split(":")[-1],
         # .get(): these fields are absent for some consequence types.
         "protein_start": tx.get("protein_start"),
-        "sift_prediction": tx.get("sift_prediction"),  # predictions, not evidence
+        # In silico predictions, not evidence. SIFT: 0 (deleterious) to 1 (tolerated),
+        # below 0.05 = deleterious. PolyPhen: 0 (benign) to 1 (probably damaging).
+        "sift_prediction": tx.get("sift_prediction"),
+        "sift_score": tx.get("sift_score"),
         "polyphen_prediction": tx.get("polyphen_prediction"),
+        "polyphen_score": tx.get("polyphen_score"),
         "known_ids": known_ids,
         # None = absent from gnomAD; expected for somatic hotspots like EGFR L858R.
         "gnomad_exomes_af": gnomad_af,
