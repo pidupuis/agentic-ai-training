@@ -24,3 +24,8 @@ __pycache__/
 # Secrets
 .env
 spec.md
+
+# Variant Copilot: local expert reviews (reviewer names), not committed
+apps/variant-copilot/backend/data/reviews.jsonl
+# Half-written files from atomic writes (cache, runs)
+apps/variant-copilot/backend/data/**/*.tmp
