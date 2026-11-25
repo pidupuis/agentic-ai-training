@@ -15,14 +15,19 @@ ALLOWED_DOMAINS=(
     "claude.ai"
     "downloads.claude.ai"
     "platform.claude.com"
-    "sentry.io"
-    "statsig.com"
     "api.openai.com"
     "rest.ensembl.org"
     "eutils.ncbi.nlm.nih.gov"
     "ui.shadcn.com"
     "objects.githubusercontent.com"
     "release-assets.githubusercontent.com"
+)
+
+# Reached by IP through GitHub's published ranges (below), but their names must
+# still resolve: dnsmasq forwards them without adding their IPs to the ipset.
+GITHUB_DOMAINS=(
+    "github.com"
+    "githubusercontent.com"
 )
 
 DNSMASQ_CONF=/run/dnsmasq-allowlist.conf
@@ -42,6 +47,22 @@ iptables -t nat -F
 iptables -t nat -X
 iptables -t mangle -F
 iptables -t mangle -X
+
+# IPv6: the allowlist is IPv4 only, so block all IPv6 except localhost.
+# Skipped if the container has no IPv6 stack (ip6tables then fails).
+if ip6tables -L >/dev/null 2>&1; then
+    ip6tables -P INPUT ACCEPT
+    ip6tables -P FORWARD ACCEPT
+    ip6tables -P OUTPUT ACCEPT
+    ip6tables -F
+    ip6tables -X
+    ip6tables -A INPUT -i lo -j ACCEPT
+    ip6tables -A OUTPUT -o lo -j ACCEPT
+    ip6tables -P INPUT DROP
+    ip6tables -P FORWARD DROP
+    ip6tables -P OUTPUT DROP
+    echo "IPv6 blocked"
+fi
 # Stop dnsmasq first: it holds a reference to the ipset
 if [ -f "$DNSMASQ_PID" ]; then
     kill "$(cat "$DNSMASQ_PID")" 2>/dev/null || true
@@ -71,11 +92,17 @@ echo "Upstream DNS: $UPSTREAM_DNS"
     echo "bind-interfaces"
     echo "no-resolv"
     echo "no-hosts"
-    echo "server=$UPSTREAM_DNS"
+    # No catch-all "server=" line: only the domains below are forwarded upstream,
+    # every other name is refused. Without this, any process could leak data in
+    # the DNS queries themselves (e.g. <secret>.attacker.com).
     # The ipset is IPv4 only: don't hand out IPv6 addresses
     echo "filter-AAAA"
     for domain in "${ALLOWED_DOMAINS[@]}"; do
+        echo "server=/$domain/$UPSTREAM_DNS"
         echo "ipset=/$domain/allowed-domains"
+    done
+    for domain in "${GITHUB_DOMAINS[@]}"; do
+        echo "server=/$domain/$UPSTREAM_DNS"
     done
 } > "$DNSMASQ_CONF"
 
@@ -93,8 +120,8 @@ echo "dnsmasq started"
 # (bypassing would resolve an IP without adding it to the ipset).
 iptables -A OUTPUT -d "$UPSTREAM_DNS" -p udp --dport 53 -m owner --uid-owner dnsmasq -j ACCEPT
 iptables -A OUTPUT -d "$UPSTREAM_DNS" -p tcp --dport 53 -m owner --uid-owner dnsmasq -j ACCEPT
-# Allow outbound SSH
-iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+# Allow outbound SSH, to allowed IPs only (the ipset holds GitHub's ranges for git push)
+iptables -A OUTPUT -p tcp --dport 22 -m set --match-set allowed-domains dst -j ACCEPT
 # Allow inbound SSH responses
 iptables -A INPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 # Allow localhost (includes queries to dnsmasq on 127.0.0.1)
