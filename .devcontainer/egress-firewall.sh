@@ -29,6 +29,12 @@ DNSMASQ_CONF=/run/dnsmasq-allowlist.conf
 DNSMASQ_PID=/run/dnsmasq.pid
 UPSTREAM_SAVE=/etc/resolv.conf.upstream
 
+# Open the default policies before flushing: on a re-run they are still DROP from
+# the previous run, and with no rules left the GitHub fetch below would be blocked.
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
 # Flush existing rules and delete existing ipsets
 iptables -F
 iptables -X
