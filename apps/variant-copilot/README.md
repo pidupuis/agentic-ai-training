@@ -9,17 +9,17 @@ A Python agent that annotates a tumor variant from Ensembl and PubMed, and a Rea
 Interpreting a tumor variant takes hours of expert time, mostly spent reading literature. An AI assistant is only worth it if every claim it makes can be checked, if it says so when evidence is missing, and if a human signs off on every conclusion. Variant Copilot is a small prototype built around those three requirements:
 
 - **Sourced evidence:** every claim links to the Ensembl page or PubMed article it comes from, and the code rejects any cited URL that no tool returned.
-- **Honest uncertainty:** the agent can answer *VUS* or *insufficient evidence* instead of guessing.
+- **Honest uncertainty:** the agent can answer _VUS_ or _insufficient evidence_ instead of guessing.
 - **Human in the loop:** an expert accepts, corrects or rejects each proposal, and every decision goes to an append-only audit trail.
 
 ## The three variants
 
-All three are linked to **Hsp90**, the molecular chaperone I worked on in Didier Picard's lab in Geneva (<!-- TODO: link to the 2011 PLOS ONE paper --> PLOS ONE, 2011; <!-- TODO: link --> PPiMapBuilder).
+All three are linked to **Hsp90**, the molecular chaperone I worked on in Didier Picard's lab in Geneva ([PLOS ONE, 2011](https://doi.org/10.1371/journal.pone.0026044); [PPiMapBuilder](https://github.com/PPiMapBuilder)).
 
-| Variant | Why | Expected result |
-| --- | --- | --- |
-| BRAF V600E | The best-known melanoma driver, an Hsp90 client | Oncogenic |
-| EGFR L858R | A lung cancer driver whose mutant depends on Hsp90 | Oncogenic |
+| Variant        | Why                                                                                        | Expected result                                         |
+| -------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| BRAF V600E     | The best-known melanoma driver, an Hsp90 client                                            | Oncogenic                                               |
+| EGFR L858R     | A lung cancer driver whose mutant depends on Hsp90                                         | Oncogenic                                               |
 | HSP90AA1 D724N | Hsp90α itself, 4 residues before the MEEVD motif; rare in gnomAD, seen in COSMIC, no paper | VUS: the agent must not conclude from predictions alone |
 
 The third one is the interesting case: SIFT and PolyPhen call it damaging, PubMed has nothing, and the agent asks for expert review instead of guessing.
@@ -63,7 +63,7 @@ yarn install                       # from the repo root, in a second terminal
 yarn workspace frontend dev        # then open http://localhost:5173
 ```
 
-The saved runs in `backend/data/runs/` are shown and replayed **without an OpenAI key**: only *Analyze* calls the LLM (about one cent per run).
+The saved runs in `backend/data/runs/` are shown and replayed **without an OpenAI key**: only _Analyze_ calls the LLM (about one cent per run).
 
 Other entry points, from `backend/`:
 
