@@ -54,9 +54,7 @@ def client(tmp_path, monkeypatch):
 @pytest.mark.parametrize("decision", ["rejected", "modified"])
 def test_disagreement_without_comment_is_refused(decision):
     with pytest.raises(ValidationError, match="A comment is required"):
-        ReviewRequest(
-            decision=decision, final_classification="vus", reviewer="PD", comment="  "
-        )
+        ReviewRequest(decision=decision, final_classification="vus", reviewer="PD", comment="  ")
 
 
 def test_acceptance_needs_no_comment():

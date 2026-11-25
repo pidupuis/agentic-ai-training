@@ -272,7 +272,7 @@ def run_agent(
                         result = TOOL_FUNCTIONS[name](**args)
                     except TypeError as e:  # wrong or missing argument names
                         result = {"error": f"Bad arguments for {name}: {e}"}
-                    except Exception as e:  # noqa: BLE001 - a tool bug must not kill the run
+                    except Exception as e:  # safety net: a tool bug must not kill the run
                         result = {"error": f"{name} failed: {e}"}
                     # A failed search does not count: the model has seen no literature yet.
                     pubmed_called = pubmed_called or (

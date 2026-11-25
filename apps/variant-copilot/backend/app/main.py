@@ -160,8 +160,9 @@ def analyze(variant_id: str, replay: bool = False) -> StreamingResponse:
     """
     variant = _get_variant(variant_id)  # 404 before the stream starts
     if replay:
-        return StreamingResponse(_replay(_get_saved_run(variant_id)), headers=SSE_HEADERS,
-                                 media_type="text/event-stream")
+        return StreamingResponse(
+            _replay(_get_saved_run(variant_id)), headers=SSE_HEADERS, media_type="text/event-stream"
+        )
 
     events: queue.Queue = queue.Queue()
     cancel = threading.Event()  # set by stream() when the client goes away

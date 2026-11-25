@@ -161,14 +161,16 @@ def _parse_efetch(xml: str) -> list[dict]:
         # whose first 4 characters are the year.
         year = _text(pub_date.find("Year")) or _text(pub_date.find("MedlineDate"))[:4]
 
-        articles.append({
-            "pmid": pmid,
-            "title": _text(article.find("ArticleTitle")),
-            "journal": _text(article.find("Journal/Title")),
-            "year": year,
-            "abstract": abstract[:ABSTRACT_MAX_CHARS],
-            "url": ARTICLE_URL.format(pmid=pmid),  # the URL the agent must cite
-        })
+        articles.append(
+            {
+                "pmid": pmid,
+                "title": _text(article.find("ArticleTitle")),
+                "journal": _text(article.find("Journal/Title")),
+                "year": year,
+                "abstract": abstract[:ABSTRACT_MAX_CHARS],
+                "url": ARTICLE_URL.format(pmid=pmid),  # the URL the agent must cite
+            }
+        )
     return articles
 
 

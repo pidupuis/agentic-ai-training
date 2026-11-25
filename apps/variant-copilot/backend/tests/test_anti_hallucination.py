@@ -17,9 +17,7 @@ from app.variants import VARIANTS_BY_ID
 VEP_URL = "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336"
 REAL_PMID_URL = "https://pubmed.ncbi.nlm.nih.gov/22281684/"
 SEARCH_PAGE_URL = "https://pubmed.ncbi.nlm.nih.gov/?term=BRAF"
-INVENTED_PMID_URL = (
-    "https://pubmed.ncbi.nlm.nih.gov/99999999/"  # no tool ever returned it
-)
+INVENTED_PMID_URL = "https://pubmed.ncbi.nlm.nih.gov/99999999/"  # no tool ever returned it
 
 
 def annotation_args(
@@ -67,9 +65,7 @@ def test_url_returned_by_a_tool_is_accepted():
 
 def test_conclusion_without_pubmed_search_is_rejected():
     with pytest.raises(ValueError, match="search PubMed"):
-        _check_annotation(
-            annotation_args(VEP_URL), seen_urls={VEP_URL}, pubmed_called=False
-        )
+        _check_annotation(annotation_args(VEP_URL), seen_urls={VEP_URL}, pubmed_called=False)
 
 
 def test_search_page_cannot_support_a_pathogenic_claim():
@@ -174,9 +170,7 @@ def test_agent_rejects_invented_url_then_accepts_the_correction(monkeypatch):
     assert [e.url for e in annotation.evidence] == [REAL_PMID_URL]
     # The first submission was refused, and the refusal was visible in the trace...
     rejections = [
-        e
-        for e in events
-        if e["type"] == "tool_result" and e["tool"] == "submit_annotation"
+        e for e in events if e["type"] == "tool_result" and e["tool"] == "submit_annotation"
     ]
     assert len(rejections) == 1
     assert INVENTED_PMID_URL in rejections[0]["result"]["error"]
