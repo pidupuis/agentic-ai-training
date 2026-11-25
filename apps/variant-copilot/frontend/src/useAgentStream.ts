@@ -19,7 +19,7 @@ export const IDLE_RUN: Run = { events: [], annotation: null, status: "idle", err
  * Runs the agent and keeps one analysis per variant, in memory.
  *
  * Usage:
- *   const { runs, start, load } = useAgentStream()
+ *   const { runs, start, load } = useAgentStream({ onDone: (id) => refresh(id) })
  *   const run = runs[variantId] ?? IDLE_RUN      // this variant's own trace and result
  *   <button onClick={() => start(variantId)}>Analyze</button>
  *   <button onClick={() => start(variantId, { replay: true })}>Replay</button>  // free
@@ -37,7 +37,14 @@ export const IDLE_RUN: Run = { events: [], annotation: null, status: "idle", err
  * server ends the stream, which restarts the agent in a loop and pays for LLM calls
  * nobody asked for. Closing it early also lets the backend cancel the run (see main.py).
  */
-export function useAgentStream() {
+export function useAgentStream({ onDone }: { onDone?: (id: string) => void } = {}) {
+  // Kept in a ref so the latest callback is used without recreating start().
+  // Updated in an effect: React forbids writing refs during render.
+  const onDoneRef = useRef(onDone);
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  });
+
   // One Run per variant id. Record<K, V> is a plain object used as a map.
   const [runs, setRuns] = useState<Record<string, Run>>({});
 
@@ -104,6 +111,7 @@ export function useAgentStream() {
         if (event.type === "done") {
           updateRun(id, () => ({ status: "done" }));
           close(id);
+          onDoneRef.current?.(id); // e.g. let the page reload what the backend just saved
         }
         if (event.type === "error") {
           updateRun(id, () => ({ status: "error", error: event.message }));

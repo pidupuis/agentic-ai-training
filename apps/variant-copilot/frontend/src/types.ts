@@ -2,7 +2,8 @@
  * Types shared with the backend. Keep in sync with:
  *   backend/app/models.py      (Annotation, Evidence)
  *   backend/app/agent.py       (tool_call, tool_result, annotation events)
- *   backend/app/main.py        (done, error events, has_saved_run)
+ *   backend/app/main.py        (done, error events, has_saved_run, latest_review, audit)
+ *   backend/app/models.py      (ReviewRequest, Review)
  *   backend/app/runs.py        (SavedRun)
  */
 
@@ -17,6 +18,7 @@ export type Variant = {
   alt: string;
   hgvs_g: string; // e.g. "7:g.140753336A>T"
   has_saved_run: boolean; // true if GET /api/variants/{id}/run has a saved analysis
+  latest_review: Review | null; // the last expert decision, whatever run it was about
 };
 
 export type Classification =
@@ -68,4 +70,35 @@ export type SavedRun = {
   model: string; // the LLM that produced it
   saved_at: number; // Unix timestamp, seconds
   events: AgentEvent[]; // the whole run, ending with the annotation event
+};
+
+export type Decision = "accepted" | "modified" | "rejected";
+
+/** Body of POST /api/variants/{id}/review: the expert's decision only. */
+export type ReviewRequest = {
+  decision: Decision;
+  final_classification?: Classification; // required when modified
+  comment: string; // required when modified or rejected
+  reviewer: string;
+};
+
+/** One line of the audit trail, as stored by the backend. */
+export type Review = {
+  id: string;
+  variant_id: string;
+  decision: Decision;
+  ai_classification: Classification;
+  final_classification: Classification | null; // null when rejected
+  comment: string;
+  reviewer: string;
+  model: string;
+  run_saved_at: number; // saved_at of the run that was reviewed
+  created_at: string; // ISO 8601, UTC, e.g. "2026-11-25T14:40:00.123456Z"
+  annotation: Annotation;
+};
+
+/** GET /api/audit */
+export type AuditResponse = {
+  agreement: { agreed: number; total: number; rate: number | null };
+  reviews: Review[]; // newest first
 };

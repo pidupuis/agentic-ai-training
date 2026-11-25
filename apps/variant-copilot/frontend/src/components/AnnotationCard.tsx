@@ -1,22 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EvidenceList } from "@/components/EvidenceList";
+import { CLASSIFICATION_STYLE } from "@/lib/classification";
 import { cn } from "@/lib/utils";
-import type { Annotation, Classification } from "@/types";
-
-// Color is reserved for meaning: red (oncogenic) to green (benign), grey when undecided.
-// Full class names on purpose: Tailwind only generates classes it can find written out.
-const CLASSIFICATION_STYLE: Record<Classification, { label: string; className: string }> = {
-  oncogenic: { label: "Oncogenic", className: "bg-red-100 text-red-800" },
-  likely_oncogenic: { label: "Likely oncogenic", className: "bg-orange-100 text-orange-800" },
-  vus: { label: "VUS", className: "bg-neutral-200 text-neutral-800" },
-  likely_benign: { label: "Likely benign", className: "bg-lime-100 text-lime-800" },
-  benign: { label: "Benign", className: "bg-green-100 text-green-800" },
-  insufficient_evidence: {
-    label: "Insufficient evidence",
-    className: "bg-neutral-200 text-neutral-800",
-  },
-};
+import type { Annotation } from "@/types";
 
 /** The agent's proposal: classification, confidence, summary, evidence, conflicts. */
 export function AnnotationCard({ annotation }: { annotation: Annotation }) {
