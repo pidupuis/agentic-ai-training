@@ -2,7 +2,8 @@
  * Types shared with the backend. Keep in sync with:
  *   backend/app/models.py      (Annotation, Evidence)
  *   backend/app/agent.py       (tool_call, tool_result, annotation events)
- *   backend/app/main.py        (done, error events)
+ *   backend/app/main.py        (done, error events, has_saved_run)
+ *   backend/app/runs.py        (SavedRun)
  */
 
 export type Variant = {
@@ -15,6 +16,7 @@ export type Variant = {
   ref: string;
   alt: string;
   hgvs_g: string; // e.g. "7:g.140753336A>T"
+  has_saved_run: boolean; // true if GET /api/variants/{id}/run has a saved analysis
 };
 
 export type Classification =
@@ -59,3 +61,11 @@ export type DoneEvent = { type: "done"; ts: number };
 export type ErrorEvent = { type: "error"; message: string; ts: number };
 
 export type AgentEvent = ToolCallEvent | ToolResultEvent | AnnotationEvent | DoneEvent | ErrorEvent;
+
+/** A saved analysis, as returned by GET /api/variants/{id}/run. */
+export type SavedRun = {
+  variant_id: string;
+  model: string; // the LLM that produced it
+  saved_at: number; // Unix timestamp, seconds
+  events: AgentEvent[]; // the whole run, ending with the annotation event
+};

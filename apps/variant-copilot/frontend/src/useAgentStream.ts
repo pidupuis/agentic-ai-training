@@ -19,15 +19,17 @@ export const IDLE_RUN: Run = { events: [], annotation: null, status: "idle", err
  * Runs the agent and keeps one analysis per variant, in memory.
  *
  * Usage:
- *   const { runs, start } = useAgentStream()
+ *   const { runs, start, load } = useAgentStream()
  *   const run = runs[variantId] ?? IDLE_RUN      // this variant's own trace and result
  *   <button onClick={() => start(variantId)}>Analyze</button>
+ *   <button onClick={() => start(variantId, { replay: true })}>Replay</button>  // free
+ *   load(variantId, savedRun.events)             // show a saved run, no stream at all
  *
  * Each variant has its own Run, so switching variants never shows another variant's
  * result, and going back to an analyzed variant shows its result without a new LLM run.
  * A run keeps going if the user looks at another variant meanwhile.
- * (In-memory only: a page reload forgets everything. Step 5 stores annotations on the
- * backend so they survive reloads.)
+ * Runs live in memory; the backend saves each successful run, and the page reloads
+ * saved runs at startup with load().
  *
  * Each start() opens an EventSource on /api/variants/{id}/analyze (proxied by Vite to
  * FastAPI). An EventSource is ALWAYS closed on "done", on "error", on a new start()
@@ -58,12 +60,39 @@ export function useAgentStream() {
     sourcesRef.current.delete(id);
   }, []);
 
+  /**
+   * Show a saved run as finished, without any stream or LLM call.
+   * Used at page load with the events from GET /api/variants/{id}/run.
+   * Does nothing if a live run of this variant is already in progress.
+   */
+  const load = useCallback((id: string, events: AgentEvent[]) => {
+    // findLast + type guard: TypeScript then knows `found` is an annotation event.
+    const found = events.findLast(
+      (e): e is Extract<AgentEvent, { type: "annotation" }> => e.type === "annotation",
+    );
+    setRuns((prev) =>
+      prev[id]?.status === "running"
+        ? prev
+        : {
+            ...prev,
+            [id]: { events, annotation: found?.annotation ?? null, status: "done", error: null },
+          },
+    );
+  }, []);
+
+  /**
+   * Analyze a variant, streaming its events live.
+   *
+   * replay=false: a real agent run (LLM calls, costs a few cents), saved on success.
+   * replay=true:  the saved run streamed again with its original timing: no LLM call,
+   *               no cost. Same events, same UI: useful to work on the design or demo.
+   */
   const start = useCallback(
-    (id: string) => {
+    (id: string, { replay = false }: { replay?: boolean } = {}) => {
       close(id); // re-analyzing must not leave the previous run of this variant open
       setRuns((prev) => ({ ...prev, [id]: { ...IDLE_RUN, status: "running" } }));
 
-      const source = new EventSource(`/api/variants/${id}/analyze`);
+      const source = new EventSource(`/api/variants/${id}/analyze${replay ? "?replay=true" : ""}`);
       sourcesRef.current.set(id, source);
 
       // Each SSE "data: {...}" line arrives as one message event.
@@ -101,5 +130,5 @@ export function useAgentStream() {
     };
   }, []);
 
-  return { runs, start };
+  return { runs, start, load };
 }
