@@ -6,6 +6,7 @@ import { AuditLog } from "@/components/AuditLog";
 import { ReviewPanel, ValidatedBanner } from "@/components/ReviewPanel";
 import { Button } from "@/components/ui/button";
 import { VariantList } from "@/components/VariantList";
+import { BACKEND_DOWN, getJson } from "@/lib/api";
 import type { SavedRun, Variant } from "@/types";
 import { IDLE_RUN, useAgentStream } from "@/useAgentStream";
 
@@ -29,24 +30,31 @@ export default function App() {
   const [savedAt, setSavedAt] = useState<Record<string, number>>({});
   // Variant whose decision is being revised (form reopened over the banner), if any.
   const [revisingId, setRevisingId] = useState<string | null>(null);
+  // Set when the variant list cannot be loaded: shown instead of an empty list.
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   // After a live run, the backend has saved a new run: reload it (its saved_at changed,
   // so the previous decision no longer applies to what is shown).
   const { runs, start, load } = useAgentStream({ onDone: (id) => loadSavedRun(id) });
 
   const loadVariants = useCallback(async () => {
-    const list: Variant[] = await (await fetch("/api/variants")).json();
-    setVariants(list);
-    return list;
+    try {
+      setVariants(await getJson<Variant[]>("/api/variants"));
+      setLoadError(null);
+    } catch {
+      setLoadError(BACKEND_DOWN);
+    }
   }, []);
 
   const loadSavedRun = useCallback(
     async (id: string) => {
-      const response = await fetch(`/api/variants/${id}/run`);
-      if (!response.ok) return; // 404: never analyzed
-      const saved: SavedRun = await response.json();
-      setSavedAt((prev) => ({ ...prev, [id]: saved.saved_at }));
-      load(id, saved.events); // shown as finished: no LLM call
+      try {
+        const saved = await getJson<SavedRun>(`/api/variants/${id}/run`);
+        setSavedAt((prev) => ({ ...prev, [id]: saved.saved_at }));
+        load(id, saved.events); // shown as finished: no LLM call
+      } catch {
+        // 404 (never analyzed) or backend down: the variant simply shows no saved run.
+      }
     },
     [load],
   );
@@ -55,12 +63,12 @@ export default function App() {
   // setState is called in .then(), once the response arrives, never synchronously in
   // the effect body (React's set-state-in-effect rule).
   useEffect(() => {
-    fetch("/api/variants")
-      .then((r) => r.json())
-      .then((list: Variant[]) => {
+    getJson<Variant[]>("/api/variants")
+      .then((list) => {
         setVariants(list);
         list.filter((v) => v.has_saved_run).forEach((v) => loadSavedRun(v.id));
-      });
+      })
+      .catch(() => setLoadError(BACKEND_DOWN));
   }, [loadSavedRun]);
 
   const selected = variants.find((v) => v.id === selectedId);
@@ -96,6 +104,7 @@ export default function App() {
             Audit trail
           </Button>
         </nav>
+        {loadError && <p className="text-sm text-destructive">{loadError}</p>}
         <VariantList
           variants={variants}
           selectedId={selectedId}

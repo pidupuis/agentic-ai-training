@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { BACKEND_DOWN, getJson } from "@/lib/api";
 import { CLASSIFICATION_STYLE } from "@/lib/classification";
 import { formatDateTime, utcTooltip } from "@/lib/dates";
 import type { AuditResponse, Classification, Variant } from "@/types";
@@ -26,14 +27,16 @@ export function AuditLog({
   onShowAll: () => void;
 }) {
   const [audit, setAudit] = useState<AuditResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetched each time the view opens: always the current trail.
   useEffect(() => {
-    fetch("/api/audit")
-      .then((r) => r.json())
-      .then(setAudit);
+    getJson<AuditResponse>("/api/audit")
+      .then(setAudit)
+      .catch(() => setError(BACKEND_DOWN));
   }, []);
 
+  if (error) return <p className="text-sm text-destructive">{error}</p>;
   if (!audit) return <p className="text-muted-foreground">Loading…</p>;
 
   // Computed here rather than read from audit.agreement, so that it follows the filter
