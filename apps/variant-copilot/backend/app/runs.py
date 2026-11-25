@@ -12,6 +12,7 @@ Only successful runs are saved: a failed or cancelled run never replaces a good 
 
 import json
 import os
+import tempfile
 import time
 from pathlib import Path
 
@@ -38,9 +39,15 @@ def save_run(variant_id: str, model: str, events: list[dict]) -> None:
     content = {"variant_id": variant_id, "model": model, "saved_at": time.time(), "events": events}
     # Write to a temporary file, then rename: os.replace is atomic, so a reader never
     # sees a half-written file, even if the server stops in the middle of the write.
-    tmp = path.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(content, ensure_ascii=False, indent=1))
-    os.replace(tmp, path)
+    # mkstemp gives a unique name: two analyses of the same variant can run at once.
+    fd, tmp = tempfile.mkstemp(dir=RUNS_DIR, suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(content, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, path)
+    except BaseException:
+        os.unlink(tmp)
+        raise
 
 
 def load_run(variant_id: str) -> dict | None:

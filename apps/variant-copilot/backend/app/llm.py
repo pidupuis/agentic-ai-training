@@ -17,4 +17,7 @@ def get_client() -> OpenAI:
 
 def get_model() -> str:
     """Model name from LLM_MODEL in .env, never hard-coded."""
-    return os.environ["LLM_MODEL"]
+    model = os.environ.get("LLM_MODEL")
+    if not model:  # a bare KeyError would reach the browser as just "'LLM_MODEL'"
+        raise RuntimeError("LLM_MODEL is not set: add it to backend/.env (see .env.example)")
+    return model

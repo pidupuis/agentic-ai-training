@@ -274,7 +274,10 @@ def run_agent(
                         result = {"error": f"Bad arguments for {name}: {e}"}
                     except Exception as e:  # noqa: BLE001 - a tool bug must not kill the run
                         result = {"error": f"{name} failed: {e}"}
-                    pubmed_called = pubmed_called or name == "search_pubmed"
+                    # A failed search does not count: the model has seen no literature yet.
+                    pubmed_called = pubmed_called or (
+                        name == "search_pubmed" and "error" not in result
+                    )
                     _collect_urls(result, seen_urls)
                 else:
                     result = {"error": f"Unknown tool: {name}"}

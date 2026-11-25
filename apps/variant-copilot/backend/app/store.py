@@ -9,9 +9,14 @@ Example file (one line per decision, shortened):
     {"decision": "modified", "final_classification": "likely_oncogenic", "comment": "...", ...}
 """
 
+import logging
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from app.models import Review
+
+log = logging.getLogger(__name__)
 
 # parents[1]: app/store.py -> app/ -> backend/
 REVIEWS_FILE = Path(__file__).resolve().parents[1] / "data" / "reviews.jsonl"
@@ -28,11 +33,23 @@ def append_review(review: Review) -> None:
 
 
 def list_reviews() -> list[Review]:
-    """Every decision, oldest first. Each line is validated back into a Review."""
+    """Every decision, oldest first. Each line is validated back into a Review.
+
+    A damaged line (hand edit, crash mid-write) is logged and skipped rather than
+    raised: one bad line must not take down the whole UI. It stays in the file.
+    """
     if not REVIEWS_FILE.exists():
         return []
+    reviews = []
     lines = REVIEWS_FILE.read_text(encoding="utf-8").splitlines()
-    return [Review.model_validate_json(line) for line in lines if line.strip()]
+    for number, line in enumerate(lines, start=1):
+        if not line.strip():
+            continue
+        try:
+            reviews.append(Review.model_validate_json(line))
+        except ValidationError as e:  # also raised for invalid JSON
+            log.warning("%s line %d skipped: %s", REVIEWS_FILE.name, number, e)
+    return reviews
 
 
 def latest_review(variant_id: str) -> Review | None:
