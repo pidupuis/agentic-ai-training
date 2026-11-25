@@ -1,0 +1,733 @@
+{
+ "url": "https://rest.ensembl.org/vep/human/hgvs/14:g.102081741C%3ET?canonical=1&hgvs=1&content-type=application%2Fjson",
+ "body": [
+  {
+   "colocated_variants": [
+    {
+     "end": 102081741,
+     "seq_region_name": "14",
+     "somatic": 1,
+     "start": 102081741,
+     "strand": 1,
+     "var_synonyms": {
+      "COSMIC": [
+       "COSM6682484"
+      ]
+     },
+     "allele_string": "COSMIC_MUTATION",
+     "id": "COSV53488860",
+     "phenotype_or_disease": 1
+    },
+    {
+     "strand": 1,
+     "allele_string": "C/G/T",
+     "id": "rs563025620",
+     "seq_region_name": "14",
+     "end": 102081741,
+     "start": 102081741,
+     "frequencies": {
+      "T": {
+       "gnomade_remaining": 1.692e-05,
+       "gnomade_mid": 0,
+       "gnomadg_fin": 0,
+       "sas": 0.001,
+       "gnomadg_asj": 0,
+       "gnomadg_eas": 0,
+       "eur": 0,
+       "af": 0.0002,
+       "gnomadg_nfe": 0,
+       "gnomade_amr": 0,
+       "gnomade_nfe": 6.481e-06,
+       "gnomadg_amr": 0,
+       "gnomade_afr": 0,
+       "gnomade_fin": 0,
+       "gnomade_asj": 0,
+       "afr": 0,
+       "gnomade_eas": 0,
+       "gnomade": 2.243e-05,
+       "gnomadg": 6.569e-06,
+       "gnomade_sas": 0.0002806,
+       "gnomadg_remaining": 0,
+       "gnomadg_ami": 0,
+       "gnomadg_mid": 0,
+       "amr": 0,
+       "gnomadg_afr": 0,
+       "gnomadg_sas": 0.0002076,
+       "eas": 0
+      }
+     }
+    }
+   ],
+   "start": 102081741,
+   "most_severe_consequence": "missense_variant",
+   "input": "14:g.102081741C>T",
+   "allele_string": "C/T",
+   "transcript_consequences": [
+    {
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "hgvsp": "ENSP00000216281.8:p.Asp724Asn",
+     "codons": "Gac/Aac",
+     "variant_allele": "T",
+     "hgvsc": "ENST00000216281.13:c.2170G>A",
+     "protein_end": 724,
+     "transcript_id": "ENST00000216281",
+     "gene_id": "ENSG00000080824",
+     "hgnc_id": "HGNC:5253",
+     "cdna_end": 2229,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2229,
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "impact": "MODERATE",
+     "polyphen_score": 0.742,
+     "cds_start": 2170,
+     "canonical": 1,
+     "gene_symbol_source": "HGNC",
+     "protein_start": 724,
+     "amino_acids": "D/N",
+     "sift_score": 0.02,
+     "biotype": "protein_coding"
+    },
+    {
+     "impact": "MODERATE",
+     "polyphen_score": 0.624,
+     "cds_start": 2536,
+     "sift_prediction": "deleterious_low_confidence",
+     "cds_end": 2536,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "amino_acids": "D/N",
+     "sift_score": 0.01,
+     "biotype": "protein_coding",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 846,
+     "hgvsp": "ENSP00000335153.7:p.Asp846Asn",
+     "codons": "Gac/Aac",
+     "variant_allele": "T",
+     "hgvsc": "ENST00000334701.12:c.2536G>A",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "cdna_end": 2905,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2905,
+     "protein_end": 846,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000334701",
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "distance": 4269,
+     "gene_symbol": "RN7SL472P",
+     "consequence_terms": [
+      "upstream_gene_variant"
+     ],
+     "strand": -1,
+     "biotype": "misc_RNA",
+     "hgnc_id": "HGNC:46488",
+     "gene_symbol_source": "HGNC",
+     "canonical": 1,
+     "gene_id": "ENSG00000240457",
+     "transcript_id": "ENST00000492799"
+    },
+    {
+     "flags": [
+      "cds_end_NF"
+     ],
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "gene_symbol": "HSP90AA1",
+     "distance": 3192,
+     "biotype": "protein_coding",
+     "transcript_id": "ENST00000553585",
+     "gene_id": "ENSG00000080824",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "biotype": "nonsense_mediated_decay",
+     "hgnc_id": "HGNC:5253",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000554401",
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "flags": [
+      "cds_start_NF"
+     ],
+     "gene_symbol": "HSP90AA1",
+     "distance": 924,
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ]
+    },
+    {
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "distance": 3239,
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000555662",
+     "hgnc_id": "HGNC:5253",
+     "biotype": "retained_intron"
+    },
+    {
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "distance": 4145,
+     "gene_symbol": "HSP90AA1",
+     "biotype": "retained_intron",
+     "gene_symbol_source": "HGNC",
+     "transcript_id": "ENST00000556554",
+     "gene_id": "ENSG00000080824",
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "distance": 1701,
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "hgnc_id": "HGNC:5253",
+     "gene_symbol_source": "HGNC",
+     "transcript_id": "ENST00000557089",
+     "gene_id": "ENSG00000080824",
+     "biotype": "retained_intron"
+    },
+    {
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000557234",
+     "hgnc_id": "HGNC:5253",
+     "biotype": "nonsense_mediated_decay",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "gene_symbol": "HSP90AA1",
+     "distance": 4178,
+     "impact": "MODIFIER",
+     "variant_allele": "T"
+    },
+    {
+     "gene_symbol": "HSP90AA1",
+     "distance": 2155,
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "hgnc_id": "HGNC:5253",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000560130",
+     "biotype": "retained_intron"
+    },
+    {
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_start": 2170,
+     "impact": "MODERATE",
+     "polyphen_score": 0.742,
+     "protein_start": 724,
+     "gene_symbol_source": "HGNC",
+     "biotype": "protein_coding",
+     "amino_acids": "D/N",
+     "sift_score": 0.02,
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "variant_allele": "T",
+     "hgvsc": "ENST00000877282.1:c.2170G>A",
+     "hgvsp": "ENSP00000547341.1:p.Asp724Asn",
+     "codons": "Gac/Aac",
+     "hgnc_id": "HGNC:5253",
+     "protein_end": 724,
+     "transcript_id": "ENST00000877282",
+     "gene_id": "ENSG00000080824",
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2538,
+     "cdna_end": 2538
+    },
+    {
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2426,
+     "cdna_end": 2426,
+     "hgnc_id": "HGNC:5253",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000877283",
+     "protein_end": 724,
+     "hgvsc": "ENST00000877283.1:c.2170G>A",
+     "variant_allele": "T",
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000547342.1:p.Asp724Asn",
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "biotype": "protein_coding",
+     "sift_score": 0.02,
+     "amino_acids": "D/N",
+     "protein_start": 724,
+     "gene_symbol_source": "HGNC",
+     "cds_start": 2170,
+     "polyphen_score": 0.742,
+     "impact": "MODERATE",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "sift_prediction": "deleterious_low_confidence",
+     "cds_end": 2170
+    },
+    {
+     "polyphen_score": 0.742,
+     "impact": "MODERATE",
+     "cds_start": 2170,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "sift_score": 0.02,
+     "amino_acids": "D/N",
+     "biotype": "protein_coding",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 724,
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000547343.1:p.Asp724Asn",
+     "hgvsc": "ENST00000877284.1:c.2170G>A",
+     "variant_allele": "T",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "cdna_end": 2277,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2277,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000877284",
+     "protein_end": 724,
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "hgnc_id": "HGNC:5253",
+     "protein_end": 720,
+     "transcript_id": "ENST00000877285",
+     "gene_id": "ENSG00000080824",
+     "cdna_start": 2217,
+     "cdna_end": 2217,
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "variant_allele": "T",
+     "hgvsc": "ENST00000877285.1:c.2158G>A",
+     "hgvsp": "ENSP00000547344.1:p.Asp720Asn",
+     "codons": "Gac/Aac",
+     "protein_start": 720,
+     "gene_symbol_source": "HGNC",
+     "biotype": "protein_coding",
+     "amino_acids": "D/N",
+     "sift_score": 0.02,
+     "sift_prediction": "deleterious_low_confidence",
+     "cds_end": 2158,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_start": 2158,
+     "impact": "MODERATE"
+    },
+    {
+     "hgvsp": "ENSP00000547345.1:p.Asp724Asn",
+     "codons": "Gac/Aac",
+     "variant_allele": "T",
+     "hgvsc": "ENST00000877286.1:c.2170G>A",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "cdna_end": 2836,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2836,
+     "protein_end": 724,
+     "transcript_id": "ENST00000877286",
+     "gene_id": "ENSG00000080824",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODERATE",
+     "polyphen_score": 0.742,
+     "cds_start": 2170,
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "amino_acids": "D/N",
+     "sift_score": 0.02,
+     "biotype": "protein_coding",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 724
+    },
+    {
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "sift_prediction": "deleterious_low_confidence",
+     "cds_end": 2170,
+     "cds_start": 2170,
+     "polyphen_score": 0.742,
+     "impact": "MODERATE",
+     "protein_start": 724,
+     "gene_symbol_source": "HGNC",
+     "biotype": "protein_coding",
+     "sift_score": 0.02,
+     "amino_acids": "D/N",
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "hgvsc": "ENST00000922308.1:c.2170G>A",
+     "variant_allele": "T",
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000592367.1:p.Asp724Asn",
+     "hgnc_id": "HGNC:5253",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000922308",
+     "protein_end": 724,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2222,
+     "cdna_end": 2222
+    },
+    {
+     "polyphen_score": 0.742,
+     "impact": "MODERATE",
+     "cds_start": 2170,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "sift_prediction": "deleterious_low_confidence",
+     "cds_end": 2170,
+     "sift_score": 0.02,
+     "amino_acids": "D/N",
+     "biotype": "protein_coding",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 724,
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000592368.1:p.Asp724Asn",
+     "hgvsc": "ENST00000922309.1:c.2170G>A",
+     "variant_allele": "T",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "cdna_end": 2229,
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2229,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000922309",
+     "protein_end": 724,
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "impact": "MODERATE",
+     "cds_start": 919,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_end": 919,
+     "sift_prediction": "tolerated_low_confidence",
+     "sift_score": 0.05,
+     "amino_acids": "D/N",
+     "biotype": "protein_coding",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 307,
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000592369.1:p.Asp307Asn",
+     "hgvsc": "ENST00000922310.1:c.919G>A",
+     "variant_allele": "T",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "cdna_end": 978,
+     "cdna_start": 978,
+     "transcript_id": "ENST00000922310",
+     "gene_id": "ENSG00000080824",
+     "protein_end": 307,
+     "hgnc_id": "HGNC:5253"
+    },
+    {
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000922311",
+     "protein_end": 724,
+     "hgnc_id": "HGNC:5253",
+     "cdna_end": 2257,
+     "cdna_start": 2257,
+     "polyphen_prediction": "possibly_damaging",
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "codons": "Gac/Aac",
+     "hgvsp": "ENSP00000592370.1:p.Asp724Asn",
+     "hgvsc": "ENST00000922311.1:c.2170G>A",
+     "variant_allele": "T",
+     "gene_symbol_source": "HGNC",
+     "protein_start": 724,
+     "sift_score": 0.02,
+     "amino_acids": "D/N",
+     "biotype": "protein_coding",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "polyphen_score": 0.742,
+     "impact": "MODERATE",
+     "cds_start": 2170
+    },
+    {
+     "hgnc_id": "HGNC:5253",
+     "protein_end": 724,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00000922312",
+     "polyphen_prediction": "possibly_damaging",
+     "cdna_start": 2564,
+     "cdna_end": 2564,
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "variant_allele": "T",
+     "hgvsc": "ENST00000922312.1:c.2170G>A",
+     "hgvsp": "ENSP00000592371.1:p.Asp724Asn",
+     "codons": "Gac/Aac",
+     "protein_start": 724,
+     "gene_symbol_source": "HGNC",
+     "biotype": "protein_coding",
+     "amino_acids": "D/N",
+     "sift_score": 0.02,
+     "cds_end": 2170,
+     "sift_prediction": "deleterious_low_confidence",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_start": 2170,
+     "impact": "MODERATE",
+     "polyphen_score": 0.742
+    },
+    {
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001067517",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253",
+     "cdna_end": 1993,
+     "cdna_start": 1993,
+     "biotype": "protein_coding",
+     "consequence_terms": [
+      "3_prime_UTR_variant"
+     ],
+     "strand": -1,
+     "gene_symbol": "HSP90AA1",
+     "impact": "MODIFIER",
+     "hgvsc": "ENST00001067517.1:c.*33G>A",
+     "variant_allele": "T"
+    },
+    {
+     "biotype": "protein_coding",
+     "hgnc_id": "HGNC:5253",
+     "gene_symbol_source": "HGNC",
+     "transcript_id": "ENST00001067521",
+     "gene_id": "ENSG00000080824",
+     "variant_allele": "T",
+     "hgvsc": "ENST00001067521.1:c.49-562G>A",
+     "impact": "MODIFIER",
+     "gene_symbol": "HSP90AA1",
+     "consequence_terms": [
+      "intron_variant"
+     ],
+     "strand": -1
+    },
+    {
+     "cdna_end": 2235,
+     "biotype": "nonsense_mediated_decay",
+     "cdna_start": 2235,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001067531",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODIFIER",
+     "hgvsc": "ENST00001067531.1:c.*1985G>A",
+     "variant_allele": "T",
+     "strand": -1,
+     "consequence_terms": [
+      "3_prime_UTR_variant",
+      "NMD_transcript_variant"
+     ],
+     "gene_symbol": "HSP90AA1"
+    },
+    {
+     "cds_end": 820,
+     "sift_prediction": "deleterious_low_confidence",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "cds_start": 820,
+     "impact": "MODERATE",
+     "protein_start": 274,
+     "gene_symbol_source": "HGNC",
+     "biotype": "protein_coding",
+     "amino_acids": "D/N",
+     "sift_score": 0,
+     "gene_symbol": "HSP90AA1",
+     "strand": -1,
+     "variant_allele": "T",
+     "hgvsc": "ENST00001104413.1:c.820G>A",
+     "hgvsp": "ENSP00000774216.1:p.Asp274Asn",
+     "codons": "Gac/Aac",
+     "hgnc_id": "HGNC:5253",
+     "protein_end": 274,
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001104413",
+     "cdna_start": 1010,
+     "cdna_end": 1010
+    },
+    {
+     "biotype": "protein_coding",
+     "transcript_id": "ENST00001104414",
+     "gene_id": "ENSG00000080824",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODIFIER",
+     "hgvsc": "ENST00001104414.1:c.180-258G>A",
+     "variant_allele": "T",
+     "consequence_terms": [
+      "intron_variant"
+     ],
+     "strand": -1,
+     "gene_symbol": "HSP90AA1"
+    },
+    {
+     "cdna_end": 2119,
+     "cdna_start": 2119,
+     "biotype": "nonsense_mediated_decay",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001104415",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "hgvsc": "ENST00001104415.1:c.*560G>A",
+     "strand": -1,
+     "consequence_terms": [
+      "3_prime_UTR_variant",
+      "NMD_transcript_variant"
+     ],
+     "gene_symbol": "HSP90AA1"
+    },
+    {
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "gene_symbol": "HSP90AA1",
+     "distance": 311,
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "biotype": "protein_coding",
+     "hgnc_id": "HGNC:5253",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126307",
+     "gene_symbol_source": "HGNC"
+    },
+    {
+     "biotype": "nonsense_mediated_decay",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126308",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "strand": -1,
+     "distance": 3094,
+     "gene_symbol": "HSP90AA1"
+    },
+    {
+     "biotype": "protein_coding",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126309",
+     "gene_symbol_source": "HGNC",
+     "hgnc_id": "HGNC:5253",
+     "impact": "MODIFIER",
+     "variant_allele": "T",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "distance": 3100,
+     "gene_symbol": "HSP90AA1"
+    },
+    {
+     "hgnc_id": "HGNC:5253",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126310",
+     "biotype": "nonsense_mediated_decay",
+     "gene_symbol": "HSP90AA1",
+     "distance": 3176,
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "variant_allele": "T",
+     "impact": "MODIFIER"
+    },
+    {
+     "variant_allele": "T",
+     "impact": "MODIFIER",
+     "gene_symbol": "HSP90AA1",
+     "distance": 3179,
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "biotype": "protein_coding",
+     "hgnc_id": "HGNC:5253",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126311",
+     "gene_symbol_source": "HGNC"
+    },
+    {
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000080824",
+     "transcript_id": "ENST00001126312",
+     "hgnc_id": "HGNC:5253",
+     "biotype": "nonsense_mediated_decay",
+     "strand": -1,
+     "consequence_terms": [
+      "downstream_gene_variant"
+     ],
+     "gene_symbol": "HSP90AA1",
+     "distance": 3179,
+     "impact": "MODIFIER",
+     "variant_allele": "T"
+    }
+   ],
+   "seq_region_name": "14",
+   "assembly_name": "GRCh38",
+   "end": 102081741,
+   "id": "14:g.102081741C>T",
+   "strand": 1
+  }
+ ]
+}

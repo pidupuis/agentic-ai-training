@@ -1,0 +1,23 @@
+{
+ "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22EGFR%22%5Btiab%5D+AND+%22L858R%22%5Btiab%5D&retmode=json&retmax=5&sort=relevance",
+ "body": {
+  "header": {
+   "type": "esearch",
+   "version": "0.3"
+  },
+  "esearchresult": {
+   "count": "3212",
+   "retmax": "5",
+   "retstart": "0",
+   "idlist": [
+    "37321664",
+    "27251290",
+    "34624491",
+    "30530173",
+    "39494831"
+   ],
+   "translationset": [],
+   "querytranslation": "\"EGFR\"[Title/Abstract] AND \"L858R\"[Title/Abstract]"
+  }
+ }
+}

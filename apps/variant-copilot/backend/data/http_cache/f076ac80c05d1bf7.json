@@ -1,0 +1,491 @@
+{
+ "url": "https://rest.ensembl.org/vep/human/hgvs/7:g.55191822T%3EG?canonical=1&hgvs=1&content-type=application%2Fjson",
+ "body": [
+  {
+   "assembly_name": "GRCh38",
+   "seq_region_name": "7",
+   "colocated_variants": [
+    {
+     "start": 55191822,
+     "strand": 1,
+     "clinvar_somatic_classification": "non-small cell lung carcinoma(Tier I - Strong:therapeutic:sensitivity/response);Neoplasm(oncogenicity:Oncogenic)",
+     "id": "COSV51765161",
+     "allele_string": "COSMIC_MUTATION",
+     "seq_region_name": "7",
+     "phenotype_or_disease": 1,
+     "var_synonyms": {
+      "COSMIC": [
+       "COSM6224"
+      ]
+     },
+     "somatic": 1,
+     "end": 55191822
+    },
+    {
+     "allele_string": "COSMIC_MUTATION",
+     "id": "COSV51854030",
+     "seq_region_name": "7",
+     "start": 55191822,
+     "clinvar_somatic_classification": "non-small cell lung carcinoma(Tier I - Strong:therapeutic:sensitivity/response);Neoplasm(oncogenicity:Oncogenic)",
+     "strand": 1,
+     "var_synonyms": {
+      "COSMIC": [
+       "COSM29578"
+      ]
+     },
+     "end": 55191822,
+     "somatic": 1,
+     "phenotype_or_disease": 1
+    },
+    {
+     "phenotype_or_disease": 1,
+     "clin_sig": [
+      "uncertain_significance",
+      "pathogenic",
+      "drug_response"
+     ],
+     "clin_sig_allele": "G:uncertain_significance;G:drug_response;G:pathogenic",
+     "var_synonyms": {
+      "PharmGKB": [
+       "PA166157527"
+      ],
+      "ClinVar": [
+       "RCV005328198",
+       "RCV005229815",
+       "RCV000419082",
+       "VCV000376281",
+       "RCV002464068",
+       "RCV001030017",
+       "RCV001030016",
+       "RCV000987885",
+       "RCV000435684",
+       "RCV000418019",
+       "RCV000211323",
+       "RCV000018084",
+       "RCV000018083",
+       "VCV000016609",
+       "RCV000150629"
+      ],
+      "UniProt": [
+       "VAR_019298"
+      ],
+      "OMIM": [
+       131550.0002
+      ]
+     },
+     "clin_sig_ref_allele": "T",
+     "end": 55191822,
+     "start": 55191822,
+     "strand": 1,
+     "clinvar_somatic_classification": "non-small cell lung carcinoma(Tier I - Strong:therapeutic:sensitivity/response);Neoplasm(oncogenicity:Oncogenic)",
+     "pubmed": [
+      24944790,
+      31019283,
+      22992668,
+      27618021,
+      32295184,
+      25157968,
+      26619011,
+      29525983,
+      15118073,
+      15118125,
+      15329413,
+      16115929,
+      16187797,
+      16204070,
+      17192902,
+      17285735,
+      19922469,
+      20479403,
+      22753918,
+      23102728,
+      15897572,
+      15901872,
+      16043828,
+      16203769,
+      16204011,
+      16865253,
+      16956694,
+      17047654,
+      17106442,
+      17317677,
+      17387341,
+      17429313,
+      17473659,
+      18303429,
+      18349398,
+      19096302,
+      19455431,
+      19692680,
+      19692684,
+      20022809,
+      20038723,
+      20573926,
+      21670455,
+      21783417,
+      21900837,
+      21969500,
+      22215752,
+      22370314,
+      22452895,
+      22740981,
+      22760226,
+      22982650,
+      23816960,
+      23948351,
+      26490356,
+      26515464,
+      19147750,
+      17877814,
+      32175330,
+      28347348,
+      26053404,
+      36388934,
+      32962681,
+      30149365,
+      29721857,
+      36629526,
+      38008767,
+      39273318,
+      21132006,
+      27032107,
+      18408761,
+      24439929,
+      22285168,
+      23982599,
+      24868098,
+      24736073,
+      27102076,
+      40376268,
+      29533785,
+      28979142,
+      30952700
+     ],
+     "seq_region_name": "7",
+     "id": "rs121434568",
+     "allele_string": "T/A/G"
+    }
+   ],
+   "input": "7:g.55191822T>G",
+   "id": "7:g.55191822T>G",
+   "strand": 1,
+   "transcript_consequences": [
+    {
+     "strand": 1,
+     "hgvsp": "ENSP00000275493.2:p.Leu858Arg",
+     "gene_id": "ENSG00000146648",
+     "sift_score": 0,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "polyphen_score": 0.997,
+     "hgvsc": "ENST00000275493.7:c.2573T>G",
+     "cdna_end": 2834,
+     "polyphen_prediction": "probably_damaging",
+     "protein_start": 858,
+     "cds_start": 2573,
+     "hgnc_id": "HGNC:3236",
+     "codons": "cTg/cGg",
+     "cdna_start": 2834,
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR",
+     "variant_allele": "G",
+     "cds_end": 2573,
+     "canonical": 1,
+     "amino_acids": "L/R",
+     "impact": "MODERATE",
+     "transcript_id": "ENST00000275493",
+     "biotype": "protein_coding",
+     "sift_prediction": "deleterious_low_confidence",
+     "protein_end": 858
+    },
+    {
+     "strand": -1,
+     "gene_symbol": "EGFR-AS1",
+     "gene_symbol_source": "HGNC",
+     "gene_id": "ENSG00000224057",
+     "variant_allele": "G",
+     "consequence_terms": [
+      "upstream_gene_variant"
+     ],
+     "transcript_id": "ENST00000442411",
+     "impact": "MODIFIER",
+     "biotype": "lncRNA",
+     "distance": 2836,
+     "hgnc_id": "HGNC:40207"
+    },
+    {
+     "protein_start": 805,
+     "cds_start": 2414,
+     "hgnc_id": "HGNC:3236",
+     "hgvsc": "ENST00000450046.3:c.2414T>G",
+     "cdna_end": 2721,
+     "polyphen_prediction": "probably_damaging",
+     "sift_score": 0,
+     "gene_id": "ENSG00000146648",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "polyphen_score": 0.997,
+     "strand": 1,
+     "hgvsp": "ENSP00000413354.2:p.Leu805Arg",
+     "sift_prediction": "deleterious_low_confidence",
+     "protein_end": 805,
+     "impact": "MODERATE",
+     "amino_acids": "L/R",
+     "transcript_id": "ENST00000450046",
+     "biotype": "protein_coding",
+     "variant_allele": "G",
+     "cds_end": 2414,
+     "cdna_start": 2721,
+     "codons": "cTg/cGg",
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR"
+    },
+    {
+     "protein_start": 813,
+     "cds_start": 2438,
+     "hgnc_id": "HGNC:3236",
+     "hgvsc": "ENST00000455089.6:c.2438T>G",
+     "cdna_end": 2896,
+     "polyphen_prediction": "possibly_damaging",
+     "gene_id": "ENSG00000146648",
+     "sift_score": 0,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "polyphen_score": 0.855,
+     "hgvsp": "ENSP00000415559.1:p.Leu813Arg",
+     "strand": 1,
+     "sift_prediction": "deleterious_low_confidence",
+     "protein_end": 813,
+     "amino_acids": "L/R",
+     "impact": "MODERATE",
+     "transcript_id": "ENST00000455089",
+     "biotype": "protein_coding",
+     "variant_allele": "G",
+     "cds_end": 2438,
+     "cdna_start": 2896,
+     "codons": "cTg/cGg",
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR"
+    },
+    {
+     "gene_id": "ENSG00000146648",
+     "variant_allele": "G",
+     "consequence_terms": [
+      "upstream_gene_variant"
+     ],
+     "strand": 1,
+     "gene_symbol": "EGFR",
+     "gene_symbol_source": "HGNC",
+     "distance": 989,
+     "hgnc_id": "HGNC:3236",
+     "transcript_id": "ENST00000485503",
+     "impact": "MODIFIER",
+     "biotype": "retained_intron"
+    },
+    {
+     "gene_symbol": "EGFR",
+     "gene_symbol_source": "HGNC",
+     "strand": 1,
+     "consequence_terms": [
+      "intron_variant"
+     ],
+     "gene_id": "ENSG00000146648",
+     "variant_allele": "G",
+     "biotype": "protein_coding",
+     "transcript_id": "ENST00000700145",
+     "hgvsc": "ENST00000700145.1:c.899+23T>G",
+     "impact": "MODIFIER",
+     "hgnc_id": "HGNC:3236",
+     "flags": [
+      "cds_start_NF"
+     ]
+    },
+    {
+     "hgnc_id": "HGNC:40207",
+     "impact": "MODIFIER",
+     "hgvsc": "ENST00000836806.1:n.208-9345A>C",
+     "transcript_id": "ENST00000836806",
+     "biotype": "lncRNA",
+     "variant_allele": "G",
+     "gene_id": "ENSG00000224057",
+     "consequence_terms": [
+      "intron_variant",
+      "non_coding_transcript_variant"
+     ],
+     "canonical": 1,
+     "strand": -1,
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR-AS1"
+    },
+    {
+     "cds_end": 2564,
+     "variant_allele": "G",
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR",
+     "cdna_start": 3022,
+     "codons": "cTg/cGg",
+     "sift_prediction": "deleterious_low_confidence",
+     "protein_end": 855,
+     "biotype": "protein_coding",
+     "amino_acids": "L/R",
+     "impact": "MODERATE",
+     "transcript_id": "ENST00000898199",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "sift_score": 0,
+     "gene_id": "ENSG00000146648",
+     "hgvsp": "ENSP00000568258.1:p.Leu855Arg",
+     "strand": 1,
+     "cds_start": 2564,
+     "hgnc_id": "HGNC:3236",
+     "protein_start": 855,
+     "cdna_end": 3022,
+     "hgvsc": "ENST00000898199.2:c.2564T>G"
+    },
+    {
+     "variant_allele": "G",
+     "cds_end": 2240,
+     "cdna_start": 2698,
+     "codons": "cTg/cGg",
+     "gene_symbol": "EGFR",
+     "gene_symbol_source": "HGNC",
+     "sift_prediction": "deleterious",
+     "protein_end": 747,
+     "transcript_id": "ENST00000898200",
+     "impact": "MODERATE",
+     "amino_acids": "L/R",
+     "biotype": "protein_coding",
+     "sift_score": 0,
+     "gene_id": "ENSG00000146648",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "strand": 1,
+     "hgvsp": "ENSP00000568259.1:p.Leu747Arg",
+     "protein_start": 747,
+     "hgnc_id": "HGNC:3236",
+     "cds_start": 2240,
+     "cdna_end": 2698,
+     "hgvsc": "ENST00000898200.2:c.2240T>G"
+    },
+    {
+     "hgvsc": "ENST00000898201.2:c.1991T>G",
+     "cdna_end": 2449,
+     "protein_start": 664,
+     "hgnc_id": "HGNC:3236",
+     "cds_start": 1991,
+     "hgvsp": "ENSP00000568260.1:p.Leu664Arg",
+     "strand": 1,
+     "sift_score": 0,
+     "gene_id": "ENSG00000146648",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "transcript_id": "ENST00000898201",
+     "impact": "MODERATE",
+     "amino_acids": "L/R",
+     "biotype": "protein_coding",
+     "sift_prediction": "deleterious",
+     "protein_end": 664,
+     "cdna_start": 2449,
+     "codons": "cTg/cGg",
+     "gene_symbol": "EGFR",
+     "gene_symbol_source": "HGNC",
+     "variant_allele": "G",
+     "cds_end": 1991
+    },
+    {
+     "amino_acids": "L/R",
+     "impact": "MODERATE",
+     "transcript_id": "ENST00000898202",
+     "biotype": "protein_coding",
+     "sift_prediction": "deleterious_low_confidence",
+     "protein_end": 845,
+     "codons": "cTg/cGg",
+     "cdna_start": 2992,
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR",
+     "variant_allele": "G",
+     "cds_end": 2534,
+     "cdna_end": 2992,
+     "hgvsc": "ENST00000898202.2:c.2534T>G",
+     "protein_start": 845,
+     "cds_start": 2534,
+     "hgnc_id": "HGNC:3236",
+     "hgvsp": "ENSP00000568261.1:p.Leu845Arg",
+     "strand": 1,
+     "gene_id": "ENSG00000146648",
+     "sift_score": 0,
+     "consequence_terms": [
+      "missense_variant"
+     ]
+    },
+    {
+     "gene_symbol_source": "HGNC",
+     "gene_symbol": "EGFR",
+     "strand": 1,
+     "cdna_start": 2827,
+     "consequence_terms": [
+      "3_prime_UTR_variant",
+      "NMD_transcript_variant"
+     ],
+     "variant_allele": "G",
+     "gene_id": "ENSG00000146648",
+     "biotype": "nonsense_mediated_decay",
+     "hgvsc": "ENST00000998125.1:c.*1243T>G",
+     "cdna_end": 2827,
+     "impact": "MODIFIER",
+     "transcript_id": "ENST00000998125",
+     "hgnc_id": "HGNC:3236"
+    },
+    {
+     "strand": 1,
+     "hgvsp": "ENSP00000804243.1:p.Leu858Arg",
+     "gene_id": "ENSG00000146648",
+     "sift_score": 0,
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "polyphen_score": 0.997,
+     "hgvsc": "ENST00001134423.1:c.2573T>G",
+     "cdna_end": 3031,
+     "polyphen_prediction": "probably_damaging",
+     "protein_start": 858,
+     "hgnc_id": "HGNC:3236",
+     "cds_start": 2573,
+     "cdna_start": 3031,
+     "codons": "cTg/cGg",
+     "gene_symbol": "EGFR",
+     "gene_symbol_source": "HGNC",
+     "variant_allele": "G",
+     "cds_end": 2573,
+     "transcript_id": "ENST00001134423",
+     "amino_acids": "L/R",
+     "impact": "MODERATE",
+     "biotype": "protein_coding",
+     "protein_end": 858,
+     "sift_prediction": "deleterious_low_confidence"
+    }
+   ],
+   "allele_string": "T/G",
+   "end": 55191822,
+   "regulatory_feature_consequences": [
+    {
+     "variant_allele": "G",
+     "consequence_terms": [
+      "regulatory_region_variant"
+     ],
+     "regulatory_feature_id": "ENSR7_C7GTJ",
+     "impact": "MODIFIER",
+     "biotype": "enhancer"
+    }
+   ],
+   "most_severe_consequence": "missense_variant",
+   "start": 55191822
+  }
+ ]
+}
