@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 
 import type { AgentEvent, Annotation } from "@/types";
 
@@ -16,20 +16,20 @@ export type Run = {
 export const IDLE_RUN: Run = { events: [], annotation: null, status: "idle", error: null };
 
 /**
- * Runs the agent and keeps one analysis per variant, in memory.
+ * Runs the agent and keeps one LIVE analysis per variant, in memory.
  *
  * Usage:
- *   const { runs, start, load } = useAgentStream({ onDone: (id) => refresh(id) })
- *   const run = runs[variantId] ?? IDLE_RUN      // this variant's own trace and result
+ *   const { runs, start } = useAgentStream({ onDone: (id) => refresh(id) })
+ *   runs[variantId]                              // this variant's live run, if any
  *   <button onClick={() => start(variantId)}>Analyze</button>
  *   <button onClick={() => start(variantId, { replay: true })}>Replay</button>  // free
- *   load(variantId, savedRun.events)             // show a saved run, no stream at all
  *
  * Each variant has its own Run, so switching variants never shows another variant's
- * result, and going back to an analyzed variant shows its result without a new LLM run.
- * A run keeps going if the user looks at another variant meanwhile.
- * Runs live in memory; the backend saves each successful run, and the page reloads
- * saved runs at startup with load().
+ * result. A run keeps going if the user looks at another variant meanwhile.
+ * Saved runs are server data, not stream state: they come from savedRunQuery, and
+ * useVariantRuns shows the live run when there is one, the saved run otherwise.
+ * Mounted once, in AgentStreamProvider, above the routes: a route change must not
+ * unmount it, since unmounting closes every stream (and cancels the agents).
  *
  * Each start() opens an EventSource on /api/variants/{id}/analyze (proxied by Vite to
  * FastAPI). An EventSource is ALWAYS closed on "done", on "error", on a new start()
@@ -65,26 +65,6 @@ export function useAgentStream({ onDone }: { onDone?: (id: string) => void } = {
   const close = useCallback((id: string) => {
     sourcesRef.current.get(id)?.close();
     sourcesRef.current.delete(id);
-  }, []);
-
-  /**
-   * Show a saved run as finished, without any stream or LLM call.
-   * Used at page load with the events from GET /api/variants/{id}/run.
-   * Does nothing if a live run of this variant is already in progress.
-   */
-  const load = useCallback((id: string, events: AgentEvent[]) => {
-    // findLast + type guard: TypeScript then knows `found` is an annotation event.
-    const found = events.findLast(
-      (e): e is Extract<AgentEvent, { type: "annotation" }> => e.type === "annotation",
-    );
-    setRuns((prev) =>
-      prev[id]?.status === "running"
-        ? prev
-        : {
-            ...prev,
-            [id]: { events, annotation: found?.annotation ?? null, status: "done", error: null },
-          },
-    );
   }, []);
 
   /**
@@ -138,5 +118,8 @@ export function useAgentStream({ onDone }: { onDone?: (id: string) => void } = {
     };
   }, []);
 
-  return { runs, start, load };
+  return { runs, start };
 }
+
+/** The app's single useAgentStream, provided by AgentStreamProvider. */
+export const AgentStreamContext = createContext<ReturnType<typeof useAgentStream> | null>(null);

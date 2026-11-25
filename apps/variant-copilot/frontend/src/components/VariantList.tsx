@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 import { CLASSIFICATION_STYLE } from "@/lib/classification";
 import { DecisionBadge } from "@/components/DecisionBadge";
 import { cn } from "@/lib/utils";
@@ -5,8 +7,8 @@ import type { Review, Variant } from "@/types";
 import type { Run } from "@/useAgentStream";
 
 /**
- * Top row: one card per variant, a click opens it. The open one is raised (white, with
- * a shadow) and marked with aria-current; the others stay flat on the page.
+ * Top row: one card per variant, each a link to /variants/{id}. The open one is raised
+ * (white, with a shadow; the Link marks it aria-current="page"); the others stay flat.
  *
  * Each card says where the variant stands in the review: "Needs review", "✓ Accepted ·
  * Oncogenic", "✎ Corrected → Insufficient evidence", "✕ Rejected". Before the expert's
@@ -19,13 +21,11 @@ export function VariantList({
   selectedId,
   runs,
   reviews,
-  onSelect,
 }: {
   variants: Variant[];
   selectedId: string | null;
   runs: Record<string, Run>;
   reviews: Record<string, Review | null>;
-  onSelect: (id: string) => void;
 }) {
   return (
     <ul aria-label="Variants" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -33,12 +33,11 @@ export function VariantList({
         const on = v.id === selectedId;
         return (
           <li key={v.id}>
-            <button
-              type="button"
-              onClick={() => onSelect(v.id)}
-              aria-current={on ? "true" : undefined}
+            <Link
+              to="/variants/$variantId"
+              params={{ variantId: v.id }}
               className={cn(
-                "h-full w-full rounded-xl border px-4 py-3 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                "block h-full w-full rounded-xl border px-4 py-3 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
                 // Open: a raised white card. Others: flat on the page, white on hover.
                 on ? "border-transparent bg-card shadow-md" : "hover:bg-card/60",
               )}
@@ -47,7 +46,7 @@ export function VariantList({
                 {v.gene} {v.protein_short}
               </div>
               <ReviewStatus run={runs[v.id]} review={reviews[v.id]} />
-            </button>
+            </Link>
           </li>
         );
       })}

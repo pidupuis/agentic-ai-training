@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { DecisionBadge } from "@/components/DecisionBadge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BACKEND_DOWN, getJson } from "@/lib/api";
+import { BACKEND_DOWN } from "@/lib/api";
 import { CLASSIFICATION_STYLE } from "@/lib/classification";
 import { formatDateTime, utcTooltip } from "@/lib/dates";
-import type { AuditResponse, Classification, Variant } from "@/types";
+import { auditQuery } from "@/lib/queries";
+import type { Classification, Variant } from "@/types";
 
 // Below this many decisions, a percentage would suggest a precision that is not there.
 const MIN_FOR_RATE = 10;
 
 /**
- * The audit trail: every expert decision, newest first, from GET /api/audit.
+ * The audit trail: every expert decision, newest first, from GET /api/audit (auditQuery).
  *
  * Headline figure: how many decisions agree with the AI (final classification == the
  * AI's), e.g. "1 of 3 decisions agree with the AI". A percentage on a handful of
@@ -37,17 +38,11 @@ export function AuditLog({
   onShowAll: () => void;
   onOpen: (id: string) => void;
 }) {
-  const [audit, setAudit] = useState<AuditResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // Refetched each time the view opens (stale at once, by default): always the current
+  // trail, and the cached one meanwhile.
+  const { data: audit, isError } = useQuery(auditQuery());
 
-  // Fetched each time the view opens: always the current trail.
-  useEffect(() => {
-    getJson<AuditResponse>("/api/audit")
-      .then(setAudit)
-      .catch(() => setError(BACKEND_DOWN));
-  }, []);
-
-  if (error) return <p className="text-sm text-destructive">{error}</p>;
+  if (isError && !audit) return <p className="text-sm text-destructive">{BACKEND_DOWN}</p>;
   if (!audit) return <p className="text-muted-foreground">Loading…</p>;
 
   // Computed here rather than read from audit.agreement, so that it follows the filter

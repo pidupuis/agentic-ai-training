@@ -1,10 +1,13 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CLASSIFICATION_STYLE, CLASSIFICATIONS } from "@/lib/classification";
 import { DecisionBadge } from "@/components/DecisionBadge";
+import { postJson } from "@/lib/api";
 import { DECISION_STYLE } from "@/lib/decision";
+import { auditQuery, variantsQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { formatDateTime, utcTooltip } from "@/lib/dates";
 import type { Classification, Decision, Review, ReviewRequest } from "@/types";
@@ -38,8 +41,22 @@ export function ReviewPanel({
   const [finalClass, setFinalClass] = useState<Classification>(aiClassification);
   const [comment, setComment] = useState("");
   const [reviewer, setReviewer] = useState(() => localStorage.getItem(REVIEWER_KEY) ?? "");
-  const [error, setError] = useState<string | null>(null);
-  const [sending, setSending] = useState(false);
+  const queryClient = useQueryClient();
+  // POST, then wait for the variants (their latest decision) and the audit trail to be
+  // refetched: the form stays "sending" until the page shows the new decision.
+  const mutation = useMutation({
+    mutationFn: (body: ReviewRequest) =>
+      postJson<Review>(`/api/variants/${variantId}/review`, body),
+    onSuccess: async (review) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: variantsQuery().queryKey }),
+        queryClient.invalidateQueries({ queryKey: auditQuery().queryKey }),
+      ]);
+      onReviewed(review);
+    },
+  });
+  const sending = mutation.isPending;
+  const error = mutation.error?.message ?? null;
 
   const needsComment = decision === "modified" || decision === "rejected";
   const canSubmit =
@@ -49,36 +66,15 @@ export function ReviewPanel({
     (decision !== "modified" || finalClass !== aiClassification) &&
     !sending;
 
-  async function submit() {
+  function submit() {
     if (!decision) return;
-    setSending(true);
-    setError(null);
     localStorage.setItem(REVIEWER_KEY, reviewer.trim());
-    const body: ReviewRequest = {
+    mutation.mutate({
       decision,
       comment: comment.trim(),
       reviewer: reviewer.trim(),
       ...(decision === "modified" && { final_classification: finalClass }),
-    };
-    try {
-      const response = await fetch(`/api/variants/${variantId}/review`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!response.ok) {
-        // FastAPI errors: {"detail": "..."} (404, 409) or {"detail": [{msg}, ...]} (422).
-        const { detail } = await response.json();
-        throw new Error(
-          Array.isArray(detail) ? detail.map((d) => d.msg).join("; ") : String(detail),
-        );
-      }
-      onReviewed((await response.json()) as Review);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e));
-    } finally {
-      setSending(false);
-    }
+    });
   }
 
   const choices: { value: Decision; label: string }[] = [
