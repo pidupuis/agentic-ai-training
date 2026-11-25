@@ -1,7 +1,7 @@
 {
  "variant_id": "egfr-l858r",
  "model": "gpt-5.4-mini",
- "saved_at": 1795617307.147464,
+ "saved_at": 1795638639.2444623,
  "events": [
   {
    "type": "tool_call",
@@ -9,7 +9,7 @@
    "args": {
     "hgvs_g": "7:g.55191822T>G"
    },
-   "ts": 1795617301.9194105
+   "ts": 1795638634.140554
   },
   {
    "type": "tool_result",
@@ -27,7 +27,9 @@
      "hgvsp": "p.Leu858Arg",
      "protein_start": 858,
      "sift_prediction": "deleterious_low_confidence",
+     "sift_score": 0,
      "polyphen_prediction": "probably_damaging",
+     "polyphen_score": 0.997,
      "known_ids": [
       "COSV51765161",
       "COSV51854030",
@@ -36,7 +38,7 @@
      "gnomad_exomes_af": null
     }
    },
-   "ts": 1795617301.9211338
+   "ts": 1795638634.1423059
   },
   {
    "type": "tool_call",
@@ -45,7 +47,7 @@
     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab]",
     "max_results": 5
    },
-   "ts": 1795617303.3418515
+   "ts": 1795638635.641144
   },
   {
    "type": "tool_result",
@@ -101,7 +103,7 @@
      ]
     }
    },
-   "ts": 1795617303.3554342
+   "ts": 1795638635.6483464
   },
   {
    "type": "tool_call",
@@ -110,7 +112,7 @@
     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND lung[tiab]",
     "max_results": 5
    },
-   "ts": 1795617303.3556085
+   "ts": 1795638635.6485023
   },
   {
    "type": "tool_result",
@@ -166,7 +168,7 @@
      ]
     }
    },
-   "ts": 1795617303.3606086
+   "ts": 1795638635.6555085
   },
   {
    "type": "tool_call",
@@ -175,7 +177,7 @@
     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND Hsp90[tiab]",
     "max_results": 5
    },
-   "ts": 1795617303.3607697
+   "ts": 1795638635.6556695
   },
   {
    "type": "tool_result",
@@ -231,7 +233,7 @@
      ]
     }
    },
-   "ts": 1795617303.366306
+   "ts": 1795638635.6616523
   },
   {
    "type": "tool_call",
@@ -239,98 +241,86 @@
    "args": {
     "classification": "oncogenic",
     "confidence": "high",
-    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating mutation in non-small cell lung cancer and showing increased kinase activity. The literature also includes clinical and preclinical reports of sensitivity to EGFR-targeted therapies in L858R-mutant tumors.",
+    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating/oncogenic EGFR mutation in non-small cell lung cancer and showing functional activation and inhibitor sensitivity. VEP also reports the variant as a missense change with COSMIC/dbSNP identifiers and deleterious/probably damaging predictions, which are supportive context but not the main basis for classification.",
     "evidence": [
      {
       "source": "Ensembl VEP",
-      "claim": "The variant is a missense_variant in EGFR with protein change p.Leu858Arg on transcript ENST00000275493.",
+      "claim": "EGFR p.Leu858Arg is a missense_variant in EGFR (ENST00000275493) at protein position 858; VEP reports SIFT deleterious_low_confidence (0) and PolyPhen probably_damaging (0.997).",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
       "direction": "neutral"
      },
      {
       "source": "Ensembl VEP",
-      "claim": "VEP reports known IDs COSV51765161, COSV51854030, and rs121434568 for this variant.",
+      "claim": "The variant has known_ids COSV51765161, COSV51854030, and rs121434568.",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
       "direction": "neutral"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis as much as 50-fold in vitro.",
+      "claim": "A PubMed-indexed article on lung cancer-derived EGFR mutants reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis in vitro.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' is indexed for EGFR L858R in lung cancer.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "claim": "A PubMed-indexed review states that EGFR mutations including L858R predict favorable responses to EGFR tyrosine kinase inhibitors in advanced non-small cell lung cancer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24353160/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.' describes EGFR L858R mutation-positive NSCLC and treatment outcomes.",
+      "claim": "A PubMed-indexed article describes EGFR exon 21 L858R as a common oncogenic driver in non-small-cell lung cancer.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/",
-      "direction": "supports_pathogenic"
-     },
-     {
-      "source": "PubMed",
-      "claim": "The article 'Hsp90 inhibition suppresses mutant EGFR-T790M signaling and overcomes kinase inhibitor resistance.' is indexed for EGFR L858R-related mutant EGFR signaling in the context of kinase inhibitor resistance.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18632637/",
       "direction": "supports_pathogenic"
      }
     ],
     "conflicts": [],
     "needs_expert_review": false
    },
-   "ts": 1795617307.1469092
+   "ts": 1795638639.2440035
   },
   {
    "type": "annotation",
    "annotation": {
     "classification": "oncogenic",
     "confidence": "high",
-    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating mutation in non-small cell lung cancer and showing increased kinase activity. The literature also includes clinical and preclinical reports of sensitivity to EGFR-targeted therapies in L858R-mutant tumors.",
+    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating/oncogenic EGFR mutation in non-small cell lung cancer and showing functional activation and inhibitor sensitivity. VEP also reports the variant as a missense change with COSMIC/dbSNP identifiers and deleterious/probably damaging predictions, which are supportive context but not the main basis for classification.",
     "evidence": [
      {
       "source": "Ensembl VEP",
-      "claim": "The variant is a missense_variant in EGFR with protein change p.Leu858Arg on transcript ENST00000275493.",
+      "claim": "EGFR p.Leu858Arg is a missense_variant in EGFR (ENST00000275493) at protein position 858; VEP reports SIFT deleterious_low_confidence (0) and PolyPhen probably_damaging (0.997).",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
       "direction": "neutral"
      },
      {
       "source": "Ensembl VEP",
-      "claim": "VEP reports known IDs COSV51765161, COSV51854030, and rs121434568 for this variant.",
+      "claim": "The variant has known_ids COSV51765161, COSV51854030, and rs121434568.",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
       "direction": "neutral"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis as much as 50-fold in vitro.",
+      "claim": "A PubMed-indexed article on lung cancer-derived EGFR mutants reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis in vitro.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' is indexed for EGFR L858R in lung cancer.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "claim": "A PubMed-indexed review states that EGFR mutations including L858R predict favorable responses to EGFR tyrosine kinase inhibitors in advanced non-small cell lung cancer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24353160/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "The article 'Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.' describes EGFR L858R mutation-positive NSCLC and treatment outcomes.",
+      "claim": "A PubMed-indexed article describes EGFR exon 21 L858R as a common oncogenic driver in non-small-cell lung cancer.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/",
-      "direction": "supports_pathogenic"
-     },
-     {
-      "source": "PubMed",
-      "claim": "The article 'Hsp90 inhibition suppresses mutant EGFR-T790M signaling and overcomes kinase inhibitor resistance.' is indexed for EGFR L858R-related mutant EGFR signaling in the context of kinase inhibitor resistance.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18632637/",
       "direction": "supports_pathogenic"
      }
     ],
     "conflicts": [],
     "needs_expert_review": false
    },
-   "ts": 1795617307.1470842
+   "ts": 1795638639.2442422
   }
  ]
 }

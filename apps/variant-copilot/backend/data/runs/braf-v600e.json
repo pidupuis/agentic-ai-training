@@ -1,7 +1,7 @@
 {
  "variant_id": "braf-v600e",
  "model": "gpt-5.4-mini",
- "saved_at": 1795617301.1051905,
+ "saved_at": 1795638635.0865273,
  "events": [
   {
    "type": "tool_call",
@@ -9,7 +9,7 @@
    "args": {
     "hgvs_g": "7:g.140753336A>T"
    },
-   "ts": 1795617295.9903803
+   "ts": 1795638628.54343
   },
   {
    "type": "tool_result",
@@ -27,7 +27,9 @@
      "hgvsp": "p.Val600Glu",
      "protein_start": 600,
      "sift_prediction": "deleterious_low_confidence",
+     "sift_score": 0,
      "polyphen_prediction": "probably_damaging",
+     "polyphen_score": 0.935,
      "known_ids": [
       "CM112509",
       "COSV56056643",
@@ -38,7 +40,7 @@
      "gnomad_exomes_af": 1.369e-06
     }
    },
-   "ts": 1795617295.992141
+   "ts": 1795638628.5482128
   },
   {
    "type": "tool_call",
@@ -47,7 +49,7 @@
     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab]",
     "max_results": 5
    },
-   "ts": 1795617297.4169405
+   "ts": 1795638630.6834476
   },
   {
    "type": "tool_result",
@@ -103,7 +105,7 @@
      ]
     }
    },
-   "ts": 1795617297.4259222
+   "ts": 1795638630.6943254
   },
   {
    "type": "tool_call",
@@ -112,7 +114,7 @@
     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND melanoma[tiab]",
     "max_results": 5
    },
-   "ts": 1795617297.4259908
+   "ts": 1795638630.694429
   },
   {
    "type": "tool_result",
@@ -168,7 +170,7 @@
      ]
     }
    },
-   "ts": 1795617297.4330812
+   "ts": 1795638630.7028537
   },
   {
    "type": "tool_call",
@@ -177,7 +179,7 @@
     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND Hsp90[tiab]",
     "max_results": 5
    },
-   "ts": 1795617297.433183
+   "ts": 1795638630.7029784
   },
   {
    "type": "tool_result",
@@ -233,7 +235,7 @@
      ]
     }
    },
-   "ts": 1795617297.439265
+   "ts": 1795638630.707511
   },
   {
    "type": "tool_call",
@@ -241,41 +243,35 @@
    "args": {
     "classification": "oncogenic",
     "confidence": "high",
-    "summary": "BRAF p.Val600Glu is a missense variant at codon 600 with very low gnomAD frequency and multiple PubMed-indexed articles describing BRAF V600E as an oncogenic driver and therapeutic target. The literature includes reports of constitutive MAPK pathway activation and approved targeted therapy use in BRAF V600E-mutant cancers.",
+    "summary": "BRAF p.Val600Glu (V600E) is a missense variant in BRAF with very low gnomAD exome frequency and multiple COSMIC/dbSNP identifiers. PubMed returns many variant-specific articles describing BRAF V600E as an oncogenic driver and a therapeutic target, including melanoma, thyroid cancer, and NSCLC, with reports of approved targeted therapies for BRAF V600E-mutant disease.",
     "evidence": [
      {
       "source": "Ensembl VEP",
-      "claim": "The variant is a missense_variant in BRAF with protein change p.Val600Glu at position 600.",
+      "claim": "BRAF p.Val600Glu is a missense_variant at protein position 600; VEP reports SIFT deleterious_low_confidence (0) and PolyPhen probably_damaging (0.935).",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
       "direction": "neutral"
      },
      {
       "source": "Ensembl VEP",
-      "claim": "VEP reports gnomAD exomes allele frequency 1.369e-06 and known IDs including COSV56056643 and rs113488022.",
+      "claim": "VEP lists known_ids CM112509, COSV56056643, COSV56065204, COSV56080151, and rs113488022, and gnomAD exomes AF is 1.369e-06.",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
       "direction": "neutral"
      },
      {
       "source": "PubMed",
-      "claim": "A review on BRAF V600E in thyroid cancer states that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] returned many variant-specific articles, including a review stating that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/41368991/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "A review on BRAF V600E-mutant metastatic NSCLC states that the BRAFV600E mutation confers constitutive activity of the MAPK pathway and that therapies directly target BRAFV600E.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/38627602/",
-      "direction": "supports_pathogenic"
-     },
-     {
-      "source": "PubMed",
-      "claim": "A melanoma review states that the most frequent oncogenic BRAF mutations consist of a single point mutation at codon 600, mostly V600E, leading to constitutive activation of the BRAF/MEK/ERK pathway.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND \"melanoma\"[Title/Abstract] returned articles describing BRAF V600E as an oncogenic mutation in melanoma and noting approved BRAF/MEK inhibitor therapy for BRAF V600E-mutated melanoma.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37627054/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "A clinical study reports combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND Hsp90[Title/Abstract] returned an article on combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29674508/",
       "direction": "supports_pathogenic"
      }
@@ -283,48 +279,42 @@
     "conflicts": [],
     "needs_expert_review": false
    },
-   "ts": 1795617301.1029778
+   "ts": 1795638635.085661
   },
   {
    "type": "annotation",
    "annotation": {
     "classification": "oncogenic",
     "confidence": "high",
-    "summary": "BRAF p.Val600Glu is a missense variant at codon 600 with very low gnomAD frequency and multiple PubMed-indexed articles describing BRAF V600E as an oncogenic driver and therapeutic target. The literature includes reports of constitutive MAPK pathway activation and approved targeted therapy use in BRAF V600E-mutant cancers.",
+    "summary": "BRAF p.Val600Glu (V600E) is a missense variant in BRAF with very low gnomAD exome frequency and multiple COSMIC/dbSNP identifiers. PubMed returns many variant-specific articles describing BRAF V600E as an oncogenic driver and a therapeutic target, including melanoma, thyroid cancer, and NSCLC, with reports of approved targeted therapies for BRAF V600E-mutant disease.",
     "evidence": [
      {
       "source": "Ensembl VEP",
-      "claim": "The variant is a missense_variant in BRAF with protein change p.Val600Glu at position 600.",
+      "claim": "BRAF p.Val600Glu is a missense_variant at protein position 600; VEP reports SIFT deleterious_low_confidence (0) and PolyPhen probably_damaging (0.935).",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
       "direction": "neutral"
      },
      {
       "source": "Ensembl VEP",
-      "claim": "VEP reports gnomAD exomes allele frequency 1.369e-06 and known IDs including COSV56056643 and rs113488022.",
+      "claim": "VEP lists known_ids CM112509, COSV56056643, COSV56065204, COSV56080151, and rs113488022, and gnomAD exomes AF is 1.369e-06.",
       "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
       "direction": "neutral"
      },
      {
       "source": "PubMed",
-      "claim": "A review on BRAF V600E in thyroid cancer states that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] returned many variant-specific articles, including a review stating that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/41368991/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "A review on BRAF V600E-mutant metastatic NSCLC states that the BRAFV600E mutation confers constitutive activity of the MAPK pathway and that therapies directly target BRAFV600E.",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/38627602/",
-      "direction": "supports_pathogenic"
-     },
-     {
-      "source": "PubMed",
-      "claim": "A melanoma review states that the most frequent oncogenic BRAF mutations consist of a single point mutation at codon 600, mostly V600E, leading to constitutive activation of the BRAF/MEK/ERK pathway.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND \"melanoma\"[Title/Abstract] returned articles describing BRAF V600E as an oncogenic mutation in melanoma and noting approved BRAF/MEK inhibitor therapy for BRAF V600E-mutated melanoma.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/37627054/",
       "direction": "supports_pathogenic"
      },
      {
       "source": "PubMed",
-      "claim": "A clinical study reports combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
+      "claim": "The PubMed query \"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND Hsp90[Title/Abstract] returned an article on combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29674508/",
       "direction": "supports_pathogenic"
      }
@@ -332,7 +322,7 @@
     "conflicts": [],
     "needs_expert_review": false
    },
-   "ts": 1795617301.1031666
+   "ts": 1795638635.0861785
   }
  ]
 }
