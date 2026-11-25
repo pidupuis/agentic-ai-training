@@ -257,6 +257,8 @@ def run_agent(
                         result = TOOL_FUNCTIONS[name](**args)
                     except TypeError as e:  # wrong or missing argument names
                         result = {"error": f"Bad arguments for {name}: {e}"}
+                    except Exception as e:  # noqa: BLE001 - a tool bug must not kill the run
+                        result = {"error": f"{name} failed: {e}"}
                     pubmed_called = pubmed_called or name == "search_pubmed"
                     _collect_urls(result, seen_urls)
                 else:

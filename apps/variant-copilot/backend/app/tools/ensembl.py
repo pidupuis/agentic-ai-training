@@ -35,8 +35,17 @@ def get_vep_annotation(hgvs_g: str) -> dict:
         >>> get_vep_annotation("14:g.102081741C>T")["data"]["hgvsp"]
         'p.Asp724Asn'
     """
+    # Reject malformed input with a readable error so the model can fix its call
+    if ":g." not in hgvs_g:
+        return {
+            "source": "Ensembl VEP",
+            "error": (
+                f"Invalid HGVS {hgvs_g!r}: expected '<chrom>:g.<pos><ref>><alt>', "
+                "e.g. '14:g.102081741C>T'"
+            ),
+        }
     # "14:g.102081741C>T" -> chrom "14", rest "102081741C>T"
-    chrom, rest = hgvs_g.split(":g.")
+    chrom, rest = hgvs_g.split(":g.", 1)
     # Keep only the digits of "102081741C>T" -> "102081741"
     pos = "".join(c for c in rest if c.isdigit())
     # The alternate base is the last character: "...C>T" -> "T"
