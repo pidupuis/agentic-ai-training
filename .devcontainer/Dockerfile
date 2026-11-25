@@ -2,10 +2,10 @@ FROM mcr.microsoft.com/devcontainers/typescript-node:26
 
 USER root
 
-# Outils dont le pare-feu a besoin
+# Outils dont le pare-feu a besoin (dnsmasq-base : résolveur DNS qui remplit l'ipset)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-       iptables ipset dnsutils aggregate jq curl sudo \
+       iptables ipset dnsutils dnsmasq-base aggregate jq curl sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Le script de pare-feu, et sudo limité à ce seul script
