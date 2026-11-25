@@ -28,6 +28,10 @@ Saved runs (app/runs.py): every successful analysis is saved with all its events
     GET /api/variants/{id}/run                -> the saved run, as JSON (no LLM call)
     GET /api/variants/{id}/analyze?replay=true -> the saved run streamed again, with its
                                                   original timing (no LLM call, no network)
+
+Expert review (app/store.py): the expert accepts, corrects or rejects the saved run.
+    POST /api/variants/{id}/review  -> appends one decision to the audit trail
+    GET  /api/audit                 -> every decision, newest first, plus the agreement rate
 """
 
 import asyncio
@@ -44,7 +48,9 @@ from fastapi.responses import StreamingResponse
 
 from app.agent import AgentCancelled, run_agent
 from app.llm import get_model
+from app.models import Annotation, Review, ReviewRequest
 from app.runs import load_run, save_run
+from app.store import append_review, latest_review, list_reviews
 from app.variants import VARIANTS, VARIANTS_BY_ID, Variant
 
 # Show our own INFO logs (e.g. "braf-v600e: turn 2/8") in the uvicorn terminal.
@@ -74,7 +80,7 @@ def _sse(event: dict) -> str:
 
 
 def _variant_dict(v: Variant) -> dict:
-    """A Variant as JSON-ready dict, plus whether a saved run exists for it.
+    """A Variant as JSON-ready dict, plus its saved run status and its last expert decision.
 
     asdict() converts the dataclass fields; hgvs_g is a @property, not a field,
     so it is added by hand.
@@ -82,9 +88,17 @@ def _variant_dict(v: Variant) -> dict:
     Example output:
         {"id": "braf-v600e", "gene": "BRAF", "protein": "p.Val600Glu",
          "protein_short": "V600E", "chrom": "7", "pos": 140753336,
-         "ref": "A", "alt": "T", "hgvs_g": "7:g.140753336A>T", "has_saved_run": true}
+         "ref": "A", "alt": "T", "hgvs_g": "7:g.140753336A>T", "has_saved_run": true,
+         "latest_review": {<Review as dict>} or null}
     """
-    return {**asdict(v), "hgvs_g": v.hgvs_g, "has_saved_run": load_run(v.id) is not None}
+    review = latest_review(v.id)
+    return {
+        **asdict(v),
+        "hgvs_g": v.hgvs_g,
+        "has_saved_run": load_run(v.id) is not None,
+        # mode="json": datetimes become ISO strings, like in the HTTP response.
+        "latest_review": review.model_dump(mode="json") if review else None,
+    }
 
 
 def _get_saved_run(variant_id: str) -> dict:
@@ -108,7 +122,7 @@ def _get_variant(variant_id: str) -> Variant:
 
 @app.get("/api/variants")
 def list_variants() -> list[dict]:
-    """The demo variants (see _variant_dict). The last expert decision is added at step 5."""
+    """The demo variants, with their saved run status and last expert decision."""
     return [_variant_dict(v) for v in VARIANTS]
 
 
@@ -217,3 +231,66 @@ async def _replay(run: dict) -> AsyncIterator[str]:
         previous_ts = event["ts"]
         yield _sse({**event, "ts": event["ts"] + offset})
     yield _sse({"type": "done", "ts": time.time()})
+
+
+@app.post("/api/variants/{variant_id}/review")
+def review_variant(variant_id: str, request: ReviewRequest) -> Review:
+    """Record the expert's decision on the variant's saved run.
+
+    FastAPI reads the JSON body into `request` and validates it with ReviewRequest:
+    a rejection without comment is refused with HTTP 422 before this code even runs.
+
+    The AI's proposal, the model name and the run date come from the saved run on the
+    server, never from the browser: a client cannot rewrite what the AI had proposed.
+
+    Body example:  {"decision": "accepted", "reviewer": "PD"}
+    Returns the stored Review (with its id and created_at).
+    """
+    _get_variant(variant_id)
+    run = load_run(variant_id)
+    if run is None:  # 409 Conflict: the request is valid, but there is nothing to review yet
+        raise HTTPException(status_code=409, detail=f"{variant_id} has no analysis to review")
+
+    annotation = Annotation.model_validate(run["events"][-1]["annotation"])
+    final = {
+        "accepted": annotation.classification,  # the expert adopts the AI's proposal
+        "modified": request.final_classification,  # the expert's own classification
+        "rejected": None,  # the expert adopts no classification
+    }[request.decision]
+
+    review = Review(
+        # model_dump(): the request fields; then the ones only the server knows.
+        **{**request.model_dump(), "final_classification": final},
+        variant_id=variant_id,
+        ai_classification=annotation.classification,
+        model=run["model"],
+        run_saved_at=run["saved_at"],
+        annotation=annotation,
+    )
+    append_review(review)
+    log.info("%s: %s by %s", variant_id, review.decision, review.reviewer)
+    return review
+
+
+@app.get("/api/audit")
+def audit() -> dict:
+    """The audit trail, newest first, and how often the expert agreed with the AI.
+
+    Agreement = decisions where the final classification equals the AI's, over all
+    decisions. A rejection counts as a disagreement. Corrections stay in the history:
+    every decision counts, not only the latest one per variant.
+
+    Example:
+        {"agreement": {"agreed": 2, "total": 3, "rate": 0.667},
+         "reviews": [{<newest Review>}, ...]}
+    """
+    reviews = list_reviews()
+    agreed = sum(r.final_classification == r.ai_classification for r in reviews)
+    return {
+        "agreement": {
+            "agreed": agreed,
+            "total": len(reviews),
+            "rate": round(agreed / len(reviews), 3) if reviews else None,
+        },
+        "reviews": [r.model_dump(mode="json") for r in reversed(reviews)],
+    }

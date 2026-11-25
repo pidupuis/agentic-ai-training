@@ -99,6 +99,9 @@ class Review(ReviewRequest):
     variant_id: str
     ai_classification: Classification
     model: str  # the LLM that produced the annotation (from the saved run)
+    # Which run was reviewed (its saved_at). A later re-analysis is a new, unreviewed
+    # proposal: the UI compares this with the current run to know if it was validated.
+    run_saved_at: float
     # Always UTC: a date without a time zone is ambiguous. The frontend shows local time.
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     annotation: Annotation  # full copy: each line of the trail is readable on its own
