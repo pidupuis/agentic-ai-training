@@ -68,13 +68,16 @@ export default function App() {
     [load],
   );
 
-  // On mount: the variant list, then the saved run of each variant that has one.
+  // On mount: the variant list (the first one opened), then the saved run of each
+  // variant that has one.
   // setState is called in .then(), once the response arrives, never synchronously in
   // the effect body (React's set-state-in-effect rule).
   useEffect(() => {
     getJson<Variant[]>("/api/variants")
       .then((list) => {
         setVariants(list);
+        // The first variant is open by default: the page never shows an empty state.
+        setSelectedId((current) => current ?? list[0]?.id ?? null);
         list.filter((v) => v.has_saved_run).forEach((v) => loadSavedRun(v.id));
       })
       .catch(() => setLoadError(BACKEND_DOWN));
@@ -252,9 +255,7 @@ export default function App() {
                 </section>
               )}
             </main>
-          ) : (
-            <p className="text-muted-foreground">Select a variant.</p>
-          )}
+          ) : null}
         </>
       )}
     </div>
