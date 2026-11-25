@@ -16,12 +16,15 @@ from app.variants import VARIANTS_BY_ID
 
 VEP_URL = "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336"
 REAL_PMID_URL = "https://pubmed.ncbi.nlm.nih.gov/22281684/"
+SEARCH_PAGE_URL = "https://pubmed.ncbi.nlm.nih.gov/?term=BRAF"
 INVENTED_PMID_URL = (
     "https://pubmed.ncbi.nlm.nih.gov/99999999/"  # no tool ever returned it
 )
 
 
-def annotation_args(*urls: str) -> dict:
+def annotation_args(
+    *urls: str, source: str = "PubMed", direction: str = "supports_pathogenic"
+) -> dict:
     """submit_annotation arguments citing the given urls, otherwise valid."""
     return {
         "classification": "oncogenic",
@@ -29,10 +32,10 @@ def annotation_args(*urls: str) -> dict:
         "summary": "BRAF V600E is an established oncogenic driver.",
         "evidence": [
             {
-                "source": "PubMed",
+                "source": source,
                 "claim": "Reported as oncogenic.",
                 "url": u,
-                "direction": "supports_pathogenic",
+                "direction": direction,
             }
             for u in urls
         ],
@@ -66,6 +69,34 @@ def test_conclusion_without_pubmed_search_is_rejected():
     with pytest.raises(ValueError, match="search PubMed"):
         _check_annotation(
             annotation_args(VEP_URL), seen_urls={VEP_URL}, pubmed_called=False
+        )
+
+
+def test_search_page_cannot_support_a_pathogenic_claim():
+    with pytest.raises(ValueError, match="not an article"):
+        _check_annotation(
+            annotation_args(SEARCH_PAGE_URL),
+            seen_urls={SEARCH_PAGE_URL},
+            pubmed_called=True,
+        )
+
+
+def test_search_page_is_accepted_for_a_neutral_claim():
+    # e.g. "0 articles found for this query": the search page is the right citation.
+    annotation = _check_annotation(
+        annotation_args(SEARCH_PAGE_URL, direction="neutral"),
+        seen_urls={SEARCH_PAGE_URL},
+        pubmed_called=True,
+    )
+    assert annotation.evidence[0].url == SEARCH_PAGE_URL
+
+
+def test_url_must_match_the_declared_source():
+    with pytest.raises(ValueError, match="does not belong to the source"):
+        _check_annotation(
+            annotation_args(VEP_URL, direction="neutral"),  # source is PubMed
+            seen_urls={VEP_URL},
+            pubmed_called=True,
         )
 
 
@@ -110,7 +141,7 @@ def fake_vep(hgvs_g: str) -> dict:
 def fake_pubmed(query: str, max_results: int = 5) -> dict:
     return {
         "source": "PubMed",
-        "url": "https://pubmed.ncbi.nlm.nih.gov/?term=BRAF",
+        "url": SEARCH_PAGE_URL,
         "data": {
             "total_count": 1,
             "articles": [{"pmid": "22281684", "url": REAL_PMID_URL}],
