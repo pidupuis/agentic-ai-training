@@ -34,7 +34,10 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 26 # same as the devcontainer image
-      - run: corepack enable # provides the Yarn version pinned in package.json
+      # Node 25+ no longer ships Corepack (same as in the devcontainer): install it, then
+      # let it provide the Yarn version pinned in package.json. Its shims land in
+      # setup-node's bin dir, which comes before the runner's global Yarn 1 in PATH.
+      - run: npm install -g corepack && corepack enable
       - run: yarn install --immutable
       - run: yarn workspace frontend lint
       - run: yarn workspace frontend format:check
