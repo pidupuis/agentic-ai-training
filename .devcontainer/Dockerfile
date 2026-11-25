@@ -25,3 +25,6 @@ RUN mkdir -p /commandhistory \
     && chown -R node:node /commandhistory
 
 USER node
+
+# Bake uv's Python into the image: ~/.local is wiped on every rebuild otherwise.
+RUN uv python install 3.12
