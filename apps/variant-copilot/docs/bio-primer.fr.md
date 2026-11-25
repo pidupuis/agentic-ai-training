@@ -2,7 +2,7 @@
 
 Les connaissances métier derrière Variant Copilot : ce que les données veulent dire, pas comment le code fonctionne (ça, c'est dans les docstrings). Chaque section répond à une question qu'on se pose en lisant un résultat d'outil.
 
-*Version anglaise : [bio-primer.md](bio-primer.md).*
+_Version anglaise : [bio-primer.md](bio-primer.md)._
 
 ## De l'ADN à la protéine
 
@@ -12,11 +12,11 @@ Un gène produit plusieurs **transcrits** : lors de l'épissage, différentes co
 
 Ensembl donne à chaque niveau son propre identifiant :
 
-| Préfixe | Niveau | Exemple |
-| --- | --- | --- |
-| `ENSG…` | gène | `ENSG00000080824` (HSP90AA1) |
-| `ENST…` | transcrit | `ENST00000216281` |
-| `ENSP…` | protéine | `ENSP00000216281` |
+| Préfixe | Niveau    | Exemple                      |
+| ------- | --------- | ---------------------------- |
+| `ENSG…` | gène      | `ENSG00000080824` (HSP90AA1) |
+| `ENST…` | transcrit | `ENST00000216281`            |
+| `ENSP…` | protéine  | `ENSP00000216281`            |
 
 Comme un gène a plusieurs transcrits, la même modification de l'ADN peut toucher l'acide aminé 724 sur un transcrit, une autre position sur un deuxième, et rien du tout sur un transcrit non codant. On décrit donc toujours les résultats sur un transcrit de référence : le **transcrit canonique**, aujourd'hui le transcrit **MANE Select**, choisi d'un commun accord par Ensembl et le NCBI.
 
@@ -36,11 +36,11 @@ Dans les URL d'Ensembl, une localisation est une région, `chromosome:début-fin
 
 HGVS (du nom de la Human Genome Variation Society) est la façon standard d'écrire un variant, pour que les articles, les bases de données et les comptes rendus cliniques le décrivent de manière identique. Le préfixe indique le niveau :
 
-| Préfixe | Niveau | BRAF V600E | Se lit |
-| --- | --- | --- | --- |
-| `g.` | génome | `7:g.140753336A>T` | chromosome 7, position 140753336, A devient T |
-| `c.` | ADN codant d'un transcrit | `NM_004333.6:c.1799T>A` | base 1799 à partir du codon start, T devient A |
-| `p.` | protéine | `p.Val600Glu` | acide aminé 600, une valine, devient un glutamate |
+| Préfixe | Niveau                    | BRAF V600E              | Se lit                                            |
+| ------- | ------------------------- | ----------------------- | ------------------------------------------------- |
+| `g.`    | génome                    | `7:g.140753336A>T`      | chromosome 7, position 140753336, A devient T     |
+| `c.`    | ADN codant d'un transcrit | `NM_004333.6:c.1799T>A` | base 1799 à partir du codon start, T devient A    |
+| `p.`    | protéine                  | `p.Val600Glu`           | acide aminé 600, une valine, devient un glutamate |
 
 `V600E` est la forme courte de `p.Val600Glu`, avec les codes à une lettre des acides aminés (V = Val, E = Glu). Les scientifiques l'utilisent dans les titres et à l'oral : c'est donc la forme à chercher dans PubMed. HGVS recommande les codes à trois lettres, moins ambigus.
 
@@ -50,14 +50,14 @@ Dans ce projet, la notation `g.` sert d'entrée à Ensembl VEP, et la notation `
 
 La **conséquence** est l'effet prédit de la modification sur le transcrit, exprimé avec les termes de la Sequence Ontology :
 
-| Terme | Signification |
-| --- | --- |
-| `synonymous_variant` (synonyme) | le codon change, mais code toujours le même acide aminé |
-| `missense_variant` (faux-sens) | un acide aminé est remplacé par un autre (les trois variants de la démo) |
-| `stop_gained` (non-sens) | un codon devient un codon stop : la protéine est tronquée |
+| Terme                                               | Signification                                                                                                 |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `synonymous_variant` (synonyme)                     | le codon change, mais code toujours le même acide aminé                                                       |
+| `missense_variant` (faux-sens)                      | un acide aminé est remplacé par un autre (les trois variants de la démo)                                      |
+| `stop_gained` (non-sens)                            | un codon devient un codon stop : la protéine est tronquée                                                     |
 | `frameshift_variant` (décalage du cadre de lecture) | une insertion ou une délétion qui n'est pas un multiple de 3 décale la lecture de tous les codons qui suivent |
-| `splice_*_variant` | la modification touche une jonction exon/intron et peut perturber l'épissage |
-| `intron_variant`, `intergenic_variant` | hors de la séquence codante : en général, pas d'effet direct sur la protéine |
+| `splice_*_variant`                                  | la modification touche une jonction exon/intron et peut perturber l'épissage                                  |
+| `intron_variant`, `intergenic_variant`              | hors de la séquence codante : en général, pas d'effet direct sur la protéine                                  |
 
 VEP renvoie deux niveaux : `most_severe_consequence` est l'effet le plus grave sur **tous** les transcrits de tous les gènes qui se chevauchent, alors que `consequence_terms` est l'effet sur le transcrit canonique seulement.
 
@@ -76,7 +76,7 @@ Les deux prédisent si un changement d'acide aminé abîme la protéine. Ce sont
 - **SIFT** regarde la conservation au cours de l'évolution : si une position ne change jamais d'une espèce à l'autre, la modifier est suspect. Valeurs : `tolerated`, `deleterious`. Le suffixe `_low_confidence` signifie que l'alignement contenait peu de séquences à cette position, ce qui est fréquent près des extrémités des protéines.
 - **PolyPhen-2** ajoute des informations structurales. Valeurs : `benign`, `possibly_damaging`, `probably_damaging`.
 
-Leur limite principale en cancérologie : ils prédisent « délétère », mais ne savent pas distinguer une *perte* de fonction d'un *gain* de fonction. Une mutation oncogénique comme EGFR L858R ne casse pas la protéine, elle la rend active en permanence. Pourtant, les deux outils la signalent comme délétère.
+Leur limite principale en cancérologie : ils prédisent « délétère », mais ne savent pas distinguer une _perte_ de fonction d'un _gain_ de fonction. Une mutation oncogénique comme EGFR L858R ne casse pas la protéine, elle la rend active en permanence. Pourtant, les deux outils la signalent comme délétère.
 
 ## La fréquence dans la population : gnomAD
 
@@ -95,11 +95,11 @@ Le séquençage d'une tumeur trouve les deux, et les séparer fait partie du tra
 
 ## Les bases de variants
 
-| Identifiant | Base | Ce que ça veut dire | Ce que ça ne veut **pas** dire |
-| --- | --- | --- | --- |
-| `rs…` | dbSNP | le variant a été soumis à dbSNP | quoi que ce soit sur son effet |
-| `COSV…` | COSMIC | le variant a été observé dans au moins une tumeur | qu'il cause le cancer (ce peut être un passager) |
-| PMID | PubMed | l'identifiant unique d'un article | — |
+| Identifiant | Base   | Ce que ça veut dire                               | Ce que ça ne veut **pas** dire                   |
+| ----------- | ------ | ------------------------------------------------- | ------------------------------------------------ |
+| `rs…`       | dbSNP  | le variant a été soumis à dbSNP                   | quoi que ce soit sur son effet                   |
+| `COSV…`     | COSMIC | le variant a été observé dans au moins une tumeur | qu'il cause le cancer (ce peut être un passager) |
+| PMID        | PubMed | l'identifiant unique d'un article                 | —                                                |
 
 Une même modification peut avoir plusieurs identifiants COSMIC (EGFR L858R en a deux), car COSMIC garde des entrées séparées selon la façon dont elle a été rapportée, et où.
 
@@ -135,12 +135,12 @@ Les trois variants de la démo suivent ce fil : deux oncogènes dépendants de H
 
 ## Le poids des preuves
 
-| Signal | Poids | Exemple dans ce projet |
-| --- | --- | --- |
-| Études fonctionnelles, essais cliniques dans la littérature | fort | des milliers d'articles sur BRAF V600E |
-| Récurrence dans les tumeurs (COSMIC) | modéré, selon le nombre de cas | identifiants `COSV…` |
-| Fréquence dans la population | fort pour « bénin » si fréquent, neutre si rare | AF gnomAD |
-| Prédictions in silico | faible | SIFT, PolyPhen |
-| Plausibilité biologique (position, charge) | une hypothèse à tester, pas une preuve | D724 à côté de MEEVD |
+| Signal                                                      | Poids                                           | Exemple dans ce projet                 |
+| ----------------------------------------------------------- | ----------------------------------------------- | -------------------------------------- |
+| Études fonctionnelles, essais cliniques dans la littérature | fort                                            | des milliers d'articles sur BRAF V600E |
+| Récurrence dans les tumeurs (COSMIC)                        | modéré, selon le nombre de cas                  | identifiants `COSV…`                   |
+| Fréquence dans la population                                | fort pour « bénin » si fréquent, neutre si rare | AF gnomAD                              |
+| Prédictions in silico                                       | faible                                          | SIFT, PolyPhen                         |
+| Plausibilité biologique (position, charge)                  | une hypothèse à tester, pas une preuve          | D724 à côté de MEEVD                   |
 
 C'est le raisonnement que l'agent doit reproduire : des signaux faibles ne justifient jamais à eux seuls une classification « oncogène ».

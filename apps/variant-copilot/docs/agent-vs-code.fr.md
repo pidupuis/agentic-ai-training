@@ -2,7 +2,7 @@
 
 L'essentiel de Variant Copilot est du code classique, déterministe. Le LLM n'intervient que là où une règle ne suffit pas, et il est entouré de garde-fous déterministes.
 
-*English version: [agent-vs-code.md](agent-vs-code.md).*
+_English version: [agent-vs-code.md](agent-vs-code.md)._
 
 ## Le principe
 
@@ -12,19 +12,19 @@ Un LLM apporte trois capacités qu'aucun programme classique n'a : lire du texte
 
 ## Qui fait quoi
 
-| Tâche | Faite par | Pourquoi |
-| --- | --- | --- |
-| Appeler VEP, choisir le transcrit canonique codant, extraire les champs | code | Règles fixes et connues : un `if` le fait à l'identique à chaque fois, gratuitement. |
-| Cache disque, limite de débit NCBI, gestion des erreurs réseau | code | Infrastructure. |
-| Valider le format de sortie | code (Pydantic) | Une règle stricte n'a pas besoin de jugement. |
-| Vérifier que chaque URL citée a été renvoyée par un outil | code (`seen_urls`) | Un contrôle doit être plus fiable que ce qu'il contrôle. |
-| Refuser une conclusion avant toute recherche PubMed | code | Une règle de procédure. |
-| Mettre `needs_expert_review` pour une VUS, un conflit ou une confiance basse | code (validateur d'`Annotation`) | Pure logique. D'abord seulement dans le prompt, puis déplacée dans le code pour qu'elle ne puisse pas être oubliée. |
-| Ordre des étapes (VEP, puis PubMed) | prompt | Pourrait être fixé dans le code ; laissé au prompt parce que le modèle le suit de façon fiable et que la boucle reste générique. |
-| **Écrire les requêtes PubMed et décider d'en lancer d'autres** | **LLM** | Il faut connaître les synonymes (`V600E`, `Val600Glu`, `BRAF(V600E)`) et réagir aux résultats : zéro article, trop d'articles, hors sujet. |
-| **Lire les résumés et en tirer des affirmations sourcées** | **LLM** | Du texte libre : aucune règle ne comprend que « constitutive activity of the MAPK pathway » veut dire gain de fonction. |
-| **Peser des signaux contradictoires et conclure** | **LLM** | « SIFT dit délétère, aucun article n'existe » demande du jugement, et le résumé pour un biologiste est de la rédaction. |
-| Décision finale | expert humain | L'outil propose ; une personne valide. |
+| Tâche                                                                        | Faite par                        | Pourquoi                                                                                                                                   |
+| ---------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Appeler VEP, choisir le transcrit canonique codant, extraire les champs      | code                             | Règles fixes et connues : un `if` le fait à l'identique à chaque fois, gratuitement.                                                       |
+| Cache disque, limite de débit NCBI, gestion des erreurs réseau               | code                             | Infrastructure.                                                                                                                            |
+| Valider le format de sortie                                                  | code (Pydantic)                  | Une règle stricte n'a pas besoin de jugement.                                                                                              |
+| Vérifier que chaque URL citée a été renvoyée par un outil                    | code (`seen_urls`)               | Un contrôle doit être plus fiable que ce qu'il contrôle.                                                                                   |
+| Refuser une conclusion avant toute recherche PubMed                          | code                             | Une règle de procédure.                                                                                                                    |
+| Mettre `needs_expert_review` pour une VUS, un conflit ou une confiance basse | code (validateur d'`Annotation`) | Pure logique. D'abord seulement dans le prompt, puis déplacée dans le code pour qu'elle ne puisse pas être oubliée.                        |
+| Ordre des étapes (VEP, puis PubMed)                                          | prompt                           | Pourrait être fixé dans le code ; laissé au prompt parce que le modèle le suit de façon fiable et que la boucle reste générique.           |
+| **Écrire les requêtes PubMed et décider d'en lancer d'autres**               | **LLM**                          | Il faut connaître les synonymes (`V600E`, `Val600Glu`, `BRAF(V600E)`) et réagir aux résultats : zéro article, trop d'articles, hors sujet. |
+| **Lire les résumés et en tirer des affirmations sourcées**                   | **LLM**                          | Du texte libre : aucune règle ne comprend que « constitutive activity of the MAPK pathway » veut dire gain de fonction.                    |
+| **Peser des signaux contradictoires et conclure**                            | **LLM**                          | « SIFT dit délétère, aucun article n'existe » demande du jugement, et le résumé pour un biologiste est de la rédaction.                    |
+| Décision finale                                                              | expert humain                    | L'outil propose ; une personne valide.                                                                                                     |
 
 ## L'alternative classique
 

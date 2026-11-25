@@ -10,11 +10,11 @@ A gene produces several **transcripts**: during splicing, different combinations
 
 Ensembl gives each level its own identifier:
 
-| Prefix | Level | Example |
-| --- | --- | --- |
-| `ENSG…` | gene | `ENSG00000080824` (HSP90AA1) |
-| `ENST…` | transcript | `ENST00000216281` |
-| `ENSP…` | protein | `ENSP00000216281` |
+| Prefix  | Level      | Example                      |
+| ------- | ---------- | ---------------------------- |
+| `ENSG…` | gene       | `ENSG00000080824` (HSP90AA1) |
+| `ENST…` | transcript | `ENST00000216281`            |
+| `ENSP…` | protein    | `ENSP00000216281`            |
 
 Because a gene has many transcripts, the same DNA change can hit amino acid 724 on one transcript, another position on a second one, and nothing at all on a non-coding one. Results are therefore always described on one reference transcript: the **canonical transcript**, nowadays the **MANE Select** transcript agreed on by Ensembl and NCBI.
 
@@ -34,11 +34,11 @@ In Ensembl URLs, a location is a region, `chromosome:start-end`. A single-base v
 
 HGVS (named after the Human Genome Variation Society) is the standard way to write a variant, so that papers, databases and clinical reports describe it identically. The prefix states the level:
 
-| Prefix | Level | BRAF V600E | Reads as |
-| --- | --- | --- | --- |
-| `g.` | genome | `7:g.140753336A>T` | chromosome 7, position 140753336, A becomes T |
-| `c.` | coding DNA of a transcript | `NM_004333.6:c.1799T>A` | base 1799 from the start codon, T becomes A |
-| `p.` | protein | `p.Val600Glu` | amino acid 600, valine, becomes glutamate |
+| Prefix | Level                      | BRAF V600E              | Reads as                                      |
+| ------ | -------------------------- | ----------------------- | --------------------------------------------- |
+| `g.`   | genome                     | `7:g.140753336A>T`      | chromosome 7, position 140753336, A becomes T |
+| `c.`   | coding DNA of a transcript | `NM_004333.6:c.1799T>A` | base 1799 from the start codon, T becomes A   |
+| `p.`   | protein                    | `p.Val600Glu`           | amino acid 600, valine, becomes glutamate     |
 
 `V600E` is the short form of `p.Val600Glu`, with one-letter amino acid codes (V = Val, E = Glu). Scientists use it in titles and speech, so it is the form to search in PubMed. HGVS recommends three-letter codes, which are less ambiguous.
 
@@ -48,14 +48,14 @@ In this project, `g.` notation is the input of Ensembl VEP, and `p.` notation (`
 
 The **consequence** is the predicted effect of the change on the transcript, using Sequence Ontology terms:
 
-| Term | Meaning |
-| --- | --- |
-| `synonymous_variant` | the codon changes but still codes for the same amino acid |
-| `missense_variant` | one amino acid is replaced by another (all three demo variants) |
-| `stop_gained` (nonsense) | a codon becomes a stop codon: the protein is truncated |
-| `frameshift_variant` | an insertion or deletion not divisible by 3 shifts the reading of every codon after it |
-| `splice_*_variant` | the change hits an exon/intron boundary and may disturb splicing |
-| `intron_variant`, `intergenic_variant` | outside coding sequence: usually no direct protein effect |
+| Term                                   | Meaning                                                                                |
+| -------------------------------------- | -------------------------------------------------------------------------------------- |
+| `synonymous_variant`                   | the codon changes but still codes for the same amino acid                              |
+| `missense_variant`                     | one amino acid is replaced by another (all three demo variants)                        |
+| `stop_gained` (nonsense)               | a codon becomes a stop codon: the protein is truncated                                 |
+| `frameshift_variant`                   | an insertion or deletion not divisible by 3 shifts the reading of every codon after it |
+| `splice_*_variant`                     | the change hits an exon/intron boundary and may disturb splicing                       |
+| `intron_variant`, `intergenic_variant` | outside coding sequence: usually no direct protein effect                              |
 
 VEP returns two levels: `most_severe_consequence` is the worst effect across **all** transcripts of all overlapping genes, while `consequence_terms` is the effect on the canonical transcript only.
 
@@ -74,7 +74,7 @@ Both predict whether an amino acid change damages the protein. They are **hints,
 - **SIFT** looks at evolutionary conservation: if a position never changes across species, changing it is suspicious. Values: `tolerated`, `deleterious`. A `_low_confidence` suffix means the alignment had few sequences at that position, which is common near protein ends.
 - **PolyPhen-2** adds structural information. Values: `benign`, `possibly_damaging`, `probably_damaging`.
 
-Their key limitation for cancer: they predict "damaging" but cannot tell *loss* of function from *gain* of function. An oncogenic mutation like EGFR L858R does not break the protein, it makes it constantly active, yet both tools flag it as damaging.
+Their key limitation for cancer: they predict "damaging" but cannot tell _loss_ of function from _gain_ of function. An oncogenic mutation like EGFR L858R does not break the protein, it makes it constantly active, yet both tools flag it as damaging.
 
 ## Population frequency: gnomAD
 
@@ -93,11 +93,11 @@ Tumor sequencing finds both, and separating them is part of the job. Our three v
 
 ## Variant databases
 
-| Identifier | Database | What it means | What it does **not** mean |
-| --- | --- | --- | --- |
-| `rs…` | dbSNP | the variant has been reported to dbSNP | anything about its effect |
-| `COSV…` | COSMIC | the variant has been observed in at least one tumor | that it causes cancer (it may be a passenger) |
-| PMID | PubMed | a unique article identifier | — |
+| Identifier | Database | What it means                                       | What it does **not** mean                     |
+| ---------- | -------- | --------------------------------------------------- | --------------------------------------------- |
+| `rs…`      | dbSNP    | the variant has been reported to dbSNP              | anything about its effect                     |
+| `COSV…`    | COSMIC   | the variant has been observed in at least one tumor | that it causes cancer (it may be a passenger) |
+| PMID       | PubMed   | a unique article identifier                         | —                                             |
 
 A single change can have several COSMIC ids (EGFR L858R has two), since COSMIC keeps separate entries depending on how and where it was reported.
 
@@ -133,12 +133,12 @@ The three demo variants follow that thread: two Hsp90-dependent oncogenes with a
 
 ## How evidence weighs
 
-| Signal | Weight | Example in this project |
-| --- | --- | --- |
-| Functional studies, clinical trials in the literature | strong | thousands of BRAF V600E papers |
-| Recurrence in tumors (COSMIC) | moderate, depends on counts | `COSV…` ids |
-| Population frequency | strong for benign if frequent, neutral if rare | gnomAD AF |
-| In silico predictions | weak | SIFT, PolyPhen |
-| Biological plausibility (position, charge) | a hypothesis to test, not evidence | D724 next to MEEVD |
+| Signal                                                | Weight                                         | Example in this project        |
+| ----------------------------------------------------- | ---------------------------------------------- | ------------------------------ |
+| Functional studies, clinical trials in the literature | strong                                         | thousands of BRAF V600E papers |
+| Recurrence in tumors (COSMIC)                         | moderate, depends on counts                    | `COSV…` ids                    |
+| Population frequency                                  | strong for benign if frequent, neutral if rare | gnomAD AF                      |
+| In silico predictions                                 | weak                                           | SIFT, PolyPhen                 |
+| Biological plausibility (position, charge)            | a hypothesis to test, not evidence             | D724 next to MEEVD             |
 
 This is the reasoning the agent must reproduce: weak signals alone never justify an oncogenic call.

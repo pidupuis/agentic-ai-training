@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { AgentEvent, Annotation } from "@/types"
+import type { AgentEvent, Annotation } from "@/types";
 
-export type StreamStatus = "idle" | "running" | "done" | "error"
+export type StreamStatus = "idle" | "running" | "done" | "error";
 
 /**
  * Runs the agent on a variant and exposes its live trace.
@@ -20,62 +20,62 @@ export type StreamStatus = "idle" | "running" | "done" | "error"
  * Closing it early also lets the backend cancel the run (see main.py).
  */
 export function useAgentStream() {
-  const [events, setEvents] = useState<AgentEvent[]>([])
-  const [annotation, setAnnotation] = useState<Annotation | null>(null)
-  const [status, setStatus] = useState<StreamStatus>("idle")
-  const [error, setError] = useState<string | null>(null)
+  const [events, setEvents] = useState<AgentEvent[]>([]);
+  const [annotation, setAnnotation] = useState<Annotation | null>(null);
+  const [status, setStatus] = useState<StreamStatus>("idle");
+  const [error, setError] = useState<string | null>(null);
 
   // A ref, not state: changing it must not re-render, and it must survive renders.
-  const sourceRef = useRef<EventSource | null>(null)
+  const sourceRef = useRef<EventSource | null>(null);
 
   const close = useCallback(() => {
-    sourceRef.current?.close()
-    sourceRef.current = null
-  }, [])
+    sourceRef.current?.close();
+    sourceRef.current = null;
+  }, []);
 
   const start = useCallback(
     (variantId: string) => {
-      close() // a second click must not leave a first agent running
-      setEvents([])
-      setAnnotation(null)
-      setError(null)
-      setStatus("running")
+      close(); // a second click must not leave a first agent running
+      setEvents([]);
+      setAnnotation(null);
+      setError(null);
+      setStatus("running");
 
-      const source = new EventSource(`/api/variants/${variantId}/analyze`)
-      sourceRef.current = source
+      const source = new EventSource(`/api/variants/${variantId}/analyze`);
+      sourceRef.current = source;
 
       // Each SSE "data: {...}" line arrives as one message event.
       source.onmessage = (msg: MessageEvent<string>) => {
-        const event = JSON.parse(msg.data) as AgentEvent
+        const event = JSON.parse(msg.data) as AgentEvent;
         // Functional update: always appends to the latest array, even when
         // several events arrive before React re-renders.
-        setEvents((prev) => [...prev, event])
+        setEvents((prev) => [...prev, event]);
 
-        if (event.type === "annotation") setAnnotation(event.annotation)
+        if (event.type === "annotation") setAnnotation(event.annotation);
         if (event.type === "done") {
-          setStatus("done")
-          close()
+          setStatus("done");
+          close();
         }
         if (event.type === "error") {
-          setError(event.message)
-          setStatus("error")
-          close()
+          setError(event.message);
+          setStatus("error");
+          close();
         }
-      }
+      };
 
       // Network failure, server down, or 404/500 before the stream started.
       // (A normal end never gets here: "done" closed the source first.)
       source.onerror = () => {
-        setError("Connection to the agent stream failed")
-        setStatus("error")
-        close()
-      }
+        setError("Connection to the agent stream failed");
+        setStatus("error");
+        close();
+      };
     },
     [close],
-  )
+  );
 
   // Cleanup on unmount: leaving the page stops the stream (and the agent).
-  useEffect(() => close, [close])
+  useEffect(() => close, [close]);
 
-  return { events, annotation, status, error, start }
+  return { events, annotation, status, error, start };
 }

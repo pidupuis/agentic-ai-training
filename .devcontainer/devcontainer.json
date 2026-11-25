@@ -23,5 +23,16 @@
   },
   "postStartCommand": "sudo /usr/local/bin/egress-firewall.sh",
   "waitFor": "postStartCommand",
-  "forwardPorts": [5173]
+  "forwardPorts": [5173],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "oxc.oxc-vscode",
+        "bradlc.vscode-tailwindcss",
+        "editorconfig.editorconfig"
+      ]
+    }
+  }
 }

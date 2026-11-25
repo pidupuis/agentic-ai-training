@@ -2,7 +2,7 @@
 
 Most of Variant Copilot is ordinary deterministic code. The LLM is used only where a rule cannot do the job, and deterministic guardrails surround it.
 
-*Version française : [agent-vs-code.fr.md](agent-vs-code.fr.md).*
+_Version française : [agent-vs-code.fr.md](agent-vs-code.fr.md)._
 
 ## The principle
 
@@ -12,19 +12,19 @@ An LLM brings three abilities no conventional program has: reading free text, ad
 
 ## Who does what
 
-| Task | Done by | Why |
-| --- | --- | --- |
-| Call VEP, pick the canonical protein-coding transcript, extract fields | code | Fixed, known rules: an `if` does it identically every time, for free. |
-| Disk cache, NCBI rate limit, network error handling | code | Infrastructure. |
-| Validate the output format | code (Pydantic) | A strict rule needs no judgment. |
-| Check that every cited URL was returned by a tool | code (`seen_urls`) | A check must be more reliable than what it checks. |
-| Refuse a conclusion before any PubMed search | code | A procedural rule. |
-| Set `needs_expert_review` for VUS, conflicts or low confidence | code (`Annotation` validator) | Pure logic. It was first in the prompt only; moved to code so it cannot be skipped. |
-| Order of steps (VEP, then PubMed) | prompt | Could be fixed in code; left to the prompt because the model follows it reliably and it keeps the loop generic. |
-| **Write PubMed queries and decide whether to run more** | **LLM** | Needs knowledge of synonyms (`V600E`, `Val600Glu`, `BRAF(V600E)`) and reactions to results: zero hits, too many, off-topic. |
-| **Read abstracts and turn them into sourced claims** | **LLM** | Free text: no rule understands that "constitutive activity of the MAPK pathway" means gain of function. |
-| **Weigh mixed signals and conclude** | **LLM** | "SIFT says deleterious, no paper exists" calls for judgment, and the summary for a biologist is writing. |
-| Final decision | human expert | The tool proposes; a person signs off. |
+| Task                                                                   | Done by                       | Why                                                                                                                         |
+| ---------------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Call VEP, pick the canonical protein-coding transcript, extract fields | code                          | Fixed, known rules: an `if` does it identically every time, for free.                                                       |
+| Disk cache, NCBI rate limit, network error handling                    | code                          | Infrastructure.                                                                                                             |
+| Validate the output format                                             | code (Pydantic)               | A strict rule needs no judgment.                                                                                            |
+| Check that every cited URL was returned by a tool                      | code (`seen_urls`)            | A check must be more reliable than what it checks.                                                                          |
+| Refuse a conclusion before any PubMed search                           | code                          | A procedural rule.                                                                                                          |
+| Set `needs_expert_review` for VUS, conflicts or low confidence         | code (`Annotation` validator) | Pure logic. It was first in the prompt only; moved to code so it cannot be skipped.                                         |
+| Order of steps (VEP, then PubMed)                                      | prompt                        | Could be fixed in code; left to the prompt because the model follows it reliably and it keeps the loop generic.             |
+| **Write PubMed queries and decide whether to run more**                | **LLM**                       | Needs knowledge of synonyms (`V600E`, `Val600Glu`, `BRAF(V600E)`) and reactions to results: zero hits, too many, off-topic. |
+| **Read abstracts and turn them into sourced claims**                   | **LLM**                       | Free text: no rule understands that "constitutive activity of the MAPK pathway" means gain of function.                     |
+| **Weigh mixed signals and conclude**                                   | **LLM**                       | "SIFT says deleterious, no paper exists" calls for judgment, and the summary for a biologist is writing.                    |
+| Final decision                                                         | human expert                  | The tool proposes; a person signs off.                                                                                      |
 
 ## The conventional alternative
 

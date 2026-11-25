@@ -3,20 +3,16 @@ name = "variant-copilot"
 version = "0.1.0"
 description = "Agent that annotates tumor variants from Ensembl and PubMed"
 readme = "README.md"
-authors = [
-    { name = "Pierre Dupuis 井磊", email = "pidupuis@users.noreply.github.com" }
-]
+authors = [{ name = "Pierre Dupuis 井磊", email = "pidupuis@users.noreply.github.com" }]
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.165.0",
-    "httpx>=0.28.1",
-    "openai>=3.58.0",
-    "pydantic>=2.14.4",
-    "python-dotenv>=1.2.4",
-    "uvicorn[standard]>=0.54.0",
+  "fastapi>=0.165.0",
+  "httpx>=0.28.1",
+  "openai>=3.58.0",
+  "pydantic>=2.14.4",
+  "python-dotenv>=1.2.4",
+  "uvicorn[standard]>=0.54.0",
 ]
 
 [dependency-groups]
-dev = [
-    "pytest>=9.2.0",
-]
+dev = ["pytest>=9.2.0"]
