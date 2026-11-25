@@ -54,7 +54,8 @@ export type ToolResult =
 export type ToolCallEvent = {
   type: "tool_call";
   tool: string;
-  args: Record<string, unknown>;
+  // The raw string when the model's arguments were not valid JSON (see agent.py).
+  args: Record<string, unknown> | string;
   ts: number;
 };
 export type ToolResultEvent = { type: "tool_result"; tool: string; result: ToolResult; ts: number };

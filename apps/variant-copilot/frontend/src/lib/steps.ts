@@ -34,12 +34,14 @@ export function toSteps(events: AgentEvent[]): Step[] {
  */
 export function label({ call, result }: Step): string {
   const r = result?.result;
+  // args is the raw string when the model sent invalid JSON: show nothing for it.
+  const args = typeof call.args === "string" ? {} : call.args;
   switch (call.tool) {
     case "get_vep_annotation":
-      return `Ensembl VEP · ${call.args.hgvs_g}`;
+      return `Ensembl VEP · ${args.hgvs_g ?? "invalid arguments"}`;
     case "search_pubmed": {
       const count = r?.data?.total_count;
-      return `PubMed · ${call.args.query}${count !== undefined ? ` → ${count} articles` : ""}`;
+      return `PubMed · ${args.query ?? "invalid arguments"}${count !== undefined ? ` → ${count} articles` : ""}`;
     }
     case "submit_annotation":
       return r?.error ? "Annotation rejected, retrying" : "Annotation submitted";
