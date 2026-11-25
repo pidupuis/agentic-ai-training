@@ -16,6 +16,7 @@ are left to the model and which are deterministic code.
 
 import json
 import logging
+import re
 import threading
 import time
 from collections.abc import Callable
@@ -66,7 +67,12 @@ TOOLS = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "PubMed query with [tiab] tags"},
-                    "max_results": {"type": "integer", "description": "1 to 10, default 5"},
+                    "max_results": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10,
+                        "description": "1 to 10, default 5",
+                    },
                 },
                 "required": ["query"],
             },
@@ -137,6 +143,15 @@ if conflicts is not empty, or if confidence is low.
 MAX_TURNS = 8
 
 EventHandler = Callable[[dict], None]
+
+# Which url each evidence source may cite. A PubMed search page (?term=...) is accepted
+# only for a neutral fact such as "0 articles found"; a claim for or against
+# pathogenicity must point to one article.
+URL_PREFIX_BY_SOURCE = {
+    "PubMed": "https://pubmed.ncbi.nlm.nih.gov/",
+    "Ensembl VEP": "https://www.ensembl.org/",
+}
+PUBMED_ARTICLE_URL = re.compile(r"https://pubmed\.ncbi\.nlm\.nih\.gov/\d+/")
 
 
 class AgentError(Exception):
@@ -319,12 +334,14 @@ def _collect_urls(obj: object, found: set[str]) -> set[str]:
 def _check_annotation(args: dict, seen_urls: set[str], pubmed_called: bool) -> Annotation:
     """Validate a submit_annotation call: deterministic guardrails around the model.
 
-    Three checks, cheapest first:
+    Four checks, cheapest first:
         1. PubMed was searched at least once (no conclusion from VEP alone).
         2. The arguments match the Annotation schema (Pydantic), which also
            enforces the needs_expert_review rule (see Annotation).
         3. Anti-hallucination: every cited url was returned by a tool in this run.
            A url no tool returned can only have been invented.
+        4. Each url fits its evidence: it belongs to the declared source, and a
+           non-neutral PubMed claim cites an article, not a search page.
 
     Returns:
         The validated Annotation.
@@ -342,4 +359,17 @@ def _check_annotation(args: dict, seen_urls: set[str], pubmed_called: bool) -> A
             f"These urls were never returned by a tool: {invented}. "
             "Cite only urls that appear in tool results."
         )
+    for e in annotation.evidence:
+        if not e.url.startswith(URL_PREFIX_BY_SOURCE[e.source]):
+            raise ValueError(f"The url {e.url} does not belong to the source {e.source}.")
+        if (
+            e.source == "PubMed"
+            and e.direction != "neutral"
+            and not PUBMED_ARTICLE_URL.fullmatch(e.url)
+        ):
+            raise ValueError(
+                f"The {e.direction} claim {e.claim!r} cites {e.url}, which is not an "
+                "article. Cite the article url (https://pubmed.ncbi.nlm.nih.gov/<pmid>/), "
+                "or mark the claim neutral if it only reports a search result."
+            )
     return annotation

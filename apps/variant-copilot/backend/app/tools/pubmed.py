@@ -13,6 +13,7 @@ from app.tools.cache import cached_get
 SOURCE = "PubMed"
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 NCBI_PAUSE = 0.4  # NCBI allows 3 requests/second without an API key
+MAX_RESULTS = 10  # hard cap: every article is sent back to the LLM on each turn
 
 # Example after completion by httpx (params are URL-encoded):
 #   https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22BRAF%22%5Btiab%5D+AND+%22V600E%22%5Btiab%5D&retmode=json&retmax=2&sort=relevance
@@ -37,7 +38,8 @@ def search_pubmed(query: str, max_results: int = 5) -> dict:
     Args:
         query: PubMed query. Use [tiab] tags, e.g. '"BRAF"[tiab] AND "V600E"[tiab]':
             without tags, PubMed silently drops unknown words like "D724N".
-        max_results: how many articles to fetch in detail (total_count is always the full count).
+        max_results: how many articles to fetch in detail, clamped to 1..MAX_RESULTS
+            (total_count is always the full count).
 
     Returns:
         The common tool contract, never an exception:
@@ -54,6 +56,9 @@ def search_pubmed(query: str, max_results: int = 5) -> dict:
         (9000, '"BRAF"[Title/Abstract] AND "V600E"[Title/Abstract]')
     """
     try:
+        # The model may send 500 or "5": clamp in code, the schema bounds are only a hint.
+        max_results = max(1, min(int(max_results), MAX_RESULTS))
+
         # Step 1: esearch, the ids of the matching articles.
         result = cached_get(
             ESEARCH_URL,
