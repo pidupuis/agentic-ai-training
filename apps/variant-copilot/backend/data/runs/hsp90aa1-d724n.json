@@ -1,0 +1,224 @@
+{
+ "variant_id": "hsp90aa1-d724n",
+ "model": "gpt-5.4-mini",
+ "saved_at": 1795617314.9265568,
+ "events": [
+  {
+   "type": "tool_call",
+   "tool": "get_vep_annotation",
+   "args": {
+    "hgvs_g": "14:g.102081741C>T"
+   },
+   "ts": 1795617308.3718112
+  },
+  {
+   "type": "tool_result",
+   "tool": "get_vep_annotation",
+   "result": {
+    "source": "Ensembl VEP",
+    "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=14:102081741-102081741",
+    "data": {
+     "most_severe_consequence": "missense_variant",
+     "gene_symbol": "HSP90AA1",
+     "transcript_id": "ENST00000216281",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "hgvsp": "p.Asp724Asn",
+     "protein_start": 724,
+     "sift_prediction": "deleterious_low_confidence",
+     "polyphen_prediction": "possibly_damaging",
+     "known_ids": [
+      "COSV53488860",
+      "rs563025620"
+     ],
+     "gnomad_exomes_af": 2.243e-05
+    }
+   },
+   "ts": 1795617308.3731148
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617310.1120145
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D",
+    "data": {
+     "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab]",
+     "translated_query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab]",
+     "total_count": 0,
+     "articles": []
+    }
+   },
+   "ts": 1795617310.1127362
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"HSP90AA1\"[tiab] AND \"Asp724Asn\"[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617310.1127698
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22Asp724Asn%22%5Btiab%5D",
+    "data": {
+     "query": "\"HSP90AA1\"[tiab] AND \"Asp724Asn\"[tiab]",
+     "translated_query": "\"HSP90AA1\"[tiab] AND \"Asp724Asn\"[tiab]",
+     "total_count": 0,
+     "articles": []
+    }
+   },
+   "ts": 1795617310.113015
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND cancer[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617310.1130402
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D+AND+cancer%5Btiab%5D",
+    "data": {
+     "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND cancer[tiab]",
+     "translated_query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND cancer[tiab]",
+     "total_count": 0,
+     "articles": []
+    }
+   },
+   "ts": 1795617310.750213
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND Hsp90[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617310.7502906
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D+AND+Hsp90%5Btiab%5D",
+    "data": {
+     "query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND Hsp90[tiab]",
+     "translated_query": "\"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND Hsp90[tiab]",
+     "total_count": 0,
+     "articles": []
+    }
+   },
+   "ts": 1795617311.5503042
+  },
+  {
+   "type": "tool_call",
+   "tool": "submit_annotation",
+   "args": {
+    "classification": "vus",
+    "confidence": "high",
+    "summary": "VEP annotates HSP90AA1 p.Asp724Asn as a missense variant with low-frequency population occurrence and in silico predictions that are neutral context only. PubMed searches for the exact variant and variant-plus-cancer/Hsp90 queries returned no variant-specific articles, so there is no direct literature evidence for oncogenicity.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is HSP90AA1 p.Asp724Asn (missense_variant) on transcript ENST00000216281.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=14:102081741-102081741",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant has known IDs COSV53488860 and rs563025620 and a gnomAD exomes allele frequency of 2.243e-05.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=14:102081741-102081741",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"D724N\"[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"Asp724Asn\"[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22Asp724Asn%22%5Btiab%5D",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND cancer[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D+AND+cancer%5Btiab%5D",
+      "direction": "neutral"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": true
+   },
+   "ts": 1795617314.926174
+  },
+  {
+   "type": "annotation",
+   "annotation": {
+    "classification": "vus",
+    "confidence": "high",
+    "summary": "VEP annotates HSP90AA1 p.Asp724Asn as a missense variant with low-frequency population occurrence and in silico predictions that are neutral context only. PubMed searches for the exact variant and variant-plus-cancer/Hsp90 queries returned no variant-specific articles, so there is no direct literature evidence for oncogenicity.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is HSP90AA1 p.Asp724Asn (missense_variant) on transcript ENST00000216281.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=14:102081741-102081741",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant has known IDs COSV53488860 and rs563025620 and a gnomAD exomes allele frequency of 2.243e-05.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=14:102081741-102081741",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"D724N\"[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"Asp724Asn\"[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22Asp724Asn%22%5Btiab%5D",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The query \"HSP90AA1\"[tiab] AND \"D724N\"[tiab] AND cancer[tiab] returned 0 articles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22HSP90AA1%22%5Btiab%5D+AND+%22D724N%22%5Btiab%5D+AND+cancer%5Btiab%5D",
+      "direction": "neutral"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": true
+   },
+   "ts": 1795617314.9264011
+  }
+ ]
+}

@@ -1,0 +1,338 @@
+{
+ "variant_id": "braf-v600e",
+ "model": "gpt-5.4-mini",
+ "saved_at": 1795617301.1051905,
+ "events": [
+  {
+   "type": "tool_call",
+   "tool": "get_vep_annotation",
+   "args": {
+    "hgvs_g": "7:g.140753336A>T"
+   },
+   "ts": 1795617295.9903803
+  },
+  {
+   "type": "tool_result",
+   "tool": "get_vep_annotation",
+   "result": {
+    "source": "Ensembl VEP",
+    "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
+    "data": {
+     "most_severe_consequence": "missense_variant",
+     "gene_symbol": "BRAF",
+     "transcript_id": "ENST00000646891",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "hgvsp": "p.Val600Glu",
+     "protein_start": 600,
+     "sift_prediction": "deleterious_low_confidence",
+     "polyphen_prediction": "probably_damaging",
+     "known_ids": [
+      "CM112509",
+      "COSV56056643",
+      "COSV56065204",
+      "COSV56080151",
+      "rs113488022"
+     ],
+     "gnomad_exomes_af": 1.369e-06
+    }
+   },
+   "ts": 1795617295.992141
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617297.4169405
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22BRAF%22%5Btiab%5D+AND+%22V600E%22%5Btiab%5D",
+    "data": {
+     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab]",
+     "translated_query": "\"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract]",
+     "total_count": 9001,
+     "articles": [
+      {
+       "pmid": "41368991",
+       "title": "BRAF V600E in thyroid cancer: navigating prognostic uncertainty and therapeutic opportunity.",
+       "journal": "European thyroid journal",
+       "year": "2025",
+       "abstract": "This review explores the role of BRAF V600E in thyroid cancer with emphasis on its debated prognostic value, notable molecular heterogeneity, and opportunities as a therapeutic target. BRAF V600E, the most common oncogenic driver in papillary thyroid carcinoma, activates the MAPK pathway and suppresses genes involved in iodine metabolism and differentiation. While linked to adverse features and outcomes such as extrathyroidal extension, lymph node metastasis, recurrence, and mortality, its utility as an independent prognostic marker remains controversial. In solitary intrathyroidal tumors (1-4",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/41368991/"
+      },
+      {
+       "pmid": "38627602",
+       "title": "BRAFV600E-mutant metastatic NSCLC: disease overview and treatment landscape.",
+       "journal": "NPJ precision oncology",
+       "year": "2024",
+       "abstract": "In this review, we cover the current understanding of BRAF mutations and associated clinical characteristics in patients with metastatic NSCLC, approved and emerging treatment options, BRAF sequencing approaches, and unmet needs. The BRAFV600E mutation confers constitutive activity of the MAPK pathway, leading to enhanced growth, proliferation, and survival of tumor cells. Testing for BRAF mutations enables patients to be treated with therapies that directly target BRAFV600E and the MAPK pathway, but BRAF testing lags behind other oncogene testing in metastatic NSCLC. Additional therapies targ",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/38627602/"
+      },
+      {
+       "pmid": "38424736",
+       "title": "BRAF V600E mutation mediates invasive and growth features in ameloblastoma.",
+       "journal": "Oral diseases",
+       "year": "2024",
+       "abstract": "Ameloblastoma (AM), a locally aggressive tumor with extensive growth capacity, causes significant damage to the jaw and affects facial appearance. Although the high prevalence of BRAF V600E mutation in AM is known, its specific impacts on patients with AM remain unclear. Thus, the present study investigated the role of BRAF V600E mutation, thereby focusing on its impact on AM invasion and growth. Immunohistochemical analysis was used to compare BRAF V600E, MMP2, MMP9, and Ki-67 expressions in AM (n = 49), normal oral mucosa (NOM) (n = 10), and odontogenic keratocyst (OKC) (n = 15) tissues. AM ",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/38424736/"
+      },
+      {
+       "pmid": "32995956",
+       "title": "BRAFV600E, hypothyroidism, and human relaxin in thyroid carcinogenesis.",
+       "journal": "Journal of cancer research and clinical oncology",
+       "year": "2021",
+       "abstract": "BRAFV600E, a major driver of thyroid cancer, evaluated in the context of thyroid hormones and human relaxin. Immunohistochemical expressions of BRAFV600E, TSH, TSH receptor (TSHR), T4, T3 receptor (T3R), RLNH2, and its receptor, RXFP1, were evaluated in thyroid tumors from a retrospective U.S. population of 481 cancer cases diagnosed in 1983-2004. BRAFV600E was expressed in 52% of all thyroid tumors; expression of other markers ranged from 25% for T4 to 98% for RLNH2. Tumors predominantly exhibited hypothyroid-like conditions characterized by elevated TSH and TSHR and reduced T4. BRAFV600E pre",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/32995956/"
+      },
+      {
+       "pmid": "22281684",
+       "title": "Unresponsiveness of colon cancer to BRAF(V600E) inhibition through feedback activation of EGFR.",
+       "journal": "Nature",
+       "year": "2012",
+       "abstract": "Inhibition of the BRAF(V600E) oncoprotein by the small-molecule drug PLX4032 (vemurafenib) is highly effective in the treatment of melanoma. However, colon cancer patients harbouring the same BRAF(V600E) oncogenic lesion have poor prognosis and show only a very limited response to this drug. To investigate the cause of the limited therapeutic effect of PLX4032 in BRAF(V600E) mutant colon tumours, here we performed an RNA-interference-based genetic screen in human cells to search for kinases whose knockdown synergizes with BRAF(V600E) inhibition. We report that blockade of the epidermal growth ",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/22281684/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617297.4259222
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND melanoma[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617297.4259908
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22BRAF%22%5Btiab%5D+AND+%22V600E%22%5Btiab%5D+AND+melanoma%5Btiab%5D",
+    "data": {
+     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND melanoma[tiab]",
+     "translated_query": "\"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND \"melanoma\"[Title/Abstract]",
+     "total_count": 2347,
+     "articles": [
+      {
+       "pmid": "40020669",
+       "title": "FAK inhibition combined with the RAF-MEK clamp avutometinib overcomes resistance to targeted and immune therapies in BRAF V600E melanoma.",
+       "journal": "Cancer cell",
+       "year": "2025",
+       "abstract": "Widespread BRAF mutations result in persistent RAS-RAF-MEK-ERK (MAPK) signaling in melanoma. BRAF (BRAFi) and MEK (MEKi) inhibitors are approved for BRAF V600E melanomas, including those progressing on immunotherapy; however, rapid resistance to these agents highlights the need for novel strategies. Here, transcriptome analysis of BRAF V600E melanomas from patients resistant to BRAFi and MEKi shows activation of focal adhesion signaling. Consistently, BRAFi, MEKi, and the RAF-MEK clamp avutometinib activate focal adhesion kinase (FAK) in melanoma cells. Mechanistically, inhibition of an MAPK-R",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/40020669/"
+      },
+      {
+       "pmid": "37627054",
+       "title": "BRAF Mutations in Melanoma: Biological Aspects, Therapeutic Implications, and Circulating Biomarkers.",
+       "journal": "Cancers",
+       "year": "2023",
+       "abstract": "Melanoma is an aggressive form of skin cancer resulting from the malignant transformation of melanocytes. Recent therapeutic approaches, including targeted therapy and immunotherapy, have improved the prognosis and outcome of melanoma patients. BRAF is one of the most frequently mutated oncogenes recognised in melanoma. The most frequent oncogenic BRAF mutations consist of a single point mutation at codon 600 (mostly V600E) that leads to constitutive activation of the BRAF/MEK/ERK (MAPK) signalling pathway. Therefore, mutated BRAF has become a useful target for molecular therapy and the use of",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/37627054/"
+      },
+      {
+       "pmid": "19282848",
+       "title": "Braf(V600E) cooperates with Pten loss to induce metastatic melanoma.",
+       "journal": "Nature genetics",
+       "year": "2009",
+       "abstract": "Mutational activation of BRAF is the earliest and most common genetic alteration in human melanoma. To build a model of human melanoma, we generated mice with conditional melanocyte-specific expression of BRaf(V600E). Upon induction of BRaf(V600E) expression, mice developed benign melanocytic hyperplasias that failed to progress to melanoma over 15-20 months. By contrast, expression of BRaf(V600E) combined with Pten tumor suppressor gene silencing elicited development of melanoma with 100% penetrance, short latency and with metastases observed in lymph nodes and lungs. Melanoma was prevented b",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/19282848/"
+      },
+      {
+       "pmid": "30069761",
+       "title": "Vemurafenib.",
+       "journal": "Recent results in cancer research. Fortschritte der Krebsforschung. Progres dans les recherches sur le cancer",
+       "year": "2018",
+       "abstract": "The activating BRAF mutation V600E and related mutations in this codon are most important for the activation of the RAS/RAF/MEK/ERK mitogen-activated protein kinase (MAPK) signalling pathway in melanoma. BRAF V600E mutations have been detected in ~40% of melanoma patients and BRAF V600K mutations in ~5% of melanoma patients. Activation of the MAPK pathway results in continuous stimulation of cell proliferation and inhibits programmed cell death. Vemurafenib (PLX4032) was developed as a low-molecular-weight molecule for the inhibition of the mutated serine-threonine kinase BRAF, and it selectiv",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/30069761/"
+      },
+      {
+       "pmid": "31050693",
+       "title": "Encorafenib and binimetinib for the treatment of BRAF V600E/K-mutated melanoma.",
+       "journal": "Drugs of today (Barcelona, Spain : 1998)",
+       "year": "2019",
+       "abstract": "BRAF is a constituent of the mitogen-activated protein kinase (MAPK) signaling pathway, which serves to activate downstream MEK, and is one of the most commonly mutated oncogenes in human tumors. Indeed, BRAF V600 mutations are present in approximately 40% of metastatic melanoma tumors. Encorafenib (LGX-818, Braftovi) and binimetinib (MEK-162, Mektovi) are small-molecule inhibitors of BRAF and MEK, respectively. BRAF and MEK inhibitors have been shown to improve overall and progression-free survival among patients with metastatic melanoma. Of these inhibitors, encorafenib and binimetinib are t",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/31050693/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617297.4330812
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND Hsp90[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617297.433183
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22BRAF%22%5Btiab%5D+AND+%22V600E%22%5Btiab%5D+AND+Hsp90%5Btiab%5D",
+    "data": {
+     "query": "\"BRAF\"[tiab] AND \"V600E\"[tiab] AND Hsp90[tiab]",
+     "translated_query": "\"BRAF\"[Title/Abstract] AND \"V600E\"[Title/Abstract] AND \"Hsp90\"[Title/Abstract]",
+     "total_count": 26,
+     "articles": [
+      {
+       "pmid": "29674508",
+       "title": "Combined BRAF and HSP90 Inhibition in Patients with Unresectable BRAF V600E-Mutant Melanoma.",
+       "journal": "Clinical cancer research : an official journal of the American Association for Cancer Research",
+       "year": "2018",
+       "abstract": "Purpose: BRAF inhibitors are clinically active in patients with advanced BRAFV600-mutant melanoma, although acquired resistance remains common. Preclinical studies demonstrated that resistance could be overcome using concurrent treatment with the HSP90 inhibitor XL888.Patients and Methods: Vemurafenib (960 mg p.o. b.i.d.) combined with escalating doses of XL888 (30, 45, 90, or 135 mg p.o. twice weekly) was investigated in 21 patients with advanced BRAFV600-mutant melanoma. Primary endpoints were safety and determination of a maximum tolerated dose. Correlative proteomic studies were performed ",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/29674508/"
+      },
+      {
+       "pmid": "36446791",
+       "title": "HSP90-CDC37-PP5 forms a structural platform for kinase dephosphorylation.",
+       "journal": "Nature communications",
+       "year": "2022",
+       "abstract": "Activation of client protein kinases by the HSP90 molecular chaperone system is affected by phosphorylation at multiple sites on HSP90, the kinase-specific co-chaperone CDC37, and the kinase client itself. Removal of regulatory phosphorylation from client kinases and their release from the HSP90-CDC37 system depends on the Ser/Thr phosphatase PP5, which associates with HSP90 via its N-terminal TPR domain. Here, we present the cryoEM structure of the oncogenic protein kinase client BRAFV600E bound to HSP90-CDC37, showing how the V600E mutation favours BRAF association with HSP90-CDC37. Structur",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/36446791/"
+      },
+      {
+       "pmid": "33986726",
+       "title": "Recent Understanding and Future Directions of Recurrent Corticotroph Tumors.",
+       "journal": "Frontiers in endocrinology",
+       "year": "2021",
+       "abstract": "Corticotroph tumors (CTs) are pituitary neoplasms arising from the Tpit lineage, which may or not express adrenocorticotrophic hormone (ACTH). Functioning CTs cause Cushing's disease (CD), which has high morbidity and mortality due to hypercortisolemia. \"Non-functioning\" or silent CTs (SCT) and the Crooke's cell subtypes do not cause CD and may be asymptomatic until manifested by compressive symptoms and are more frequently found as macroadenoma. Both tend toward more aggressive behavior, recurrence, and a higher rate of malignant transformation to pituitary carcinoma. Tumorigenesis involves g",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/33986726/"
+      },
+      {
+       "pmid": "35326726",
+       "title": "Identification of New Vulnerabilities in Conjunctival Melanoma Using Image-Based High Content Drug Screening.",
+       "journal": "Cancers",
+       "year": "2022",
+       "abstract": "Recent evidence suggests that numerous similarities exist between the genomic landscapes of both conjunctival and cutaneous melanoma. Since alterations of several components of the MAP kinases, PI3K/mTOR, and cell cycle pathways have been reported in conjunctival melanoma, we decided to assess the sensitivity of conjunctival melanoma to targeted inhibition mostly of kinase inhibitors. A high content drug screening assay based on automated fluorescence microscopy was performed in three conjunctival melanoma cell lines with different genomic backgrounds with 489 kinase inhibitors and 53 other in",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/35326726/"
+      },
+      {
+       "pmid": "40878818",
+       "title": "Multi-omic characterization of consensus molecular subtype 1 (CMS1) colorectal cancer with dampened immune response improves precision medicine.",
+       "journal": "Molecular oncology",
+       "year": "2025",
+       "abstract": "Colorectal cancer (CRC) is a heterogenous disease with distinct biological and clinical subgroups, each with different prognoses and responses to therapy. In this case report, taking inspiration from a case of locally advanced CRC with serine/threonine-protein kinase B-raf (BRAF) V600E mutation, we highlight an atypical consensus molecular subtype 1 (CMS1). Deep multi-omic analyses showed a limited expression of programmed cell death protein 1 (PD-1) and reduced T-cell infiltration, including CD8+ and natural killer (NK) cells, in the analyzed CMS1 tumor. In parallel, a reduced activation of t",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/40878818/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617297.439265
+  },
+  {
+   "type": "tool_call",
+   "tool": "submit_annotation",
+   "args": {
+    "classification": "oncogenic",
+    "confidence": "high",
+    "summary": "BRAF p.Val600Glu is a missense variant at codon 600 with very low gnomAD frequency and multiple PubMed-indexed articles describing BRAF V600E as an oncogenic driver and therapeutic target. The literature includes reports of constitutive MAPK pathway activation and approved targeted therapy use in BRAF V600E-mutant cancers.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is a missense_variant in BRAF with protein change p.Val600Glu at position 600.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "VEP reports gnomAD exomes allele frequency 1.369e-06 and known IDs including COSV56056643 and rs113488022.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A review on BRAF V600E in thyroid cancer states that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41368991/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A review on BRAF V600E-mutant metastatic NSCLC states that the BRAFV600E mutation confers constitutive activity of the MAPK pathway and that therapies directly target BRAFV600E.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38627602/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A melanoma review states that the most frequent oncogenic BRAF mutations consist of a single point mutation at codon 600, mostly V600E, leading to constitutive activation of the BRAF/MEK/ERK pathway.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37627054/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A clinical study reports combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29674508/",
+      "direction": "supports_pathogenic"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": false
+   },
+   "ts": 1795617301.1029778
+  },
+  {
+   "type": "annotation",
+   "annotation": {
+    "classification": "oncogenic",
+    "confidence": "high",
+    "summary": "BRAF p.Val600Glu is a missense variant at codon 600 with very low gnomAD frequency and multiple PubMed-indexed articles describing BRAF V600E as an oncogenic driver and therapeutic target. The literature includes reports of constitutive MAPK pathway activation and approved targeted therapy use in BRAF V600E-mutant cancers.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is a missense_variant in BRAF with protein change p.Val600Glu at position 600.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "VEP reports gnomAD exomes allele frequency 1.369e-06 and known IDs including COSV56056643 and rs113488022.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:140753336-140753336",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A review on BRAF V600E in thyroid cancer states that BRAF V600E is the most common oncogenic driver in papillary thyroid carcinoma and activates the MAPK pathway.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41368991/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A review on BRAF V600E-mutant metastatic NSCLC states that the BRAFV600E mutation confers constitutive activity of the MAPK pathway and that therapies directly target BRAFV600E.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38627602/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A melanoma review states that the most frequent oncogenic BRAF mutations consist of a single point mutation at codon 600, mostly V600E, leading to constitutive activation of the BRAF/MEK/ERK pathway.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37627054/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "A clinical study reports combined BRAF and HSP90 inhibition in patients with unresectable BRAF V600E-mutant melanoma.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29674508/",
+      "direction": "supports_pathogenic"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": false
+   },
+   "ts": 1795617301.1031666
+  }
+ ]
+}

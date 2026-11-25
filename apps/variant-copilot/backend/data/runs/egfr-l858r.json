@@ -1,0 +1,336 @@
+{
+ "variant_id": "egfr-l858r",
+ "model": "gpt-5.4-mini",
+ "saved_at": 1795617307.147464,
+ "events": [
+  {
+   "type": "tool_call",
+   "tool": "get_vep_annotation",
+   "args": {
+    "hgvs_g": "7:g.55191822T>G"
+   },
+   "ts": 1795617301.9194105
+  },
+  {
+   "type": "tool_result",
+   "tool": "get_vep_annotation",
+   "result": {
+    "source": "Ensembl VEP",
+    "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
+    "data": {
+     "most_severe_consequence": "missense_variant",
+     "gene_symbol": "EGFR",
+     "transcript_id": "ENST00000275493",
+     "consequence_terms": [
+      "missense_variant"
+     ],
+     "hgvsp": "p.Leu858Arg",
+     "protein_start": 858,
+     "sift_prediction": "deleterious_low_confidence",
+     "polyphen_prediction": "probably_damaging",
+     "known_ids": [
+      "COSV51765161",
+      "COSV51854030",
+      "rs121434568"
+     ],
+     "gnomad_exomes_af": null
+    }
+   },
+   "ts": 1795617301.9211338
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617303.3418515
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22EGFR%22%5Btiab%5D+AND+%22L858R%22%5Btiab%5D",
+    "data": {
+     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab]",
+     "translated_query": "\"EGFR\"[Title/Abstract] AND \"L858R\"[Title/Abstract]",
+     "total_count": 3212,
+     "articles": [
+      {
+       "pmid": "37321664",
+       "title": "Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.",
+       "journal": "BMJ open respiratory research",
+       "year": "2023",
+       "abstract": "The most common oncogenic driver in non-small-cell lung cancer (NSCLC) is the epidermal growth factor receptor (EGFR) gene mutations that occur more frequently among Asians (30%-50%) as opposed to Caucasians (10%-15%). Lung cancer is one of the most prevalent cancers in India, with a reported adenocarcinoma positivity ranging between 26.1% and 86.9% in NSCLC patients. The prevalence of EGFR mutations in adenocarcinoma patients (36.9%) in India is higher than that of Caucasian patients and lower than that of East Asian patients. The exon 19 deletion (Ex19del) is more common than exon 21 L858R m",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/"
+      },
+      {
+       "pmid": "27251290",
+       "title": "Overcoming EGFR(T790M) and EGFR(C797S) resistance with mutant-selective allosteric inhibitors.",
+       "journal": "Nature",
+       "year": "2016",
+       "abstract": "The epidermal growth factor receptor (EGFR)-directed tyrosine kinase inhibitors (TKIs) gefitinib, erlotinib and afatinib are approved treatments for non-small cell lung cancers harbouring activating mutations in the EGFR kinase, but resistance arises rapidly, most frequently owing to the secondary T790M mutation within the ATP site of the receptor. Recently developed mutant-selective irreversible inhibitors are highly active against the T790M mutant, but their efficacy can be compromised by acquired mutation of C797, the cysteine residue with which they form a key covalent bond. All current EG",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/27251290/"
+      },
+      {
+       "pmid": "34624491",
+       "title": "Discovery and optimization of covalent EGFR T790M/L858R mutant inhibitors.",
+       "journal": "Bioorganic & medicinal chemistry letters",
+       "year": "2021",
+       "abstract": "Epidermal growth factor receptor (EGFR) inhibitors have clinical utility in the treatment of non-small cell lung cancer (NSCLC) patients. Despite encouraging clinical efficacy with these agents, many patients develop resistance due to sensitizing (or activating) mutations ultimately leading to disease progression. In the majority of the cases, this resistance is due to the T790M mutation and frequently coexisting L858R. In addition, EGFR wild type receptor inhibition can lead to on target related dose limiting toxicities such as rash and diarrhea. We describe herein the identification of a mut",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/34624491/"
+      },
+      {
+       "pmid": "30530173",
+       "title": "Design, synthesis and biological evaluation of AZD9291 derivatives as selective and potent EGFRL858R/T790M inhibitors.",
+       "journal": "European journal of medicinal chemistry",
+       "year": "2019",
+       "abstract": "Third-generation epidermal growth factor receptor (EGFR)L858R/T790M inhibitors are still the main drugs for the treatment of advanced non-small cell lung cancer (NSCLC), and these drugs have achieved remarkable clinical efficacy. However, there are still many patients suffering from drug-resistant mutations and drug side effects caused by NSCLC. In this study, guided by the molecular simulation, we applied a structure-based drug design strategy (SBDD) and optimized the structure to obtain a series of potent and selective EGFRL858R/T790M inhibitors. The most potent compound 18e demonstrated exc",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/30530173/"
+      },
+      {
+       "pmid": "39494831",
+       "title": "L858R/L718Q and L858R/L792H Mutations of EGFR Inducing Resistance Against Osimertinib by Forming Additional Hydrogen Bonds.",
+       "journal": "Proteins",
+       "year": "2025",
+       "abstract": "Acquired resistance to first-line treatments in various cancers both promotes cancer recurrence as well as limits effective treatment. This is true for epidermal growth factor receptor (EGFR) mutations, for which secondary EGFR mutations are one of the principal mechanisms conferring resistance to the covalent inhibitor osimertinib. Thus, it is very important to develop a deeper understanding of the secondary mutational resistance mechanisms associated with EGFR mutations arising in tumors treated with osimertinib to expedite the development of innovative therapeutic drugs to overcome acquired",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/39494831/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617303.3554342
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND lung[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617303.3556085
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22EGFR%22%5Btiab%5D+AND+%22L858R%22%5Btiab%5D+AND+lung%5Btiab%5D",
+    "data": {
+     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND lung[tiab]",
+     "translated_query": "\"EGFR\"[Title/Abstract] AND \"L858R\"[Title/Abstract] AND \"lung\"[Title/Abstract]",
+     "total_count": 2881,
+     "articles": [
+      {
+       "pmid": "37321664",
+       "title": "Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.",
+       "journal": "BMJ open respiratory research",
+       "year": "2023",
+       "abstract": "The most common oncogenic driver in non-small-cell lung cancer (NSCLC) is the epidermal growth factor receptor (EGFR) gene mutations that occur more frequently among Asians (30%-50%) as opposed to Caucasians (10%-15%). Lung cancer is one of the most prevalent cancers in India, with a reported adenocarcinoma positivity ranging between 26.1% and 86.9% in NSCLC patients. The prevalence of EGFR mutations in adenocarcinoma patients (36.9%) in India is higher than that of Caucasian patients and lower than that of East Asian patients. The exon 19 deletion (Ex19del) is more common than exon 21 L858R m",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/"
+      },
+      {
+       "pmid": "17349580",
+       "title": "Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.",
+       "journal": "Cancer cell",
+       "year": "2007",
+       "abstract": "Mutations in the EGFR kinase are a cause of non-small-cell lung cancer. To understand their mechanism of activation and effects on drug binding, we studied the kinetics of the L858R and G719S mutants and determined their crystal structures with inhibitors including gefitinib, AEE788, and a staurosporine. We find that the mutations activate the kinase by disrupting autoinhibitory interactions, and that they accelerate catalysis as much as 50-fold in vitro. Structures of inhibitors in complex with both wild-type and mutant kinases reveal similar binding modes for gefitinib and AEE788, but a mark",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/"
+      },
+      {
+       "pmid": "24353160",
+       "title": "Structural, biochemical, and clinical characterization of epidermal growth factor receptor (EGFR) exon 20 insertion mutations in lung cancer.",
+       "journal": "Science translational medicine",
+       "year": "2013",
+       "abstract": "Epidermal growth factor receptor (EGFR) gene mutations (G719X, exon 19 deletions/insertions, L858R, and L861Q) predict favorable responses to EGFR tyrosine kinase inhibitors (TKIs) in advanced non-small cell lung cancer (NSCLC). However, EGFR exon 20 insertion mutations (~10% of all EGFR mutations) are generally associated with insensitivity to available TKIs (gefitinib, erlotinib, and afatinib). The basis of this primary resistance is poorly understood. We studied a broad subset of exon 20 insertion mutations, comparing in vitro TKI sensitivity with responses to gefitinib and erlotinib in NSC",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/24353160/"
+      },
+      {
+       "pmid": "34911913",
+       "title": "[Differences between EGFR Exon 19 Deletion and Exon 21 L858R Point Mutation, Frequently Detected EGFR Mutations in Patients with Non-Small Cell Lung Cancer, from a Molecular Biology Viewpoint].",
+       "journal": "Gan to kagaku ryoho. Cancer & chemotherapy",
+       "year": "2021",
+       "abstract": "Epidermal growth factor receptor(EGFR)is a transmembrane receptor tyrosine kinase that plays an important role in regulating the growth and progression of cancer via signalling pathways. This review summarizes the differences in EGFR kinase structural changes, stability of active forms, and phosphorylation inhibitory effects of EGFR tyrosine kinase inhibitors between the exon 19 deletion mutation and the exon 21 L858R point mutation, which are frequently detected EGFR mutations in patients with non-small cell lung cancer.",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/34911913/"
+      },
+      {
+       "pmid": "30114862",
+       "title": "Differential MicroRNA Expression between EGFR T790M and L858R Mutated Lung Cancer.",
+       "journal": "Journal of pathology and translational medicine",
+       "year": "2018",
+       "abstract": "MicroRNAs (miRNAs) are short, non-coding RNAs that mediate post-transcriptional gene regulation. They are commonly deregulated in human malignancies, including non-small cell lung cancer (NSCLC). The aim of this study is to investigate miRNA expression in T790M-mutated NSCLC resistant to epidermal growth factor receptor (EGFR) tyrosine kinase inhibitors. Six cases of resected NSCLC harboring the T790M mutation were examined. We performed miRNA time polymerase chain reaction (PCR) array profiling using EGFR T790M-mutated NSCLC and L858R-mutated NSCLC. Once identified, miRNAs that were different",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/30114862/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617303.3606086
+  },
+  {
+   "type": "tool_call",
+   "tool": "search_pubmed",
+   "args": {
+    "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND Hsp90[tiab]",
+    "max_results": 5
+   },
+   "ts": 1795617303.3607697
+  },
+  {
+   "type": "tool_result",
+   "tool": "search_pubmed",
+   "result": {
+    "source": "PubMed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/?term=%22EGFR%22%5Btiab%5D+AND+%22L858R%22%5Btiab%5D+AND+Hsp90%5Btiab%5D",
+    "data": {
+     "query": "\"EGFR\"[tiab] AND \"L858R\"[tiab] AND Hsp90[tiab]",
+     "translated_query": "\"EGFR\"[Title/Abstract] AND \"L858R\"[Title/Abstract] AND \"Hsp90\"[Title/Abstract]",
+     "total_count": 15,
+     "articles": [
+      {
+       "pmid": "18632637",
+       "title": "Hsp90 inhibition suppresses mutant EGFR-T790M signaling and overcomes kinase inhibitor resistance.",
+       "journal": "Cancer research",
+       "year": "2008",
+       "abstract": "The epidermal growth factor receptor (EGFR) secondary kinase domain T790M non-small cell lung cancer (NSCLC) mutation enhances receptor catalytic activity and confers resistance to the reversible tyrosine kinase inhibitors gefitinib and erlotinib. Currently, irreversible inhibitors represent the primary approach in clinical use to circumvent resistance. We show that higher concentrations of the irreversible EGFR inhibitor CL-387,785 are required to inhibit EGFR phosphorylation in T790M-expressing cells compared with EGFR mutant NSCLC cells without T790M. Additionally, CL-387,785 does not fully",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/18632637/"
+      },
+      {
+       "pmid": "23515752",
+       "title": "Inhibiting proliferation of gefitinib-resistant, non-small cell lung cancer.",
+       "journal": "Cancer chemotherapy and pharmacology",
+       "year": "2013",
+       "abstract": "Sensitivity to a tyrosine kinase inhibitor (TKI) is correlated with the presence of somatic mutations that affect the kinase domain of epidermal growth factor receptor (EGFR). Development of resistance to TKI is a major therapeutic problem in non-small cell lung cancer (NSCLC). Aim of this study is to identify agents that can overcome TKI resistance in NSCLC. We used a carefully selected panel of 12 NSCLC cell lines to address this clinical problem. Initially, the cell lines were treated with a variety of 10 compounds. Cellular proliferation was measured via MTT assay. We then focused on the g",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/23515752/"
+      },
+      {
+       "pmid": "16849543",
+       "title": "Association with HSP90 inhibits Cbl-mediated down-regulation of mutant epidermal growth factor receptors.",
+       "journal": "Cancer research",
+       "year": "2006",
+       "abstract": "Activating mutations in the epidermal growth factor receptor (EGFR), localized in the activation loop within the kinase domain, have been discovered in non-small cell lung cancers (NSCLC). Most of these mutants are exquisitely sensitive to EGFR tyrosine kinase inhibitors, suggesting that they generate receptor dependence in the cancers that express them. 32D cells stably expressing EGFR-L861Q and EGFR-L858R but not wild-type EGFR exhibited ligand-independent receptor phosphorylation and viability. Ligand-induced receptor down-regulation (LIRD) was impaired in mutant-expressing cells. The EGFR ",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/16849543/"
+      },
+      {
+       "pmid": "33471376",
+       "title": "HSP90 inhibition overcomes EGFR amplification-induced resistance to third-generation EGFR-TKIs.",
+       "journal": "Thoracic cancer",
+       "year": "2021",
+       "abstract": "Patients with non-small cell lung cancer (NSCLC) harboring activating EGFR mutations are sensitive to epidermal growth factor receptor-tyrosine kinase inhibitors (EGFR-TKIs) but inevitably develop resistance to the inhibitors mostly through acquisition of the secondary T790M mutation. Although third-generation EGFR-TKIs overcome this resistance by selectively inhibiting EGFR with EGFR-TKI-sensitizing and T790M mutations, acquired resistance to third-generation EGFR-TKIs invariably develops. Next-generation sequencing (NGS) and fluorescence in situ hybridization (FISH) analysis were performed i",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/33471376/"
+      },
+      {
+       "pmid": "34903832",
+       "title": "A small-molecule compound D6 overcomes EGFR-T790M-mediated resistance in non-small cell lung cancer.",
+       "journal": "Communications biology",
+       "year": "2021",
+       "abstract": "Non-small cell lung cancer (NSCLC) is a deadly and highly prevalent malignancy. Targeting activated-EGFR mutations in NSCLC via EGFR tyrosine kinase inhibitor (EGFR-TKI) initially achieves a profound therapeutic response, but resistance frequently evolves, reducing treatment options. Here, we present a small-molecule compound D6 which selectively inhibits tumor cell growth and migration in NSCLC cells with EGFR-TKI-resistant T790M-EGFR-activated mutations (T790M-EGFR-AM), e.g., L858R/T790M, 19Del/T790M and L858R/T790M/C797S. D6 mimics a natural product isolated from the roots of Codonopsis pil",
+       "url": "https://pubmed.ncbi.nlm.nih.gov/34903832/"
+      }
+     ]
+    }
+   },
+   "ts": 1795617303.366306
+  },
+  {
+   "type": "tool_call",
+   "tool": "submit_annotation",
+   "args": {
+    "classification": "oncogenic",
+    "confidence": "high",
+    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating mutation in non-small cell lung cancer and showing increased kinase activity. The literature also includes clinical and preclinical reports of sensitivity to EGFR-targeted therapies in L858R-mutant tumors.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is a missense_variant in EGFR with protein change p.Leu858Arg on transcript ENST00000275493.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "VEP reports known IDs COSV51765161, COSV51854030, and rs121434568 for this variant.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis as much as 50-fold in vitro.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' is indexed for EGFR L858R in lung cancer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.' describes EGFR L858R mutation-positive NSCLC and treatment outcomes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Hsp90 inhibition suppresses mutant EGFR-T790M signaling and overcomes kinase inhibitor resistance.' is indexed for EGFR L858R-related mutant EGFR signaling in the context of kinase inhibitor resistance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18632637/",
+      "direction": "supports_pathogenic"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": false
+   },
+   "ts": 1795617307.1469092
+  },
+  {
+   "type": "annotation",
+   "annotation": {
+    "classification": "oncogenic",
+    "confidence": "high",
+    "summary": "EGFR p.Leu858Arg (L858R) is a missense variant in EGFR with multiple PubMed-indexed articles describing it as an activating mutation in non-small cell lung cancer and showing increased kinase activity. The literature also includes clinical and preclinical reports of sensitivity to EGFR-targeted therapies in L858R-mutant tumors.",
+    "evidence": [
+     {
+      "source": "Ensembl VEP",
+      "claim": "The variant is a missense_variant in EGFR with protein change p.Leu858Arg on transcript ENST00000275493.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
+      "direction": "neutral"
+     },
+     {
+      "source": "Ensembl VEP",
+      "claim": "VEP reports known IDs COSV51765161, COSV51854030, and rs121434568 for this variant.",
+      "url": "https://www.ensembl.org/Homo_sapiens/Location/View?r=7:55191822-55191822",
+      "direction": "neutral"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' reports that the L858R mutant activates the kinase by disrupting autoinhibitory interactions and accelerates catalysis as much as 50-fold in vitro.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Structures of lung cancer-derived EGFR mutants and inhibitor complexes: mechanism of activation and insights into differential inhibitor sensitivity.' is indexed for EGFR L858R in lung cancer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17349580/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Differential clinicopathological features, treatments and outcomes in patients with Exon 19 deletion and Exon 21 L858R EGFR mutation-positive adenocarcinoma non-small-cell lung cancer.' describes EGFR L858R mutation-positive NSCLC and treatment outcomes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37321664/",
+      "direction": "supports_pathogenic"
+     },
+     {
+      "source": "PubMed",
+      "claim": "The article 'Hsp90 inhibition suppresses mutant EGFR-T790M signaling and overcomes kinase inhibitor resistance.' is indexed for EGFR L858R-related mutant EGFR signaling in the context of kinase inhibitor resistance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18632637/",
+      "direction": "supports_pathogenic"
+     }
+    ],
+    "conflicts": [],
+    "needs_expert_review": false
+   },
+   "ts": 1795617307.1470842
+  }
+ ]
+}
