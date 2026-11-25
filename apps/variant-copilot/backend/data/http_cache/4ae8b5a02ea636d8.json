@@ -1,0 +1,23 @@
+{
+ "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%22HSP90AA1%22%5Btiab%5D+AND+Hsp90%5Btiab%5D&retmode=json&retmax=5&sort=relevance",
+ "body": {
+  "header": {
+   "type": "esearch",
+   "version": "0.3"
+  },
+  "esearchresult": {
+   "count": "115",
+   "retmax": "5",
+   "retstart": "0",
+   "idlist": [
+    "39461872",
+    "38057328",
+    "26071189",
+    "42152503",
+    "26358502"
+   ],
+   "translationset": [],
+   "querytranslation": "\"HSP90AA1\"[Title/Abstract] AND \"Hsp90\"[Title/Abstract]"
+  }
+ }
+}
