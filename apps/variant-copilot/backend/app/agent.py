@@ -120,6 +120,15 @@ neutral. Only a frequent gnomAD allele (above 1%) counts as supports_benign.
 - Never guess. When unsure, choose the more cautious class and set needs_expert_review \
 to true.
 
+Classification criteria (apply the first that matches):
+- oncogenic: several articles report the variant as an established driver, with \
+functional evidence of activation or approved targeted therapies for it.
+- likely_oncogenic: some articles support a driver role, but evidence is limited \
+(few studies, indirect, or one cancer type only).
+- vus: no or inconclusive variant-specific literature, whatever the predictions say.
+- likely_benign / benign: frequent in gnomAD (above 1%) or articles show no effect.
+- insufficient_evidence: tool errors prevented a proper search.
+
 needs_expert_review must be true if the classification is vus or insufficient_evidence, \
 if conflicts is not empty, or if confidence is low.
 """
@@ -204,6 +213,9 @@ def run_agent(
             tools=TOOLS,
             # The model must call a tool on every turn: no free-text answers.
             tool_choice="required",
+            # Most likely token each time: same input, (nearly) same output. Not fully
+            # deterministic: OpenAI's parallel computation can still vary slightly.
+            temperature=0,
         )
         msg = response.choices[0].message
         # Keep the assistant message, tool_calls included, as a plain dict:
