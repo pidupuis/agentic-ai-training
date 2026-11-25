@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AgentTrace } from "@/components/AgentTrace";
 import { Button } from "@/components/ui/button";
 import { VariantList } from "@/components/VariantList";
+import { AnnotationCard } from "@/components/AnnotationCard";
 import type { Variant } from "@/types";
 import { IDLE_RUN, useAgentStream } from "@/useAgentStream";
 
@@ -50,9 +51,7 @@ export default function App() {
             </div>
             <AgentTrace events={run.events} status={run.status} />
             {run.error && <p className="text-sm text-destructive">{run.error}</p>}
-            {run.annotation && (
-              <pre className="text-xs">{JSON.stringify(run.annotation, null, 2)}</pre>
-            )}
+            {run.annotation && <AnnotationCard annotation={run.annotation} />}
           </>
         ) : (
           <p className="text-muted-foreground">Select a variant.</p>
