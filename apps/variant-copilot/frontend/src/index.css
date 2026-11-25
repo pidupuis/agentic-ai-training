@@ -25,6 +25,14 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-corail: var(--corail);
+  --color-corail-deep: var(--corail-deep);
+  --color-sahara: var(--sahara);
+  --color-menthe: var(--menthe);
+  --color-fantome: var(--fantome);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -49,24 +57,41 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* Brand palette. Contrast with the background (WCAG AA needs 4.5:1 for text):
+     graphite 10.4:1, granite 5.4:1, indigo 7.4:1, corail-deep 4.9:1 on fantome.
+     menthe (1.4:1) and sahara (1.5:1) are too light for text: fills only, with
+     graphite text on top (7.4:1 and 6.7:1). Corail fails both ways (graphite 3.9:1,
+     white 3.2:1): text sits on corail-deep instead, in white (5.9:1). */
+  --fantome: #e6eaf5;
+  --indigo: #3228d0;
+  --menthe: #27e29e;
+  --corail: #ff5151;
+  --corail-deep: #c81616;
+  --sahara: #ffac61;
+  --graphite: #343434;
+  --granite: #5e5e5e;
+
+  --background: var(--fantome);
+  --foreground: var(--graphite);
+  --card: #ffffff; /* white cards stand out on the fantome page */
+  --card-foreground: var(--graphite);
+  --popover: #ffffff;
+  --popover-foreground: var(--graphite);
+  --primary: var(--indigo);
+  --primary-foreground: #ffffff;
+  --secondary: #f1f3fa;
+  --secondary-foreground: var(--graphite);
+  --muted: #f1f3fa; /* a light fantome, for hovers and selections */
+  --muted-foreground: var(--granite);
+  --accent: #f1f3fa;
+  --accent-foreground: var(--graphite);
+  --destructive: var(--corail-deep); /* error */
+  --success: var(--menthe);
+  --warning: var(--sahara);
+  --info: var(--indigo);
+  --border: #cdd3e6;
+  --input: #cdd3e6;
+  --ring: var(--indigo);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

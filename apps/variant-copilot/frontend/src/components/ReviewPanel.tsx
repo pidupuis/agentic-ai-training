@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CLASSIFICATION_STYLE, CLASSIFICATIONS } from "@/lib/classification";
+import { DecisionBadge } from "@/components/DecisionBadge";
 import { DECISION_STYLE } from "@/lib/decision";
+import { cn } from "@/lib/utils";
 import { formatDateTime, utcTooltip } from "@/lib/dates";
 import type { Classification, Decision, Review, ReviewRequest } from "@/types";
 
@@ -92,7 +94,12 @@ export function ReviewPanel({
         {choices.map((c) => (
           <Button
             key={c.value}
-            variant={decision === c.value ? "default" : "outline"}
+            // Each in its decision's color until one is chosen; then only the chosen
+            // one keeps its color, the others turn neutral (outline).
+            variant={decision === null || decision === c.value ? "default" : "outline"}
+            className={cn(
+              (decision === null || decision === c.value) && DECISION_STYLE[c.value].fill,
+            )}
             aria-pressed={decision === c.value}
             onClick={() => setDecision(c.value)}
           >
@@ -184,25 +191,22 @@ export function DecisionBand({
 }) {
   const final = review.final_classification;
   const ai = CLASSIFICATION_STYLE[review.ai_classification];
-  const { label, Icon } = DECISION_STYLE[review.decision];
 
   return (
-    <section aria-label="Expert decision" className="rounded-xl border px-4 py-2 text-sm">
+    <section aria-label="Expert decision" className="rounded-xl border bg-card px-4 py-2 text-sm">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {final ? (
           <>
-            <span className="font-medium">Final:</span>
+            <span className="font-semibold">Final:</span>
             <Badge className={CLASSIFICATION_STYLE[final].className}>
               {CLASSIFICATION_STYLE[final].label}
             </Badge>
             <span aria-hidden="true">·</span>
           </>
         ) : null}
-        <span className="inline-flex items-center gap-1">
-          <Icon aria-hidden="true" className="size-3.5" />
-          {label}
-          {review.decision === "modified" && ` from ${ai.label}`}
-        </span>
+        {/* The decision's color is carried by its badge. */}
+        <DecisionBadge decision={review.decision} />
+        {review.decision === "modified" && <span>from {ai.label}</span>}
         <span className="text-muted-foreground">
           by {review.reviewer} ·{" "}
           <time dateTime={review.created_at} title={utcTooltip(review.created_at)}>

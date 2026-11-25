@@ -8,11 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { VariantList } from "@/components/VariantList";
 import { BACKEND_DOWN, getJson } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { DECISION_FORM_ID, focusDecisionForm } from "@/lib/decision";
 import type { SavedRun, Variant } from "@/types";
 import { IDLE_RUN, useAgentStream } from "@/useAgentStream";
 
 type View = "analysis" | "audit";
+
+const TAB_CURRENT = "bg-fantome text-foreground hover:bg-fantome";
+const TAB_OTHER = "text-muted-foreground";
 
 /**
  * The page, as a single column of cards: header (title, view switch), then either the
@@ -104,12 +108,15 @@ export default function App() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-8">
-      <header className="flex items-center justify-between rounded-xl border px-5 py-3">
+      <header className="flex items-center justify-between rounded-xl border bg-card px-5 py-3">
         <h1 className="text-lg font-semibold">Variant Copilot</h1>
+        {/* A state, not an action: the current view is a quiet fantome tab, never the
+            primary (indigo) button color. */}
         <nav className="flex gap-1">
           <Button
             size="sm"
-            variant={view === "analysis" ? "default" : "ghost"}
+            variant="ghost"
+            className={cn(view === "analysis" ? TAB_CURRENT : TAB_OTHER)}
             aria-current={view === "analysis" ? "page" : undefined}
             onClick={() => setView("analysis")}
           >
@@ -117,7 +124,8 @@ export default function App() {
           </Button>
           <Button
             size="sm"
-            variant={view === "audit" ? "default" : "ghost"}
+            variant="ghost"
+            className={cn(view === "audit" ? TAB_CURRENT : TAB_OTHER)}
             aria-current={view === "audit" ? "page" : undefined}
             onClick={() => openAudit([])}
           >
@@ -129,7 +137,7 @@ export default function App() {
       {loadError && <p className="text-sm text-destructive">{loadError}</p>}
 
       {view === "audit" ? (
-        <main className="rounded-xl border p-5">
+        <main className="rounded-xl border bg-card p-5">
           <AuditLog
             variants={variants}
             variantIds={auditFilter}
@@ -239,7 +247,7 @@ export default function App() {
                 </Card>
               )}
               {run.status !== "idle" && (
-                <section className="rounded-xl border px-4 py-3">
+                <section className="rounded-xl border bg-card px-4 py-3">
                   <AgentTrace events={run.events} status={run.status} />
                 </section>
               )}

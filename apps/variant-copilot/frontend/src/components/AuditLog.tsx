@@ -76,7 +76,9 @@ export function AuditLog({
             <Button
               key={v.id}
               size="sm"
-              variant={on ? "default" : "outline"}
+              // A state, not an action: on = fantome fill, never the primary color.
+              variant="outline"
+              className={on ? "border-transparent bg-fantome hover:bg-fantome" : undefined}
               aria-pressed={on}
               onClick={() => onToggle(v.id)}
             >

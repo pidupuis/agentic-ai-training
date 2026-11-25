@@ -1,12 +1,12 @@
 import { CLASSIFICATION_STYLE } from "@/lib/classification";
-import { DECISION_STYLE } from "@/lib/decision";
+import { DecisionBadge } from "@/components/DecisionBadge";
 import { cn } from "@/lib/utils";
 import type { Review, Variant } from "@/types";
 import type { Run } from "@/useAgentStream";
 
 /**
- * Top row: one card per variant, a click opens it. The open one has a thick ring and
- * aria-current.
+ * Top row: one card per variant, a click opens it. The open one is raised (white, with
+ * a shadow) and marked with aria-current; the others stay flat on the page.
  *
  * Each card says where the variant stands in the review: "Needs review", "✓ Accepted ·
  * Oncogenic", "✎ Corrected → Insufficient evidence", "✕ Rejected". Before the expert's
@@ -38,8 +38,9 @@ export function VariantList({
               onClick={() => onSelect(v.id)}
               aria-current={on ? "true" : undefined}
               className={cn(
-                "h-full w-full rounded-xl border px-4 py-3 text-left outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
-                on && "bg-muted ring-2 ring-foreground",
+                "h-full w-full rounded-xl border px-4 py-3 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                // Open: a raised white card. Others: flat on the page, white on hover.
+                on ? "border-transparent bg-card shadow-md" : "hover:bg-card/60",
               )}
             >
               <div className="font-medium">
@@ -61,13 +62,11 @@ function ReviewStatus({ run, review }: { run?: Run; review: Review | null }) {
   if (run?.status !== "done") return <div className={muted}>Not analyzed</div>;
   if (!review) return <div className="text-xs font-medium">Needs review</div>;
 
-  const { label, Icon } = DECISION_STYLE[review.decision];
   const final = review.final_classification && CLASSIFICATION_STYLE[review.final_classification];
   return (
-    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-      <Icon aria-hidden="true" className="size-3.5 shrink-0" />
-      {label}
-      {final && (review.decision === "modified" ? ` → ${final.label}` : ` · ${final.label}`)}
+    <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+      <DecisionBadge decision={review.decision} />
+      {final && (review.decision === "modified" ? `→ ${final.label}` : final.label)}
     </div>
   );
 }

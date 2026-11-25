@@ -99,11 +99,11 @@ function EmptySearches({ searches }: { searches: EmptySearch[] }) {
   );
 }
 
-/** Disagreements between sources. Orange, and hidden when there are none. */
+/** Disagreements between sources. Warning (sahara), and hidden when there are none. */
 function ConflictsBox({ conflicts }: { conflicts: string[] }) {
   if (conflicts.length === 0) return null;
   return (
-    <div className="rounded-md border border-orange-300 bg-orange-50 px-3 py-2 text-sm text-orange-900">
+    <div className="rounded-md border border-warning bg-warning/15 px-3 py-2 text-sm">
       <div className="mb-1 font-medium">Conflicting evidence</div>
       <ul className="list-disc space-y-1 pl-5">
         {conflicts.map((c, i) => (
