@@ -3,8 +3,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CLASSIFICATION_STYLE, CLASSIFICATIONS } from "@/lib/classification";
+import { DECISION_STYLE } from "@/lib/decision";
 import { formatDateTime, utcTooltip } from "@/lib/dates";
-import { cn } from "@/lib/utils";
 import type { Classification, Decision, Review, ReviewRequest } from "@/types";
 
 // The reviewer's name is remembered in the browser, so it is typed only once.
@@ -86,14 +86,14 @@ export function ReviewPanel({
   ];
 
   return (
-    <section className="space-y-3 rounded-xl border p-4">
-      <h3 className="font-medium">Expert review</h3>
-
+    // No border or title: shown inside the "Expert decision" card (App.tsx).
+    <div className="space-y-3">
       <div className="flex gap-2">
         {choices.map((c) => (
           <Button
             key={c.value}
             variant={decision === c.value ? "default" : "outline"}
+            aria-pressed={decision === c.value}
             onClick={() => setDecision(c.value)}
           >
             {c.label}
@@ -155,44 +155,72 @@ export function ReviewPanel({
       )}
 
       {error && <p className="text-sm text-destructive">{error}</p>}
-    </section>
+    </div>
   );
 }
 
 /**
- * Shown instead of the review panel once the current proposal has been reviewed:
- * "Accepted by PD · 2026-11-25 14:40", the comment, and the final class when corrected.
- * "Revise decision" reopens the form: revising appends a new decision, it never
- * edits or deletes this one.
+ * The expert's verdict, in a compact band ABOVE the AI proposal card and outside it: once
+ * decided, the human's conclusion comes first and the AI's proposal becomes the file that
+ * supports it (like a signed clinical report: conclusion on top, reasoning below).
+ *
+ * One line, the comment (if any) on a second one:
+ *   Final: [Oncogenic] · ✓ Accepted by PD · 25/11/2026 16:09          Revise  History
+ *   Final: [Insufficient evidence] · ✎ Corrected from Oncogenic by PD · ...
+ *   ✕ Rejected by PD · 25/11/2026 16:09 · no final classification
+ *
+ * "Revise" (hidden while revising) reopens the form: revising appends a new decision, it
+ * never edits or deletes this one. "History" opens the audit trail filtered on this
+ * variant, where earlier decisions remain visible.
  */
-export function ValidatedBanner({ review, onRevise }: { review: Review; onRevise: () => void }) {
-  const verb = { accepted: "Accepted", modified: "Corrected", rejected: "Rejected" }[
-    review.decision
-  ];
+export function DecisionBand({
+  review,
+  onRevise,
+  onShowHistory,
+}: {
+  review: Review;
+  onRevise?: () => void;
+  onShowHistory: () => void;
+}) {
   const final = review.final_classification;
+  const ai = CLASSIFICATION_STYLE[review.ai_classification];
+  const { label, Icon } = DECISION_STYLE[review.decision];
 
   return (
-    <section
-      className={cn(
-        "space-y-1 rounded-xl border px-4 py-3 text-sm",
-        review.decision === "rejected" && "border-destructive/40",
-      )}
-    >
-      <div className="flex items-center gap-2">
-        <span className="font-medium">
-          {verb} by {review.reviewer} ·{" "}
+    <section aria-label="Expert decision" className="rounded-xl border px-4 py-2 text-sm">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        {final ? (
+          <>
+            <span className="font-medium">Final:</span>
+            <Badge className={CLASSIFICATION_STYLE[final].className}>
+              {CLASSIFICATION_STYLE[final].label}
+            </Badge>
+            <span aria-hidden="true">·</span>
+          </>
+        ) : null}
+        <span className="inline-flex items-center gap-1">
+          <Icon aria-hidden="true" className="size-3.5" />
+          {label}
+          {review.decision === "modified" && ` from ${ai.label}`}
+        </span>
+        <span className="text-muted-foreground">
+          by {review.reviewer} ·{" "}
           <time dateTime={review.created_at} title={utcTooltip(review.created_at)}>
             {formatDateTime(review.created_at)}
           </time>
+          {!final && " · no final classification"}
         </span>
-        {final && review.decision === "modified" && (
-          <Badge className={CLASSIFICATION_STYLE[final].className}>
-            {CLASSIFICATION_STYLE[final].label}
-          </Badge>
-        )}
-        <Button size="sm" variant="ghost" className="ml-auto" onClick={onRevise}>
-          Revise decision
-        </Button>
+        <span className="ml-auto flex gap-1">
+          {/* Secondary: Revise. Tertiary: History. */}
+          {onRevise && (
+            <Button size="sm" variant="outline" onClick={onRevise}>
+              Revise
+            </Button>
+          )}
+          <Button size="sm" variant="ghost" onClick={onShowHistory}>
+            History
+          </Button>
+        </span>
       </div>
       {review.comment && <p className="text-muted-foreground">“{review.comment}”</p>}
     </section>

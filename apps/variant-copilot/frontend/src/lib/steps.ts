@@ -49,8 +49,3 @@ export function label({ call, result }: Step): string {
       return call.tool;
   }
 }
-
-/** Step duration in ms, from the backend timestamps (seconds). */
-export function durationMs({ call, result }: Step): number | undefined {
-  return result ? Math.round((result.ts - call.ts) * 1000) : undefined;
-}

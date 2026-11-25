@@ -4,19 +4,18 @@ import {
   TraceCollapsible,
   TraceCollapsibleContent,
   TraceCollapsibleTrigger,
-  TraceDescription,
   TraceLine,
   TraceTitle,
 } from "@/components/ui/trace";
-import { durationMs, label, toSteps } from "@/lib/steps";
+import { label, toSteps } from "@/lib/steps";
 import type { StreamStatus } from "@/useAgentStream";
 import type { AgentEvent } from "@/types";
 
 /**
  * The live agent trace: one collapsible line per tool call.
+ * Expanded while the agent runs (or if it failed), collapsed once it is done.
  *
- * A line shows a spinner (status "running") until its result arrives, then the
- * duration; it turns red if the tool returned an error. Expanding a line shows
+ * A line shows a spinner (status "running") until its result arrives; it turns red if the tool returned an error. Expanding a line shows
  * the raw arguments and result, for anyone who wants to check the agent's work.
  */
 export function AgentTrace({ events, status }: { events: AgentEvent[]; status: StreamStatus }) {
@@ -28,7 +27,9 @@ export function AgentTrace({ events, status }: { events: AgentEvent[]; status: S
   if (status === "idle") return null;
 
   return (
-    <TraceCollapsible defaultOpen>
+    // key: a new status remounts the collapsible, so it takes its new default state
+    // (the user can still toggle it in between).
+    <TraceCollapsible key={status} defaultOpen={status !== "done"}>
       <TraceCollapsibleTrigger>
         <TraceLine status={status === "running" ? "running" : undefined}>
           <TraceTitle>
@@ -45,7 +46,6 @@ export function AgentTrace({ events, status }: { events: AgentEvent[]; status: S
                   status={!s.result ? "running" : s.result.result.error ? "error" : undefined}
                 >
                   <TraceTitle>{label(s)}</TraceTitle>
-                  {s.result && <TraceDescription>{durationMs(s)} ms</TraceDescription>}
                 </TraceLine>
               </TraceCollapsibleTrigger>
               <TraceCollapsibleContent>

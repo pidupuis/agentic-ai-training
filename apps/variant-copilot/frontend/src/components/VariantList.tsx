@@ -1,57 +1,73 @@
+import { CLASSIFICATION_STYLE } from "@/lib/classification";
+import { DECISION_STYLE } from "@/lib/decision";
 import { cn } from "@/lib/utils";
-import type { Variant } from "@/types";
+import type { Review, Variant } from "@/types";
 import type { Run } from "@/useAgentStream";
 
 /**
- * Left column: one button per variant; the selected one is highlighted.
+ * Top row: one card per variant, a click opens it. The open one has a thick ring and
+ * aria-current.
  *
- * Shows only facts that describe the variant itself (gene, protein, genomic HGVS),
- * never a hint of the expected answer, so the expert's judgment is not biased.
- * A small status shows which variants were analyzed in this session.
+ * Each card says where the variant stands in the review: "Needs review", "✓ Accepted ·
+ * Oncogenic", "✎ Corrected → Insufficient evidence", "✕ Rejected". Before the expert's
+ * decision it never hints at the AI's answer, so the expert's judgment is not biased.
+ *
+ * `reviews`: the latest decision about each variant's CURRENT run, null if none.
  */
 export function VariantList({
   variants,
   selectedId,
   runs,
+  reviews,
   onSelect,
 }: {
   variants: Variant[];
   selectedId: string | null;
   runs: Record<string, Run>;
+  reviews: Record<string, Review | null>;
   onSelect: (id: string) => void;
 }) {
   return (
-    <ul className="space-y-1">
+    <ul aria-label="Variants" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       {variants.map((v) => {
-        const status = runs[v.id]?.status; // undefined = never analyzed
+        const on = v.id === selectedId;
         return (
           <li key={v.id}>
             <button
+              type="button"
               onClick={() => onSelect(v.id)}
+              aria-current={on ? "true" : undefined}
               className={cn(
-                "w-full rounded-md px-3 py-2 text-left hover:bg-muted",
-                v.id === selectedId && "bg-muted",
+                "h-full w-full rounded-xl border px-4 py-3 text-left outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50",
+                on && "bg-muted ring-2 ring-foreground",
               )}
             >
-              <div className="flex items-center justify-between font-medium">
-                <span>
-                  {v.gene} {v.protein_short}
-                </span>
-                {status === "running" && (
-                  <span className="text-xs text-muted-foreground">running…</span>
-                )}
-                {status === "done" && (
-                  <span className="text-xs text-muted-foreground">analyzed</span>
-                )}
-                {status === "error" && <span className="text-xs text-destructive">failed</span>}
+              <div className="font-medium">
+                {v.gene} {v.protein_short}
               </div>
-              <div className="text-xs text-muted-foreground">
-                {v.protein} · {v.hgvs_g}
-              </div>
+              <ReviewStatus run={runs[v.id]} review={reviews[v.id]} />
             </button>
           </li>
         );
       })}
     </ul>
+  );
+}
+
+function ReviewStatus({ run, review }: { run?: Run; review: Review | null }) {
+  const muted = "text-xs text-muted-foreground";
+  if (run?.status === "running") return <div className={muted}>Analyzing…</div>;
+  if (run?.status === "error") return <div className="text-xs text-destructive">Failed</div>;
+  if (run?.status !== "done") return <div className={muted}>Not analyzed</div>;
+  if (!review) return <div className="text-xs font-medium">Needs review</div>;
+
+  const { label, Icon } = DECISION_STYLE[review.decision];
+  const final = review.final_classification && CLASSIFICATION_STYLE[review.final_classification];
+  return (
+    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+      <Icon aria-hidden="true" className="size-3.5 shrink-0" />
+      {label}
+      {final && (review.decision === "modified" ? ` → ${final.label}` : ` · ${final.label}`)}
+    </div>
   );
 }
