@@ -27,6 +27,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // saved_at of each variant's saved run, to match decisions with the run they reviewed.
   const [savedAt, setSavedAt] = useState<Record<string, number>>({});
+  // Variant whose decision is being revised (form reopened over the banner), if any.
+  const [revisingId, setRevisingId] = useState<string | null>(null);
 
   // After a live run, the backend has saved a new run: reload it (its saved_at changed,
   // so the previous decision no longer applies to what is shown).
@@ -98,16 +100,19 @@ export default function App() {
           variants={variants}
           selectedId={selectedId}
           runs={runs}
-          onSelect={(id) => {
-            setSelectedId(id);
-            setView("analysis");
-          }}
+          // In the analysis view a click opens the variant; in the audit view it filters
+          // the trail to that variant (the view stays the same).
+          onSelect={setSelectedId}
         />
       </aside>
 
       <main className="min-w-0 space-y-6">
         {view === "audit" ? (
-          <AuditLog variants={variants} />
+          <AuditLog
+            variants={variants}
+            variantId={selectedId}
+            onShowAll={() => setSelectedId(null)}
+          />
         ) : selected ? (
           <>
             <div className="flex items-center justify-between">
@@ -134,15 +139,19 @@ export default function App() {
             {run.annotation && run.status === "done" && (
               <>
                 <AnnotationCard annotation={run.annotation} />
-                {reviewed && review ? (
-                  <ValidatedBanner review={review} />
+                {reviewed && review && revisingId !== selected.id ? (
+                  <ValidatedBanner review={review} onRevise={() => setRevisingId(selected.id)} />
                 ) : (
                   <ReviewPanel
                     // A new key resets the form when the variant or its run changes.
                     key={`${selected.id}-${savedAt[selected.id]}`}
                     variantId={selected.id}
                     aiClassification={run.annotation.classification}
-                    onReviewed={loadVariants}
+                    onReviewed={() => {
+                      setRevisingId(null);
+                      loadVariants();
+                    }}
+                    onCancel={revisingId === selected.id ? () => setRevisingId(null) : undefined}
                   />
                 )}
               </>

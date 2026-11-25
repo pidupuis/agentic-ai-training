@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CLASSIFICATION_STYLE, CLASSIFICATIONS } from "@/lib/classification";
+import { formatDateTime, utcTooltip } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 import type { Classification, Decision, Review, ReviewRequest } from "@/types";
 
@@ -15,15 +16,21 @@ const REVIEWER_KEY = "variant-copilot.reviewer";
  * "Correct" asks for the expert's own classification; "Correct" and "Reject" require a
  * comment (an expert must justify a disagreement). The same rules are enforced by the
  * backend (ReviewRequest in models.py): this form only gives earlier feedback.
+ *
+ * Also used to revise a decision: the new decision is appended to the audit trail,
+ * the previous one stays in the history (decisions are never edited or deleted).
+ * `onCancel` adds a Cancel button, for that case.
  */
 export function ReviewPanel({
   variantId,
   aiClassification,
   onReviewed,
+  onCancel,
 }: {
   variantId: string;
   aiClassification: Classification;
   onReviewed: (review: Review) => void;
+  onCancel?: () => void;
 }) {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [finalClass, setFinalClass] = useState<Classification>(aiClassification);
@@ -136,8 +143,13 @@ export function ReviewPanel({
               />
             </label>
             <Button onClick={submit} disabled={!canSubmit}>
-              {sending ? "Saving…" : "Sign off"}
+              {sending ? "Saving…" : "Submit decision"}
             </Button>
+            {onCancel && (
+              <Button variant="ghost" onClick={onCancel}>
+                Cancel
+              </Button>
+            )}
           </div>
         </>
       )}
@@ -149,13 +161,11 @@ export function ReviewPanel({
 
 /**
  * Shown instead of the review panel once the current proposal has been reviewed:
- * "Accepted by PD on 25/11 at 14:40", with the final class when it differs.
+ * "Accepted by PD · 2026-11-25 14:40", the comment, and the final class when corrected.
+ * "Revise decision" reopens the form: revising appends a new decision, it never
+ * edits or deletes this one.
  */
-export function ValidatedBanner({ review }: { review: Review }) {
-  // created_at is UTC; toLocaleDateString/TimeString show it in the browser's time zone.
-  const date = new Date(review.created_at);
-  const day = date.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" });
-  const time = date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+export function ValidatedBanner({ review, onRevise }: { review: Review; onRevise: () => void }) {
   const verb = { accepted: "Accepted", modified: "Corrected", rejected: "Rejected" }[
     review.decision
   ];
@@ -170,13 +180,19 @@ export function ValidatedBanner({ review }: { review: Review }) {
     >
       <div className="flex items-center gap-2">
         <span className="font-medium">
-          {verb} by {review.reviewer} on {day} at {time}
+          {verb} by {review.reviewer} ·{" "}
+          <time dateTime={review.created_at} title={utcTooltip(review.created_at)}>
+            {formatDateTime(review.created_at)}
+          </time>
         </span>
         {final && review.decision === "modified" && (
           <Badge className={CLASSIFICATION_STYLE[final].className}>
             {CLASSIFICATION_STYLE[final].label}
           </Badge>
         )}
+        <Button size="sm" variant="ghost" className="ml-auto" onClick={onRevise}>
+          Revise decision
+        </Button>
       </div>
       {review.comment && <p className="text-muted-foreground">“{review.comment}”</p>}
     </section>
