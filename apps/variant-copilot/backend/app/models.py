@@ -1,5 +1,7 @@
 """Data contracts shared by the agent, the API and (mirrored in types.ts) the frontend."""
 
+import uuid
+from datetime import UTC, datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -44,3 +46,59 @@ class Annotation(BaseModel):
         ):
             self.needs_expert_review = True
         return self
+
+
+# --- Expert review (step 5) -------------------------------------------------------
+
+Decision = Literal["accepted", "modified", "rejected"]
+
+
+class ReviewRequest(BaseModel):
+    """What the browser sends: the expert's decision only (POST /api/variants/{id}/review).
+
+    The AI's proposal is NOT part of the request: the server takes it from the saved run,
+    so a client can never rewrite what the AI had proposed.
+
+    Example:
+        {"decision": "modified", "final_classification": "likely_oncogenic",
+         "comment": "Single cancer type in the cited studies", "reviewer": "PD"}
+    """
+
+    decision: Decision
+    final_classification: Classification | None = Field(
+        default=None, description="Required when modified: the expert's own classification"
+    )
+    comment: str = ""
+    reviewer: str = Field(min_length=1, description="Free text, e.g. a name or initials")
+
+    @model_validator(mode="after")
+    def _check_consistency(self) -> "ReviewRequest":
+        """An expert must justify a disagreement, and a correction must say what it corrects to."""
+        if self.decision in ("modified", "rejected") and not self.comment.strip():
+            raise ValueError(f"A comment is required when the decision is {self.decision}")
+        if self.decision == "modified" and self.final_classification is None:
+            raise ValueError("final_classification is required when the decision is modified")
+        return self
+
+
+class Review(ReviewRequest):
+    """One line of the audit trail: the expert's decision plus what the AI had proposed.
+
+    Inherits the fields AND the checks of ReviewRequest (comment rule included); the
+    extra fields are filled by the server from the saved run, never sent by the browser.
+
+    final_classification after the server fills it:
+        accepted -> the AI's classification
+        modified -> the expert's classification
+        rejected -> None (the expert adopts no classification)
+    """
+
+    # default_factory: computed at each creation. A plain default=uuid.uuid4().hex would
+    # be computed once at import time, giving every review the same id.
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex)
+    variant_id: str
+    ai_classification: Classification
+    model: str  # the LLM that produced the annotation (from the saved run)
+    # Always UTC: a date without a time zone is ambiguous. The frontend shows local time.
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    annotation: Annotation  # full copy: each line of the trail is readable on its own
